@@ -1,0 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace magix_api.Dtos.Player
+{
+    public class AddPlayerDto
+    {
+        public string Username { get; set; } = "";
+
+        public string? Class { get; set; }
+
+        public int Trophies { get; set; } = 0;
+
+        public int BestTrophyScore { get; set; } = 0;
+
+        public string Faction { get; set; } = "rebel";
+    }
+}

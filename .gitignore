@@ -501,3 +501,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+appsettings.Development.json
