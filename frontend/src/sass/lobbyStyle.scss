@@ -1,0 +1,94 @@
+.webgl {
+	position: fixed;
+	top: 0;
+	left: 0;
+	outline: none;
+	z-index: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+	animation: fade-in 2s forwards;
+	animation-delay: 1s;
+}
+
+html {
+	background-color: black;
+}
+
+main {
+	position: relative;
+	justify-content: space-between;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+#leftContainer,
+#chatContainer {
+	width: 20%;
+	min-width: 250px;
+	min-height: 840px;
+	max-height: 1000px;
+	opacity: 0;
+	animation: fade-in 2s forwards;
+	animation-delay: 1s;
+}
+
+#leftContainer .subContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#playContainer,
+#navContainer {
+	& > * {
+		width: 100%;
+	}
+}
+
+.flex-column {
+	height: fit-content;
+}
+
+#chat {
+	border: none;
+	width: 100%;
+	height: 100%;
+}
+
+.lobby.message-container {
+	position: absolute;
+	top: 50vh;
+	left: 50vw;
+	z-index: 1000;
+	font-size: 2em;
+	transform: translate(-50%, -50%) !important;
+
+	.alert {
+		text-transform: capitalize;
+
+		span {
+			text-transform: uppercase;
+			margin-right: 30px;
+		}
+	}
+}
+
+@media only screen and (max-width: 800px) {
+	canvas,
+	.cover,
+	#chatContainer {
+		display: none;
+	}
+
+	#leftContainer {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media only screen and (max-height: 915px) {
+	main {
+		overflow-y: scroll;
+	}
+}

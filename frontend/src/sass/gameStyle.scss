@@ -1,0 +1,665 @@
+#game {
+	--offValue: 0.2vmin;
+	--marginHand: -1.5vw;
+	--card-height: 10vw;
+	--card-text-size: calc(var(--card-height) * 0.02);
+	--card-width: calc(var(--card-height) / 1.5);
+
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+
+	grid-template:
+		"chat handOpp handOpp handOpp playerOpp"
+		"deckOpp fieldOpp fieldOpp fieldOpp lifeOpp"
+		"empty message message message chrono"
+		"deckSelf fieldSelf fieldSelf fieldSelf lifeSelf"
+		"nothing handSelf handSelf handSelf playerSelf";
+
+	@media screen and (max-height: 900px) {
+		overflow-y: auto;
+	}
+
+	@media screen and (max-width: 950px) {
+		--card-height: 16vw;
+
+		padding: 5vh 0vh 5vh 5vh;
+		row-gap: 2vh;
+		column-gap: 5vw;
+
+		grid-template:
+			"handOpp handOpp playerOpp"
+			"fieldOpp fieldOpp playerOpp"
+			"fieldOpp fieldOpp lifeOpp"
+			"message message chrono"
+			"fieldSelf fieldSelf lifeSelf"
+			"fieldSelf fieldSelf playerSelf"
+			"handSelf handSelf playerSelf";
+
+		.deck {
+			display: none;
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.loader {
+	font-size: 5em;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	top: 50vh;
+	left: 50vw;
+	transform: translate(-50%, -50%);
+	width: 300px;
+}
+
+.loading-symbol {
+	height: 150px;
+	margin-bottom: 10px;
+	width: 150px;
+	filter: drop-shadow(0 0 0.75rem var(--light-blue));
+
+	& > img {
+		height: 100%;
+		width: 100%;
+		background: linear-gradient(0.25turn, var(--dark-blue-tp), var(--light-blue));
+		animation: loading 20s linear infinite;
+	}
+}
+
+.loading-text {
+	align-self: flex-start;
+	color: #fff;
+	font-family: arial, sans-serif;
+}
+
+.loading-text:after {
+	content: "Loading";
+	animation: load 2s linear infinite;
+}
+
+@keyframes load {
+	0% {
+		content: "Loading";
+	}
+
+	33% {
+		content: "Loading.";
+	}
+
+	67% {
+		content: "Loading..";
+	}
+
+	100% {
+		content: "Loading...";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.hand {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+
+	.card {
+		margin: 0 var(--marginHand);
+	}
+}
+
+.hand.self {
+	grid-area: handSelf;
+
+	.card:hover:not(.dragging) {
+		.card-inner {
+			transition-delay: 200ms;
+			transform: translateY(-25vmin) scale(2);
+			z-index: 5;
+		}
+	}
+
+	.card:active:not(.opponent) {
+		.card-inner {
+			transition: none;
+			transform: none !important;
+		}
+	}
+
+	@for $i from 0 through 7 {
+		$rotation: ($i - 7/2) / 6 * 50;
+		$offset: abs(($i - 7/2) / 6 * 80);
+
+		.card:nth-child(#{$i + 1}) {
+			.card-inner {
+				transform: translateY($offset * 0.15vmin) rotateZ($rotation * 1deg);
+			}
+		}
+	}
+
+	.card.self[draggable="true"] {
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
+		}
+	}
+
+	.card.self[draggable="false"] {
+		cursor: not-allowed;
+	}
+}
+
+.hand.opponent {
+	transform: rotateZ(180deg);
+	grid-area: handOpp;
+
+	@for $i from 0 through 7 {
+		$rotation: ($i - 7/2) / 6 * 50;
+		$offset: abs(($i - 7/2) / 6 * 80);
+
+		.card:nth-child(#{$i + 1}) {
+			.card-inner {
+				transform: translateY($offset * 0.05vmin) rotateZ($rotation * 1deg) rotateY(180deg);
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+
+.field {
+	border: 5px solid transparent;
+	align-items: center;
+	justify-items: center;
+	display: grid;
+	min-height: 20vh;
+	grid-template: "1 2 3 4 5 6 7 8";
+
+	@media screen and (max-width: 950px) {
+		grid-template:
+			"3 1 2 4"
+			"7 5 6 8";
+	}
+
+	.card {
+		transition: 0s transform;
+	}
+
+	.card:hover {
+		z-index: 10;
+
+		.card-inner {
+			transform: scale(3) translateY(5vh);
+			transition-delay: 500ms;
+
+			.card-front {
+				filter: none !important;
+			}
+		}
+	}
+
+	.card.self:hover .card-inner {
+		transform: scale(3) translateY(-5vh);
+	}
+
+	&.opponent {
+		grid-area: fieldOpp;
+	}
+
+	&.self {
+		grid-area: fieldSelf;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#chat-game {
+	position: absolute;
+	margin: 1vmin 0vmin;
+	z-index: 6;
+	top: 1vh;
+	left: 1vw;
+	grid-area: chat;
+
+	button {
+		display: none;
+	}
+
+	iframe {
+		display: None;
+		opacity: 0;
+		margin: 18px 0px 0px 18px;
+		width: 100%;
+		height: 90%;
+	}
+
+	.toggle-icon {
+		display: block;
+		position: relative;
+		width: fit-content;
+		cursor: pointer;
+	}
+
+	.toggle-icon .saber {
+		display: block;
+		width: 3em;
+		height: 0.2em;
+		margin: 0.8em;
+		border-right: 2em solid #fff;
+		border-left: 0.6em solid #888;
+	}
+
+	.toggle-icon,
+	.saber {
+		transition: all 0.4s ease-in-out;
+	}
+
+	&.pushed {
+		height: 98%;
+		width: unquote("min(650px, 100vw)");
+		margin: 0;
+
+		.toggle-icon {
+			transition-delay: 0.8s;
+			transform: rotate(-45deg);
+			top: -1%;
+			left: -2%;
+		}
+
+		.saber:nth-child(2) {
+			opacity: 0;
+		}
+
+		.saber:nth-of-type(1) {
+			transform: translateY(1em);
+			border-right-color: #e9b8b9;
+			box-shadow: 0.4em 0 0.6em 0.1em rgba(205, 40, 44, 1);
+		}
+
+		.saber:nth-of-type(3) {
+			transform: translateY(-1em) rotate(-90deg);
+			border-right-color: #b3d3f1;
+			box-shadow: 0.4em 0 0.6em 0.1em rgba(0, 119, 255, 1);
+		}
+
+		iframe {
+			display: block;
+			animation: fade-in 1s forwards;
+			margin: 0px;
+		}
+
+		.subcontainer {
+			animation: fade-in 1s forwards;
+		}
+
+		&.container {
+			animation: fade-in 1s forwards;
+		}
+
+		button {
+			display: block;
+			position: absolute;
+			top: 1em;
+			right: 2em;
+			font-size: 100%;
+		}
+	}
+}
+
+///////////////////////////////////////////////////////////////
+
+#chrono {
+	cursor: pointer;
+	position: relative;
+	align-self: center;
+	justify-self: right;
+	width: 12vmin;
+	height: 12vmin;
+	border-radius: 100%;
+	background: linear-gradient(165deg, var(--light-blue) 0%, var(--purple) 100%);
+	box-shadow: 0 0 90px var(--purple);
+	grid-area: chrono;
+	margin-right: 2vw;
+
+	&:active {
+		h1 {
+			color: var(--red);
+		}
+
+		animation: pulse 1.5s;
+	}
+
+	&:before {
+		content: "";
+		position: absolute;
+		-webkit-font-smoothing: antialiased;
+		font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+		background: black;
+		width: 10vmin;
+		height: 10vmin;
+		margin: 1vmin;
+		border-radius: 100%;
+	}
+
+	&:hover {
+		filter: drop-shadow(0px 0px 15px var(--light-blue));
+	}
+
+	h1 {
+		color: #fff;
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+		text-align: center;
+		font-size: 5vmin;
+		width: 100%;
+		letter-spacing: 0.5vmin;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+.playerInfos {
+	min-height: 200px;
+	max-height: 100%;
+	max-width: 20vw;
+	position: relative;
+	left: 100%;
+	transform: translateX(-100%);
+	cursor: default;
+	overflow: hidden;
+
+	.credit {
+		margin: 0px auto;
+		align-self: center;
+		width: 100%;
+
+		p {
+			font-size: 4em;
+		}
+	}
+
+	.avatar {
+		max-width: 15vw;
+		max-height: 15vw;
+		cursor: pointer;
+
+		&:hover {
+			filter: drop-shadow(0px 0px 15px var(--light-blue));
+		}
+	}
+
+	.subContainer {
+		display: flex;
+		justify-content: space-between;
+		font-size: 1.5rem;
+	}
+
+	.infoJoueur > p {
+		text-transform: capitalize;
+	}
+
+	@media screen and (max-width: 950px) {
+		.subContainer {
+			flex-direction: column;
+		}
+	}
+
+	@media screen and (max-width: 1600px) {
+		.subContainer {
+			font-size: 0.75rem;
+		}
+	}
+}
+
+.opponent.playerInfos {
+	grid-area: playerOpp;
+
+	.avatar {
+		background-image: var(--opponentAvatar),
+			linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue));
+	}
+}
+
+.self.playerInfos {
+	grid-area: playerSelf;
+}
+
+.activated {
+	animation: pulse 1.5s infinite;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+.deck {
+	display: flex;
+	position: relative;
+
+	.card {
+		left: 0;
+		box-shadow: #333 6px 0px 1px 1px;
+		padding: 0px;
+	}
+
+	span {
+		position: absolute;
+		top: 80%;
+		left: calc(var(--card-width) / 2);
+		transform: translateX(-50%);
+		color: white;
+		font-size: 4em;
+	}
+
+	@media screen and (max-width: 650px) {
+		display: none;
+	}
+}
+
+.deck.opponent {
+	grid-area: deckOpp;
+}
+
+.deck.self {
+	grid-area: deckSelf;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+.life {
+	filter: drop-shadow(0 0 2rem var(--purple));
+	margin: auto auto;
+	position: relative;
+	left: 50%;
+	transform: translateX(-100%);
+
+	div {
+		background: var(--dark-blue);
+		background-image: url(../../static/img/horizontal-lined-bg.png);
+		mask: url(../../static/img/life.png) center/contain no-repeat;
+		font-size: 3em;
+		height: 2em;
+		width: 2em;
+		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		p {
+			position: relative;
+			top: -5%;
+		}
+
+		@media screen and (max-width: 650px) {
+			font-size: 2em;
+			height: 2em;
+			width: 2em;
+		}
+	}
+
+	&.opponent {
+		grid-area: lifeOpp;
+	}
+
+	&.self {
+		grid-area: lifeSelf;
+	}
+}
+
+.hurt div {
+	background-color: rgba(205, 40, 44, 0.5);
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+.message-slider {
+	display: flex;
+	padding: 0 1vw;
+	align-self: center;
+	align-content: center;
+	justify-content: center;
+	height: 5vh;
+	grid-area: message;
+}
+
+/////////////////////////////////////////////////////////////
+
+.gameOver {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 10;
+	opacity: 0;
+	animation: fade-in 1000ms forwards;
+
+	h1 {
+		color: black;
+		-webkit-text-stroke: 3px yellow;
+		text-transform: uppercase;
+	}
+
+	.img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-clip: border-box;
+		opacity: 0;
+		animation: fade-in 15000ms forwards;
+		animation-delay: 3s;
+
+		&.defeat {
+			background-size: 2048px 1030px;
+			background-image: url("../../static/img/darth.webp");
+		}
+
+		&.victory {
+			background-size: 2048px 1030px;
+			background-image: url("../../static/img/luke.webp");
+		}
+	}
+
+	.wrapper {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		animation: fade-in 3000ms forwards;
+		animation-delay: 5s;
+
+		h1 {
+			font-size: 10rem;
+
+			@media screen and (max-width: 650px) {
+				font-size: 7rem;
+			}
+		}
+
+		button {
+			transform: scale(2);
+			margin-top: 3em;
+			z-index: 1;
+		}
+	}
+}
+
+.plasma {
+	border-radius: 12px 12px 0 0;
+	position: relative;
+	width: 9px;
+	filter: blur(1px);
+	height: 0px;
+	animation-delay: 2s;
+	pointer-events: none;
+}
+
+.vader {
+	background: linear-gradient(
+		to right,
+		rgba(229, 17, 21, 1) 0%,
+		rgba(254, 254, 254, 1) 30%,
+		rgba(254, 254, 254, 1) 47%,
+		rgba(254, 254, 254, 1) 71%,
+		rgba(229, 17, 21, 1) 100%
+	);
+	transform: rotateZ(316deg);
+	animation: openSaberVader 3s forwards;
+
+	@keyframes openSaberVader {
+		0% {
+			left: -60px;
+			top: 70px;
+			height: 0px;
+		}
+
+		100% {
+			left: 0px;
+			top: 138px;
+			height: 195px;
+		}
+	}
+}
+
+.luke {
+	background: linear-gradient(
+		to right,
+		rgb(89, 255, 0) 0%,
+		rgb(254, 254, 254) 45%,
+		rgb(254, 254, 254) 50%,
+		rgb(254, 254, 254) 55%,
+		rgb(89, 255, 0) 100%
+	);
+	transform: rotateZ(214deg);
+	animation: openSaberLuke 3s forwards;
+
+	@keyframes openSaberLuke {
+		0% {
+			left: -40px;
+			top: 130px;
+			height: 0px;
+		}
+
+		100% {
+			left: -120px;
+			top: 260px;
+			height: 310px;
+		}
+	}
+}

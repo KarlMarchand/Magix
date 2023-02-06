@@ -1,0 +1,30 @@
+main {
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	color: black;
+	-webkit-text-stroke: 3px yellow;
+	line-height: 80%;
+	font-size: 10em;
+	max-width: 100vw;
+	text-align: center;
+	margin: 10vh 0px 5vh;
+}
+
+input {
+	text-align: left;
+	margin-left: 15px;
+}
+
+.container {
+	width: fit-content;
+	align-self: center;
+}
+
+@media only screen and (max-width: 530px) {
+	h1 {
+		font-size: 6em;
+	}
+}
