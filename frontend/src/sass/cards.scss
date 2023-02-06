@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 :root {
 	--card-height: 20vw;
 	--card-text-size: calc(var(--card-height) * 0.02);
