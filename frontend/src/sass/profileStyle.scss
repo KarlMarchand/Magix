@@ -1,0 +1,238 @@
+main {
+	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+	height: 100%;
+	padding: 0px 10px;
+	gap: 200px;
+
+	section {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+.infoJoueur {
+	margin-top: 25px;
+	margin-left: 25px;
+
+	.avatar {
+		height: unquote("max(200px, 15vw)");
+		width: unquote("max(200px, 15vw)");
+		z-index: 2;
+	}
+
+	.container {
+		position: absolute;
+		left: unquote("max(10%, 90px)");
+		width: 80vw;
+		align-self: center;
+
+		.subContainer {
+			height: fit-content;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+
+			* {
+				position: relative;
+				font-size: 2em;
+				left: unquote("max(110px, 10vw)");
+			}
+
+			h1 {
+				text-transform: uppercase;
+			}
+		}
+	}
+
+	@media screen and (max-width: 650px) {
+		margin: inherit;
+
+		.container {
+			position: static;
+			margin-bottom: 30px;
+
+			.subContainer * {
+				align-self: center;
+				left: 0px;
+			}
+		}
+	}
+}
+
+#player-stats {
+	width: 100%;
+	align-content: center;
+	justify-content: space-evenly;
+	margin-top: 20px;
+	gap: 15px;
+
+	#trophy-img {
+		background: linear-gradient(0.25turn, var(--dark-blue-tp), var(--light-blue));
+		height: unquote("max(200px, 15vw)");
+		width: unquote("max(200px, 15vw)");
+		mask: url("../../static/img/trophy.png") center/contain no-repeat;
+	}
+
+	#trophy-wrap {
+		filter: drop-shadow(0 0 0.75rem var(--light-blue));
+	}
+}
+
+#game-stats {
+	align-self: center;
+	width: 30vw;
+	min-width: 300px;
+
+	.subContainer > p {
+		width: 100%;
+	}
+
+	#graph {
+		margin-top: 20px;
+		width: 100%;
+
+		svg {
+			height: unquote("max(200px, 10vw)");
+			width: unquote("max(200px, 10vw)");
+			overflow: visible;
+			margin-bottom: 10px;
+
+			circle {
+				fill: rgba(0, 0, 0, 0);
+				stroke-width: 31.8309886184;
+				stroke-dasharray: 0, 0, 0, 100;
+				stroke-dashoffset: 25;
+				filter: drop-shadow(0 0 0.15rem var(--light-blue));
+			}
+
+			#pie-wins {
+				--arg1: var(--wins);
+				--arg2: var(--loses);
+				--arg3: 0;
+				stroke: var(--light-blue);
+				animation: pie-draw 5s ease-in forwards;
+			}
+
+			#pie-loses {
+				--arg1: 0;
+				--arg2: var(--wins);
+				--arg3: var(--loses);
+				stroke: var(--dark-blue);
+				animation: pie-draw 5s ease-in forwards;
+			}
+
+			@keyframes pie-draw {
+				50%,
+				100% {
+					stroke-dasharray: var(--arg1), var(--arg2), var(--arg3), 0;
+				}
+			}
+		}
+
+		#wins-label {
+			width: 20ch;
+
+			&::before {
+				content: "";
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				background-color: var(--light-blue);
+				margin-right: 10px;
+				border: 1px solid white;
+			}
+		}
+
+		#loses-label {
+			width: 20ch;
+
+			&::before {
+				content: "";
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				background-color: var(--dark-blue);
+				margin-right: 10px;
+				border: 1px solid white;
+			}
+		}
+	}
+}
+
+#games-history {
+	padding: 2% 5% 5% 5%;
+
+	table {
+		font-family: arial, sans-serif;
+		border-collapse: collapse;
+		width: 100%;
+		margin: 30px auto;
+	}
+
+	td,
+	th {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 10px;
+	}
+
+	th {
+		background-color: var(--dark-grey);
+	}
+
+	tr:nth-child(odd) {
+		background-color: var(--background-blue);
+	}
+
+	@media screen and (max-width: 650px) {
+		overflow-x: scroll;
+	}
+}
+
+#top-cards {
+	position: relative;
+	display: flex;
+	margin: 50px auto;
+	gap: 20px;
+	align-items: center;
+
+	&:after {
+		position: absolute;
+		content: "";
+		top: 5vw;
+		left: 0;
+		right: 0;
+		z-index: -1;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		filter: blur(5vw);
+		background: linear-gradient(270deg, #5ddcff, #4e00c2);
+		background-size: 150% 150%;
+		animation: animateGlow 3s ease infinite;
+
+		@keyframes animateGlow {
+			0% {
+				background-position: 0% 50%;
+			}
+
+			50% {
+				background-position: 100% 50%;
+			}
+
+			100% {
+				background-position: 0% 50%;
+			}
+		}
+	}
+
+	@media screen and (max-width: 650px) {
+		flex-direction: column-reverse;
+		--card-height: 50vw;
+		--card-text-size: calc(var(--card-height) * 0.02);
+		--card-width: calc(var(--card-height) / 1.5);
+	}
+}

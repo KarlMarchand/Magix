@@ -1,0 +1,11 @@
+Model Information:
+* title:	Death Star (2)
+* source:	https://sketchfab.com/3d-models/death-star-2-eadd05e23595432994b1c9fdf4471437
+* author:	Hj.Kj (https://sketchfab.com/Hj.Kj)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Death Star (2)" (https://sketchfab.com/3d-models/death-star-2-eadd05e23595432994b1c9fdf4471437) by Hj.Kj (https://sketchfab.com/Hj.Kj) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
