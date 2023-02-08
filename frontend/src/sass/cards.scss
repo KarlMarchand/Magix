@@ -257,7 +257,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	mask: url(../../static/img/shield.png) center/contain no-repeat;
+	mask: url(../assets/img/shield.png) center/contain no-repeat;
 	background: var(--shield-blue);
 	animation: opens 2s forwards;
 
@@ -281,7 +281,7 @@
 		left: 0;
 		height: 100%;
 		width: 100%;
-		background-image: url(../../static/img/fog.png);
+		background-image: url(../assets/img/fog.png);
 		background-repeat: repeat-x;
 		background-size: cover;
 		background-position: center;
@@ -301,46 +301,46 @@
 
 .empire {
 	--color-scheme: rgb(51, 51, 77);
-	--faction-symbol: url(../../static/img/factions/empire-symbol.png);
+	--faction-symbol: url(../assets/img/factions/empire-symbol.png);
 
 	& .card-back {
-		background-image: url(../../static/img/cards/empire-back.webp);
+		background-image: url(../assets/img/cards/empire-back.webp);
 	}
 }
 
 .rebel {
 	--color-scheme: rgb(150, 43, 43);
-	--faction-symbol: url(../../static/img/factions/rebel-symbol.png);
+	--faction-symbol: url(../assets/img/factions/rebel-symbol.png);
 
 	& .card-back {
-		background-image: url(../../static/img/cards/rebel-back.webp);
+		background-image: url(../assets/img/cards/rebel-back.webp);
 	}
 }
 
 .republic {
 	--color-scheme: rgb(50, 47, 201);
-	--faction-symbol: url(../../static/img/factions/republic-symbol.png);
+	--faction-symbol: url(../assets/img/factions/republic-symbol.png);
 
 	& .card-back {
-		background-image: url(../../static/img/cards/republic-back.webp);
+		background-image: url(../assets/img/cards/republic-back.webp);
 	}
 }
 
 .separatist {
 	--color-scheme: rgb(201, 112, 11);
-	--faction-symbol: url(../../static/img/factions/separatist-symbol.png);
+	--faction-symbol: url(../assets/img/factions/separatist-symbol.png);
 
 	& .card-back {
-		background-image: url(../../static/img/cards/separatist-back.webp);
+		background-image: url(../assets/img/cards/separatist-back.webp);
 	}
 }
 
 .criminal {
 	--color-scheme: rgb(35, 107, 21);
-	--faction-symbol: url(../../static/img/factions/criminal-symbol.png);
+	--faction-symbol: url(../assets/img/factions/criminal-symbol.png);
 
 	& .card-back {
-		background-image: url(../../static/img/cards/criminal-back.webp);
+		background-image: url(../assets/img/cards/criminal-back.webp);
 	}
 }
 

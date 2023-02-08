@@ -75,7 +75,7 @@ main {
 		background: linear-gradient(0.25turn, var(--dark-blue-tp), var(--light-blue));
 		height: unquote("max(200px, 15vw)");
 		width: unquote("max(200px, 15vw)");
-		mask: url("../../static/img/trophy.png") center/contain no-repeat;
+		mask: url("../assets/img/trophy.png") center/contain no-repeat;
 	}
 
 	#trophy-wrap {

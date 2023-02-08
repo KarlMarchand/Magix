@@ -481,8 +481,8 @@
 
 	div {
 		background: var(--dark-blue);
-		background-image: url(../../static/img/horizontal-lined-bg.png);
-		mask: url(../../static/img/life.png) center/contain no-repeat;
+		background-image: url(../assets/img/horizontal-lined-bg.png);
+		mask: url(../assets/img/life.png) center/contain no-repeat;
 		font-size: 3em;
 		height: 2em;
 		width: 2em;
@@ -565,12 +565,12 @@
 
 		&.defeat {
 			background-size: 2048px 1030px;
-			background-image: url("../../static/img/darth.webp");
+			background-image: url("../assets/img/darth.webp");
 		}
 
 		&.victory {
 			background-size: 2048px 1030px;
-			background-image: url("../../static/img/luke.webp");
+			background-image: url("../assets/img/luke.webp");
 		}
 	}
 
