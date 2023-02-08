@@ -1,7 +1,7 @@
-export const URL = "http://localhost:3000";
-export const API_URL_USERS = URL + "/api/users/";
+export const URL = "http://localhost:5028/api";
+export const API_URL_USERS = URL + "/Player/";
 
-export const getRequest = async (url: string, auth = null) => {
+export const getRequest = async (url: string) => {
 	const response = await fetch(url, {
 		method: "GET",
 		headers: {

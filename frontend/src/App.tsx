@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./components/protectedRoute";
-import { AuthProvider } from "./hooks/useAuth";
-import LoginPage from "./pages/loginPage";
-import LobbyPage from "./pages/lobbyPage";
-import GamePage from "./pages/gamePage";
-import DeckPage from "./pages/deckPage";
-import ProfilePage from "./pages/profilePage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthProvider";
+import LoginPage from "./pages/LoginPage";
+import LobbyPage from "./pages/LobbyPage";
+import GamePage from "./pages/GamePage";
+import DeckPage from "./pages/DeckPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
 	return (
@@ -17,7 +17,7 @@ function App() {
 					<Route path="/profile" element={<ProfilePage />}></Route>
 					<Route path="/game" element={<GamePage />}></Route>
 				</Route>
-				<Route path="/" element={<LoginPage />} />
+				<Route path="/login" element={<LoginPage />} />
 			</Routes>
 		</AuthProvider>
 	);
