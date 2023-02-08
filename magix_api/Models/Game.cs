@@ -9,13 +9,15 @@ public partial class Game
 
     public int Player { get; set; }
 
-    public string? Class { get; set; }
+    public int Deck { get; set; }
 
     public string Opponent { get; set; } = null!;
 
     public DateOnly Date { get; set; }
 
     public bool Won { get; set; }
+
+    public virtual Deck DeckNavigation { get; set; } = null!;
 
     public virtual Player PlayerNavigation { get; set; } = null!;
 }

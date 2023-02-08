@@ -17,5 +17,7 @@ namespace magix_api.Dtos.Player
         public int BestTrophyScore { get; set; } = 0;
 
         public string Faction { get; set; } = "rebel";
+
+        public string? Token { get; set; }
     }
 }

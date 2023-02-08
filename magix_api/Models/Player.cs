@@ -9,13 +9,11 @@ public partial class Player
 
     public string Username { get; set; } = null!;
 
-    public string? Class { get; set; }
-
     public int? Trophies { get; set; }
 
     public int? BestTrophyScore { get; set; }
 
-    public string? Faction { get; set; }
+    public virtual ICollection<Deck> Decks { get; } = new List<Deck>();
 
     public virtual ICollection<Game> Games { get; } = new List<Game>();
 

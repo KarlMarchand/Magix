@@ -102,5 +102,23 @@ namespace magix_api.Services.PlayerService
             }
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<GetPlayerDto>> Login(LoginPlayerDto userInfos)
+        {
+            var serviceResponse = new ServiceResponse<GetPlayerDto>();
+
+            // TODO: send infos to game server for verification
+            // var response = call_magix_api(userInfos.Username, userInfos.Password)
+
+            var player = await _context.Players.FirstOrDefaultAsync(p => p.Username == userInfos.Username);
+            if (player is null)
+            {
+                // TODO: Should create a new player
+
+            }
+
+            serviceResponse.Data = _mapper.Map<GetPlayerDto>(player);
+            return serviceResponse;
+        }
     }
 }

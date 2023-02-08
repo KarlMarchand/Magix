@@ -20,6 +20,12 @@ namespace magix_api.Controllers
             _playerService = playerService;
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(LoginPlayerDto userInfos)
+        {
+            return Ok(await _playerService.Login(userInfos));
+        }
+
         [HttpGet("GetAll")] // Create a sub-route at api/Player/GetAll
         // Could also, instead of adding ("GetAll") in the httpGet attribute, I could add [Route("GetAll")] on line under to define a "sub-route"
         public async Task<ActionResult<ServiceResponse<List<GetPlayerDto>>>> Get()
