@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using magix_api.Data;
 using magix_api.Dtos.Player;
 using magix_api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace magix_api.Services.PlayerService
 {
