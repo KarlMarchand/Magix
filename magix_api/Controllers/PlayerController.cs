@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using magix_api.Dtos.Player;
 using magix_api.Models;
 using magix_api.Services.PlayerService;
