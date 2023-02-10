@@ -1,4 +1,4 @@
-using magix_api.Dtos.Player;
+using magix_api.Dtos.PlayerDto;
 using magix_api.Services.PlayerService;
 using Microsoft.AspNetCore.Mvc;
 
