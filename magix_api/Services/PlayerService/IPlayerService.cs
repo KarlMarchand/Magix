@@ -1,4 +1,4 @@
-using magix_api.Dtos.Player;
+using magix_api.Dtos.PlayerDto;
 
 namespace magix_api.Services.PlayerService
 {

@@ -1,6 +1,11 @@
 using AutoMapper;
-using magix_api.Dtos.Player;
-using magix_api.Dtos.Card;
+using magix_api.Dtos.PlayerDto;
+using magix_api.Dtos.CardDto;
+using magix_api.Dtos.DeckDto;
+using magix_api.Dtos.FactionDto;
+using magix_api.Dtos.HeroDto;
+using magix_api.Dtos.TalentDto;
+
 
 namespace magix_api
 {
@@ -11,7 +16,20 @@ namespace magix_api
             CreateMap<Player, GetPlayerDto>();
             CreateMap<AddPlayerDto, Player>();
             CreateMap<UpdatePlayerDto, Player>();
+
+            CreateMap<Card, GetCardDto>();
             CreateMap<GetCardDto, Card>();
+
+            CreateMap<Faction, GetFactionDto>();
+            CreateMap<GetFactionDto, Faction>();
+
+            CreateMap<Hero, GetHeroDto>();
+            CreateMap<GetHeroDto, Hero>();
+
+            CreateMap<Talent, GetTalentDto>();
+            CreateMap<GetTalentDto, Talent>();
+
+            CreateMap<AvailableOptions, GetAvailableOptionsDto>();
         }
     }
 }

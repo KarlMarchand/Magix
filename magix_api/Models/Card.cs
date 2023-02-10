@@ -1,4 +1,4 @@
-using magix_api.Dtos.Card;
+using magix_api.Dtos.CardDto;
 
 namespace magix_api;
 
@@ -30,13 +30,15 @@ public class Card
 
     public Card(ServerCardDto cardData)
     {
-        Id = cardData.Id;
-        Cost = cardData.Cost;
-        Hp = cardData.Hp;
-        Atk = cardData.Atk;
-        Mechanics = cardData.Mechanics;
-        Dedicated = cardData.Dedicated;
-        CustomCard customData = Card._customCards[Id];
+        Id = cardData.id;
+        Cost = cardData.cost;
+        Hp = cardData.hp;
+        Atk = cardData.atk;
+        Mechanics = cardData.mechanics;
+        Dedicated = cardData.dedicated;
+
+        int index = Card._customCards.ContainsKey(Id) ? Id : 0;
+        CustomCard customData = Card._customCards[index];
         CardName = customData.CardName;
         Faction = customData.Faction;
         Sound = customData.Sound;
