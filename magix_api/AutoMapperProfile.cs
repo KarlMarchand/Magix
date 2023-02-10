@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using magix_api.Dtos.Player;
-using magix_api.Models;
-
+using magix_api.Dtos.Card;
 
 namespace magix_api
 {
@@ -16,6 +11,7 @@ namespace magix_api
             CreateMap<Player, GetPlayerDto>();
             CreateMap<AddPlayerDto, Player>();
             CreateMap<UpdatePlayerDto, Player>();
+            CreateMap<GetCardDto, Card>();
         }
     }
 }

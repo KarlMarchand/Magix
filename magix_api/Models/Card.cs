@@ -1,48 +1,48 @@
 using magix_api.Dtos.Card;
 
-namespace magix_api.Models
-{
-    public class CustomCard
-    {
-        public string CardName { get; set; }
-        public string? Faction { get; set; }
-        public string? Sound { get; set; }
+namespace magix_api;
 
-        public CustomCard(string cardName, string? faction = null, string? sound = null)
-        {
-            CardName = cardName;
-            Faction = faction;
-            Sound = sound;
-        }
+public class CustomCard
+{
+    public string CardName { get; set; }
+    public string? Faction { get; set; }
+    public string? Sound { get; set; }
+
+    public CustomCard(string cardName, string? faction = null, string? sound = null)
+    {
+        CardName = cardName;
+        Faction = faction;
+        Sound = sound;
+    }
+}
+
+public class Card
+{
+    public int Id { get; set; }
+    public int Cost { get; set; }
+    public int Hp { get; set; }
+    public int Atk { get; set; }
+    public List<string> Mechanics { get; set; }
+    public string Dedicated { get; set; }
+    public string? CardName { get; set; }
+    public string? Faction { get; set; }
+    public string? Sound { get; set; }
+
+    public Card(ServerCardDto cardData)
+    {
+        Id = cardData.Id;
+        Cost = cardData.Cost;
+        Hp = cardData.Hp;
+        Atk = cardData.Atk;
+        Mechanics = cardData.Mechanics;
+        Dedicated = cardData.Dedicated;
+        CustomCard customData = Card._customCards[Id];
+        CardName = customData.CardName;
+        Faction = customData.Faction;
+        Sound = customData.Sound;
     }
 
-    public class Card
-    {
-        public int Id { get; set; }
-        public int Cost { get; set; }
-        public int Hp { get; set; }
-        public int Atk { get; set; }
-        public List<string> Mechanics { get; set; }
-        public string Dedicated { get; set; }
-        public string? CardName { get; set; }
-        public string? Faction { get; set; }
-        public string? Sound { get; set; }
-
-        public Card(ServerCardDto cardData)
-        {
-            Id = cardData.Id;
-            Cost = cardData.Cost;
-            Hp = cardData.Hp;
-            Atk = cardData.Atk;
-            Mechanics = cardData.Mechanics;
-            Dedicated = cardData.Dedicated;
-            CustomCard customData = Card._customCards[Id];
-            CardName = customData.CardName;
-            Faction = customData.Faction;
-            Sound = customData.Sound;
-        }
-
-        private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
+    private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
             {0, new CustomCard("Missing Card")},
             {1, new CustomCard("Minion", "empire")},
             {2, new CustomCard("IG-100 MagnaGuard", "separatist")},
@@ -141,5 +141,4 @@ namespace magix_api.Models
             { 95, new CustomCard("IG-88", "criminal")},
             { 96, new CustomCard("Rebel commandos", "rebel")},
         };
-    }
 }

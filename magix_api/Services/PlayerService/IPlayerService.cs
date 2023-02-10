@@ -1,6 +1,4 @@
 using magix_api.Dtos.Player;
-using magix_api.Models;
-
 
 namespace magix_api.Services.PlayerService
 {

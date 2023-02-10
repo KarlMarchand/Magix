@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace magix_api;
+﻿namespace magix_api;
 
 public partial class PlayedCard
 {
