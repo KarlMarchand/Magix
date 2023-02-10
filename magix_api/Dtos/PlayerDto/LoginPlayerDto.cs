@@ -1,5 +1,5 @@
 
-namespace magix_api.Dtos.Player
+namespace magix_api.Dtos.PlayerDto
 {
     public class LoginPlayerDto
     {

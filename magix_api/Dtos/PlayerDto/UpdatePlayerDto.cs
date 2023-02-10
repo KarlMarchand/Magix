@@ -1,7 +1,7 @@
 
-namespace magix_api.Dtos.Player
+namespace magix_api.Dtos.PlayerDto
 {
-    public class GetPlayerDto
+    public class UpdatePlayerDto
     {
         public int Id { get; set; }
         public string Username { get; set; } = "";
@@ -13,7 +13,5 @@ namespace magix_api.Dtos.Player
         public int BestTrophyScore { get; set; } = 0;
 
         public string Faction { get; set; } = "rebel";
-
-        public string? Token { get; set; }
     }
 }

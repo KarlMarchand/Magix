@@ -1,5 +1,5 @@
 
-namespace magix_api.Dtos.Card
+namespace magix_api.Dtos.CardDto
 {
     public class GetCardDto
     {

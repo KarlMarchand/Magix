@@ -1,6 +1,6 @@
-namespace magix_api.Dtos.Hero
+namespace magix_api.Dtos.HeroDto
 {
-    public class ServerHeroDto
+    public class GetHeroDto
     {
         public string Name { get; set; }
         public string Power { get; set; }

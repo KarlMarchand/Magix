@@ -1,4 +1,4 @@
-namespace magix_api.Dtos.Talent
+namespace magix_api.Dtos.TalentDto
 {
     public class GetTalentDto
     {
