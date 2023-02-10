@@ -1,24 +1,11 @@
 using magix_api.Dtos.Talent;
+using magix_api.Class;
 
-namespace magix_api.Models
+namespace magix_api;
+
+public class Talent : ConvertibleModel
 {
-    public class Talent
-    {
-        public string Name { get; }
-        public string Description { get; }
-
-        public Talent(ServerTalentDto gameServerVersion)
-        {
-            Name = ConvertName(gameServerVersion.Name);
-            Description = gameServerVersion.Desc;
-        }
-
-        private static string ConvertName(string originalData)
-        {
-            return _talentConversion.TryGetValue(originalData, out string? convertedData) ? convertedData : originalData;
-        }
-
-        private static readonly Dictionary<string, string> _talentConversion = new Dictionary<string, string>{
+    private static readonly Dictionary<string, string> _talentNameConversion = new Dictionary<string, string>{
                 {"SpawnMinion", "Ambush"},
                 {"ExtraCrystal", "Conscription"},
                 {"ShieldProtection", "Energy_Shield"},
@@ -26,5 +13,17 @@ namespace magix_api.Models
                 {"LifeBoost", "Life_Ritual"},
                 {"ExtraCard", "Scavenger"}
         };
+    public string Description { get; set; }
+
+    public Talent(ServerTalentDto gameServerVersion) : base(_talentNameConversion)
+    {
+        Name = gameServerVersion.Name;
+        Description = gameServerVersion.Desc;
+    }
+
+    public Talent(GetTalentDto frontendVersion) : base(_talentNameConversion)
+    {
+        Name = frontendVersion.Name;
+        Description = frontendVersion.Description;
     }
 }

@@ -1,34 +1,34 @@
 using magix_api.Dtos.Hero;
+using magix_api.Class;
 
-namespace magix_api.Models
+namespace magix_api;
+
+public class Hero : ConvertibleModel
 {
-    public class Hero
+    private static readonly Dictionary<string, string> _heroNameConversion = new Dictionary<string, string>{
+            {"DemonHunter", "Bounty_Hunter"},
+            {"Hunter", "Ace_Pilot"},
+            {"Priest", "Diplomat"},
+            {"Druid", "Scout"},
+            {"Paladin", "Guardian"},
+            {"Warlock", "Mystic"},
+            {"Shaman", "Night_Sister"},
+            {"Rogue", "Smuggler"},
+            {"Warrior", "Soldier"},
+            {"Mage", "Slicer"},
+    };
+
+    public string Power { get; set; }
+
+    public Hero(ServerHeroDto gameServerVersion) : base(_heroNameConversion)
     {
-        public string Name { get; }
-        public string Power { get; }
+        Name = gameServerVersion.Name;
+        Power = gameServerVersion.Power;
+    }
 
-        public Hero(ServerHeroDto gameServerVersion)
-        {
-            Name = ConvertName(gameServerVersion.Name);
-            Power = gameServerVersion.Power;
-        }
-
-        private static string ConvertName(string originalData)
-        {
-            return _nameConversion.TryGetValue(originalData, out string? convertedData) ? convertedData : originalData;
-        }
-
-        private static readonly Dictionary<string, string> _nameConversion = new Dictionary<string, string>{
-                {"DemonHunter", "Bounty_Hunter"},
-                {"Hunter", "Ace_Pilot"},
-                {"Priest", "Diplomat"},
-                {"Druid", "Scout"},
-                {"Paladin", "Guardian"},
-                {"Warlock", "Mystic"},
-                {"Shaman", "Night_Sister"},
-                {"Rogue", "Smuggler"},
-                {"Warrior", "Soldier"},
-                {"Mage", "Slicer"},
-        };
+    public Hero(GetHeroDto frontendVersion) : base(_heroNameConversion)
+    {
+        Name = frontendVersion.Name;
+        Power = frontendVersion.Power;
     }
 }
