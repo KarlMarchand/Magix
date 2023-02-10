@@ -1,5 +1,4 @@
-using magix_api.Dtos.Hero;
-using magix_api.Class;
+using magix_api.Dtos.HeroDto;
 
 namespace magix_api;
 
@@ -22,8 +21,8 @@ public class Hero : ConvertibleModel
 
     public Hero(ServerHeroDto gameServerVersion) : base(_heroNameConversion)
     {
-        Name = gameServerVersion.Name;
-        Power = gameServerVersion.Power;
+        Name = gameServerVersion.name;
+        Power = gameServerVersion.power;
     }
 
     public Hero(GetHeroDto frontendVersion) : base(_heroNameConversion)

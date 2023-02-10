@@ -1,5 +1,4 @@
-using magix_api.Dtos.Talent;
-using magix_api.Class;
+using magix_api.Dtos.TalentDto;
 
 namespace magix_api;
 
@@ -17,8 +16,8 @@ public class Talent : ConvertibleModel
 
     public Talent(ServerTalentDto gameServerVersion) : base(_talentNameConversion)
     {
-        Name = gameServerVersion.Name;
-        Description = gameServerVersion.Desc;
+        Name = gameServerVersion.name;
+        Description = gameServerVersion.desc;
     }
 
     public Talent(GetTalentDto frontendVersion) : base(_talentNameConversion)

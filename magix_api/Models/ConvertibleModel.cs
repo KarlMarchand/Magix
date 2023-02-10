@@ -1,4 +1,4 @@
-namespace magix_api.Class;
+namespace magix_api;
 
 public class ConvertibleModel
 {
@@ -31,9 +31,7 @@ public class ConvertibleModel
 
         if (!dict.TryGetValue(originalData, out result))
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(string.Format("Can't seems to find the {0} string in specified converter.", originalData));
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         return result ?? originalData;
