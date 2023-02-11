@@ -4,6 +4,7 @@ using magix_api.Services.DeckService;
 using magix_api.Repositories;
 using magix_api.Data;
 using Microsoft.EntityFrameworkCore;
+using magix_api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,6 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeckService, DeckService>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors("corspolicy");
 
