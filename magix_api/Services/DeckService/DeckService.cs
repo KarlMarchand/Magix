@@ -5,6 +5,7 @@ using magix_api.Dtos.TalentDto;
 using magix_api.Dtos.HeroDto;
 using magix_api.Dtos.FactionDto;
 using magix_api.Repositories;
+using magix_api.Dtos.PlayerDto;
 
 namespace magix_api.Services.DeckService
 {
@@ -64,6 +65,11 @@ namespace magix_api.Services.DeckService
             List<Talent> talentList = await _deckRepository.GetAllTalents();
             serviceResponse.Data = _mapper.Map<List<Talent>, List<GetTalentDto>>(talentList);
             return serviceResponse;
+        }
+
+        Task<ServiceResponse<List<Deck>>> IDeckService.GetAllDecks(IdPlayerDto playerInfos)
+        {
+            throw new NotImplementedException();
         }
     }
 }
