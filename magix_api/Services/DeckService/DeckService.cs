@@ -1,5 +1,4 @@
 using AutoMapper;
-using magix_api.Data;
 using magix_api.Dtos.DeckDto;
 using magix_api.Dtos.CardDto;
 using magix_api.Dtos.TalentDto;
@@ -12,18 +11,14 @@ namespace magix_api.Services.DeckService
     public class DeckService : IDeckService
     {
         private readonly IMapper _mapper;
-        private readonly MagixContext _context;
-
         private readonly IDeckRepository _deckRepository;
 
         public DeckService(
                 IMapper mapper,
-                MagixContext context,
                 IDeckRepository deckRepository
             )
         {
             _deckRepository = deckRepository;
-            _context = context;
             _mapper = mapper;
         }
 

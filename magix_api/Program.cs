@@ -24,6 +24,8 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 }));
 
 // Add Custom Repositories
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IDeckRepository, DeckRepository>();
 
 // Add Custom Services

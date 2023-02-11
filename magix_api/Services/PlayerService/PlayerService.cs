@@ -1,31 +1,25 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using magix_api.Data;
 using magix_api.Dtos.PlayerDto;
-using magix_api.utils;
 
 namespace magix_api.Services.PlayerService
 {
     public class PlayerService : IPlayerService
     {
         private readonly IMapper _mapper;
-        private readonly MagixContext _context;
 
-        public PlayerService(IMapper mapper, MagixContext context)
+        public PlayerService(IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<List<GetPlayerDto>>> AddPlayer(ServerPlayerDto newPlayer)
-        {
-            var serviceResponse = new ServiceResponse<List<GetPlayerDto>>();
-            var player = _mapper.Map<Player>(newPlayer);
-            await _context.Players.AddAsync(player);
-            var players = await _context.Players.ToListAsync();
-            serviceResponse.Data = players.Select(p => _mapper.Map<GetPlayerDto>(p)).ToList();
-            return serviceResponse;
-        }
+        // private async Task<ServiceResponse<List<GetPlayerDto>>> AddPlayer(ServerPlayerDto newPlayer)
+        // {
+        //     var player = _mapper.Map<Player>(newPlayer);
+        //     await _context.Players.AddAsync(player);
+        //     var players = await _context.Players.ToListAsync();
+        //     serviceResponse.Data = players.Select(p => _mapper.Map<GetPlayerDto>(p)).ToList();
+        // }
 
         public async Task<ServiceResponse<GetPlayerDto>> Login(LoginPlayerDto userInfos)
         {

@@ -3,17 +3,19 @@ using magix_api.Dtos.CardDto;
 using magix_api.utils;
 using magix_api.Dtos.TalentDto;
 using magix_api.Dtos.HeroDto;
-
+using magix_api.Data;
 
 namespace magix_api.Repositories
 {
     public class DeckRepository : IDeckRepository
     {
         private readonly IMemoryCache _memoryCache;
+        private readonly MagixContext _context;
 
-        public DeckRepository(IMemoryCache memoryCache)
+        public DeckRepository(IMemoryCache memoryCache, MagixContext context)
         {
             _memoryCache = memoryCache;
+            _context = context;
         }
 
         public async Task<List<Card>> GetAllCards()
