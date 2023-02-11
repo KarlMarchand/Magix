@@ -33,6 +33,12 @@ builder.Services.AddScoped<IDeckService, DeckService>();
 
 var app = builder.Build();
 
+app.Use((context, next) =>
+{
+    context.Request.EnableBuffering();
+    return next();
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -22,12 +22,14 @@ namespace magix_api.Controllers
             return Ok(await _playerService.Login(userInfos));
         }
 
+        [ValidateKey]
         [HttpPost("logout")]
         public async Task<ActionResult<ServiceResponse<string>>> Logout(IdPlayerDto userInfos)
         {
             return Ok(await _playerService.Logout(userInfos));
         }
 
+        [ValidateKey]
         [HttpPost("profile")]
         public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> GetProfile(IdPlayerDto userInfos)
         {
