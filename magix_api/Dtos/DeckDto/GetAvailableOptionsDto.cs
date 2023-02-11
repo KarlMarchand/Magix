@@ -7,9 +7,9 @@ namespace magix_api.Dtos.DeckDto
 {
     public class GetAvailableOptionsDto
     {
-        public List<GetCardDto> cards { get; set; }
-        public List<GetTalentDto> talents { get; set; }
-        public List<GetHeroDto> heroes { get; set; }
-        public List<GetFactionDto> factions { get; set; }
+        public List<GetCardDto> cards { get; set; } = null!;
+        public List<GetTalentDto> talents { get; set; } = null!;
+        public List<GetHeroDto> heroes { get; set; } = null!;
+        public List<GetFactionDto> factions { get; set; } = null!;
     }
 }

@@ -7,7 +7,7 @@ namespace magix_api.Dtos.CardDto
         public int cost { get; set; }
         public int hp { get; set; }
         public int atk { get; set; }
-        public List<string> mechanics { get; set; }
-        public string dedicated { get; set; }
+        public List<string> mechanics { get; set; } = null!;
+        public string dedicated { get; set; } = null!;
     }
 }

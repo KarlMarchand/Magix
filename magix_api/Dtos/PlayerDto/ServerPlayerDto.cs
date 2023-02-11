@@ -5,7 +5,7 @@ namespace magix_api.Dtos.PlayerDto
     {
         public string Username { get; set; } = "";
 
-        public string? Class { get; set; }
+        public string Class { get; set; } = null!;
 
         public int Trophies { get; set; } = 0;
 
