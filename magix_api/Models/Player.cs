@@ -6,9 +6,9 @@ public partial class Player
 
     public string Username { get; set; } = null!;
 
-    public int? Trophies { get; set; }
+    public int Trophies { get; set; }
 
-    public int? BestTrophyScore { get; set; }
+    public int BestTrophyScore { get; set; }
 
     public virtual ICollection<Deck> Decks { get; } = new List<Deck>();
 
