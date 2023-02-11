@@ -14,8 +14,7 @@ namespace magix_api
         public AutoMapperProfile()
         {
             CreateMap<Player, GetPlayerDto>();
-            CreateMap<AddPlayerDto, Player>();
-            CreateMap<UpdatePlayerDto, Player>();
+            CreateMap<ServerPlayerDto, Player>();
 
             CreateMap<Card, GetCardDto>();
             CreateMap<GetCardDto, Card>();

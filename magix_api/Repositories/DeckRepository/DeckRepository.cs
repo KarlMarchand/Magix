@@ -20,7 +20,7 @@ namespace magix_api.Repositories
         {
             List<Card>? result = null;
             //result = _memoryCache.Get<List<Card>>("cards");
-            if (result == null)
+            if (result is null)
             {
                 try
                 {
@@ -54,7 +54,7 @@ namespace magix_api.Repositories
         {
             List<Hero>? result = null;
             // result = _memoryCache.Get<List<Hero>>("heroes");
-            if (result == null)
+            if (result is null)
             {
                 try
                 {
@@ -82,7 +82,7 @@ namespace magix_api.Repositories
         {
             List<Talent>? result = null;
             // result = _memoryCache.Get<List<Talent>>("talents");
-            if (result == null)
+            if (result is null)
             {
                 try
                 {

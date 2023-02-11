@@ -1,6 +1,7 @@
 using magix_api.Dtos.PlayerDto;
 using magix_api.Services.PlayerService;
 using Microsoft.AspNetCore.Mvc;
+using magix_api.Middlewares;
 
 namespace magix_api.Controllers
 {
@@ -21,45 +22,16 @@ namespace magix_api.Controllers
             return Ok(await _playerService.Login(userInfos));
         }
 
-        [HttpGet("GetAll")] // Create a sub-route at api/Player/GetAll
-        // Could also, instead of adding ("GetAll") in the httpGet attribute, I could add [Route("GetAll")] on line under to define a "sub-route"
-        public async Task<ActionResult<ServiceResponse<List<GetPlayerDto>>>> Get()
+        [HttpPost("logout")]
+        public async Task<ActionResult<ServiceResponse<string>>> Logout(IdPlayerDto userInfos)
         {
-            return Ok(await _playerService.GetAllPlayers());
+            return Ok(await _playerService.Logout(userInfos));
         }
 
-        [HttpGet("{username}")]
-        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> GetSingle(string username)
+        [HttpPost("profile")]
+        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> GetProfile(IdPlayerDto userInfos)
         {
-            return Ok(await _playerService.GetPlayerByUsername(username));
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetPlayerDto>>>> AddPlayer(AddPlayerDto newPlayer)
-        {
-            return Ok(await _playerService.AddPlayer(newPlayer));
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<ServiceResponse<List<GetPlayerDto>>>> UpdatePlayer(UpdatePlayerDto updatedPlayer)
-        {
-            var response = await _playerService.UpdatePlayer(updatedPlayer);
-            if (response.Data is null)
-            {
-                return NotFound(response);
-            }
-            return Ok(response);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<GetPlayerDto>>>> DeletePlayer(int id)
-        {
-            var response = await _playerService.DeletePlayer(id);
-            if (response.Data is null)
-            {
-                return NotFound(response);
-            }
-            return Ok(response);
+            return Ok(await _playerService.GetProfile(userInfos));
         }
 
     }

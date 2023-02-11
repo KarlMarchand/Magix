@@ -1,7 +1,7 @@
 
 namespace magix_api.Dtos.PlayerDto
 {
-    public class AddPlayerDto
+    public class ServerPlayerDto
     {
         public string Username { get; set; } = "";
 
