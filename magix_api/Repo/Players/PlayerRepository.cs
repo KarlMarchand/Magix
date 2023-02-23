@@ -12,7 +12,7 @@ namespace magix_api.Repositories
             _context = context;
         }
 
-        Task<GetPlayerDto> IPlayerRepository.GetPlayer(ServerPlayerDto playerInfos)
+        Task<GetPlayerDto> IPlayerRepository.GetPlayer(Player playerInfos)
         {
             throw new NotImplementedException();
         }

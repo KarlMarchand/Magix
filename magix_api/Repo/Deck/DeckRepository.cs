@@ -1,8 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
-using magix_api.Dtos.CardDto;
 using magix_api.utils;
-using magix_api.Dtos.TalentDto;
-using magix_api.Dtos.HeroDto;
 using magix_api.Data;
 
 namespace magix_api.Repositories
@@ -26,10 +23,9 @@ namespace magix_api.Repositories
             {
                 try
                 {
-                    List<ServerCardDto>? list = await GameServerAPI.CallApi<List<ServerCardDto>>("cards");
-                    if (list != null)
+                    result = await GameServerAPI.CallApi<List<Card>>("cards");
+                    if (result != null)
                     {
-                        result = list.Select(x => new Card(x)).ToList();
                         // var input = _memoryCache.Set("cards", result, TimeSpan.FromDays(1));
                     }
                 }
@@ -60,12 +56,11 @@ namespace magix_api.Repositories
             {
                 try
                 {
-                    List<ServerHeroDto>? list = await GameServerAPI.CallApi<List<ServerHeroDto>>("heroes");
+                    List<Hero>? list = await GameServerAPI.CallApi<List<Hero>>("heroes");
                     if (list != null)
                     {
-                        result = list.Select(x =>
+                        result = list.Select(hero =>
                         {
-                            Hero hero = new Hero(x);
                             hero.ToFrontend();
                             return hero;
                         }).ToList();
@@ -88,12 +83,11 @@ namespace magix_api.Repositories
             {
                 try
                 {
-                    List<ServerTalentDto>? list = await GameServerAPI.CallApi<List<ServerTalentDto>>("talents");
+                    List<Talent>? list = await GameServerAPI.CallApi<List<Talent>>("talents");
                     if (list != null)
                     {
-                        result = list.Select(x =>
+                        result = list.Select(talent =>
                         {
-                            Talent talent = new Talent(x);
                             talent.ToFrontend();
                             return talent;
                         }).ToList();

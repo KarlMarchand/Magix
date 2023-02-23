@@ -1,5 +1,3 @@
-using magix_api.Dtos.CardDto;
-
 namespace magix_api;
 
 public class CustomCard
@@ -18,31 +16,26 @@ public class CustomCard
 
 public class Card
 {
-    public int Id { get; set; }
+    private int _id;
+    public int Id { 
+        get => _id; 
+        set{
+            _id = value;
+            int index = Card._customCards.ContainsKey(value) ? value : 0;
+            CustomCard customData = Card._customCards[index];
+            CardName = customData.CardName;
+            Faction = customData.Faction;
+            Sound = customData.Sound;
+        }
+    }
     public int Cost { get; set; }
     public int Hp { get; set; }
     public int Atk { get; set; }
-    public List<string> Mechanics { get; set; }
-    public string Dedicated { get; set; }
+    public List<string> Mechanics { get; set; } = default!;
+    public string Dedicated { get; set; } = default!;
     public string? CardName { get; set; }
     public string? Faction { get; set; }
     public string? Sound { get; set; }
-
-    public Card(ServerCardDto cardData)
-    {
-        Id = cardData.id;
-        Cost = cardData.cost;
-        Hp = cardData.hp;
-        Atk = cardData.atk;
-        Mechanics = cardData.mechanics;
-        Dedicated = cardData.dedicated;
-
-        int index = Card._customCards.ContainsKey(Id) ? Id : 0;
-        CustomCard customData = Card._customCards[index];
-        CardName = customData.CardName;
-        Faction = customData.Faction;
-        Sound = customData.Sound;
-    }
 
     private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
             {0, new CustomCard("Missing Card")},

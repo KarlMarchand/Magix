@@ -30,7 +30,7 @@ namespace magix_api.utils
                 Console.WriteLine(result);
             }
 
-            return JsonSerializer.Deserialize<T>(result);
+            return JsonSerializer.Deserialize<T>(result, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
     }
 

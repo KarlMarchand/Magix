@@ -1,4 +1,5 @@
 using magix_api.Dtos.TalentDto;
+using System.Text.Json.Serialization;
 
 namespace magix_api;
 
@@ -12,17 +13,8 @@ public class Talent : ConvertibleModel
                 {"LifeBoost", "Life_Ritual"},
                 {"ExtraCard", "Scavenger"}
         };
-    public string Description { get; set; }
+    [JsonPropertyName("desc")]
+    public string Description { get; set; } = default!;
 
-    public Talent(ServerTalentDto gameServerVersion) : base(_talentNameConversion)
-    {
-        Name = gameServerVersion.name;
-        Description = gameServerVersion.desc;
-    }
-
-    public Talent(GetTalentDto frontendVersion) : base(_talentNameConversion)
-    {
-        Name = frontendVersion.Name;
-        Description = frontendVersion.Description;
-    }
+    public Talent() : base(_talentNameConversion) {}
 }

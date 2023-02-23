@@ -17,17 +17,7 @@ public class Hero : ConvertibleModel
             {"Mage", "Slicer"},
     };
 
-    public string Power { get; set; }
+    public string Power { get; set; } = default!;
 
-    public Hero(ServerHeroDto gameServerVersion) : base(_heroNameConversion)
-    {
-        Name = gameServerVersion.name;
-        Power = gameServerVersion.power;
-    }
-
-    public Hero(GetHeroDto frontendVersion) : base(_heroNameConversion)
-    {
-        Name = frontendVersion.Name;
-        Power = frontendVersion.Power;
-    }
+    public Hero() : base(_heroNameConversion) {}
 }

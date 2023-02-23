@@ -2,7 +2,6 @@ using AutoMapper;
 using magix_api.utils;
 using magix_api.Dtos.PlayerDto;
 using magix_api.Repositories;
-using Microsoft.AspNetCore.Mvc;
 
 namespace magix_api.Services.PlayerService
 {
@@ -17,18 +16,10 @@ namespace magix_api.Services.PlayerService
             _playerRepository = playerRepository;
         }
 
-        // private async Task<ServiceResponse<List<GetPlayerDto>>> AddPlayer(ServerPlayerDto newPlayer)
-        // {
-        //     var player = _mapper.Map<Player>(newPlayer);
-        //     await _context.Players.AddAsync(player);
-        //     var players = await _context.Players.ToListAsync();
-        //     serviceResponse.Data = players.Select(p => _mapper.Map<GetPlayerDto>(p)).ToList();
-        // }
-
         public async Task<ServiceResponse<GetPlayerDto>> Login(LoginPlayerDto userInfos)
         {
             var serviceResponse = new ServiceResponse<GetPlayerDto>();
-            var response = await GameServerAPI.CallApi<ServerPlayerDto>("signin", new Dictionary<string, string>() {
+            var response = await GameServerAPI.CallApi<Player>("signin", new Dictionary<string, string>() {
                 { "username", userInfos.Username },
                 { "password", userInfos.Password }
             });
