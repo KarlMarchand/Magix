@@ -7,10 +7,10 @@ namespace magix_api.Dtos.CardDto
         public int Cost { get; set; }
         public int Hp { get; set; }
         public int Atk { get; set; }
-        public List<string> Mechanics { get; set; } = null!;
-        public string Dedicated { get; set; } = null!;
-        public string CardName { get; set; } = null!;
-        public string Faction { get; set; } = null!;
-        public string Sound { get; set; } = null!;
+        public List<string> Mechanics { get; set; } = default!;
+        public string Dedicated { get; set; } = default!;
+        public string CardName { get; set; } = default!;
+        public string Faction { get; set; } = default!;
+        public string Sound { get; set; } = default!;
     }
 }

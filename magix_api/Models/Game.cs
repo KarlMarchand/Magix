@@ -8,13 +8,13 @@ public partial class Game
 
     public int Deck { get; set; }
 
-    public string Opponent { get; set; } = null!;
+    public string Opponent { get; set; } = default!;
 
     public DateOnly Date { get; set; }
 
     public bool Won { get; set; }
 
-    public virtual Deck DeckNavigation { get; set; } = null!;
+    public virtual Deck DeckNavigation { get; set; } = default!;
 
-    public virtual Player PlayerNavigation { get; set; } = null!;
+    public virtual Player PlayerNavigation { get; set; } = default!;
 }

@@ -4,7 +4,9 @@ public partial class Player
 {
     public int Id { get; set; }
 
-    public string Username { get; set; } = null!;
+    public string Key {get; set;} = default!;
+
+    public string Username { get; set; } = default!;
 
     public int Trophies { get; set; }
 

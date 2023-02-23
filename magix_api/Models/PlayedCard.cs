@@ -12,5 +12,5 @@ public partial class PlayedCard
 
     public int Victory { get; set; }
 
-    public virtual Player PlayerNavigation { get; set; } = null!;
+    public virtual Player PlayerNavigation { get; set; } = default!;
 }

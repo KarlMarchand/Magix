@@ -6,19 +6,19 @@ public partial class Deck
 
     public int Player { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = default!;
 
-    public int[] Cards { get; set; } = null!;
+    public int[] Cards { get; set; } = default!;
 
-    public string Class { get; set; } = null!;
+    public string Class { get; set; } = default!;
 
-    public string Talent { get; set; } = null!;
+    public string Talent { get; set; } = default!;
 
-    public string Faction { get; set; } = null!;
+    public string Faction { get; set; } = default!;
 
     public bool Active { get; set; } = true;
 
     public virtual ICollection<Game> Games { get; } = new List<Game>();
 
-    public virtual Player PlayerNavigation { get; set; } = null!;
+    public virtual Player PlayerNavigation { get; set; } = default!;
 }

@@ -45,7 +45,7 @@ namespace magix_api.Middlewares
     }
     public class KeyRequest
     {
-        public string Key { get; set; } = null!;
+        public string Key { get; set; } = default!;
     }
 
 }

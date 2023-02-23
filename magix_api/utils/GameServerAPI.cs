@@ -23,14 +23,26 @@ namespace magix_api.utils
             }
 
             response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync();
 
-            if (result.Contains("<br"))
+            if (json.Contains("<br"))
             {
-                Console.WriteLine(result);
+                Console.WriteLine(json);
             }
 
-            return JsonSerializer.Deserialize<T>(result, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            T? result = default;
+
+            Console.WriteLine(json);
+            try
+            {
+                result = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(json);
+            }
+            return result;
+
         }
     }
 

@@ -16,12 +16,12 @@ namespace magix_api.Services.PlayerService
             _playerRepository = playerRepository;
         }
 
-        public async Task<ServiceResponse<GetPlayerDto>> Login(LoginPlayerDto userInfos)
+        public async Task<ServiceResponse<GetPlayerDto>> Login(string username, string password)
         {
             var serviceResponse = new ServiceResponse<GetPlayerDto>();
             var response = await GameServerAPI.CallApi<Player>("signin", new Dictionary<string, string>() {
-                { "username", userInfos.Username },
-                { "password", userInfos.Password }
+                { "username", username },
+                { "password", password }
             });
             if (response != null && response.GetType() != typeof(string))
             {
@@ -30,7 +30,8 @@ namespace magix_api.Services.PlayerService
             }
             else
             {
-                throw new Exception("Bad Logins");
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Bad Logins";
             }
             return serviceResponse;
         }

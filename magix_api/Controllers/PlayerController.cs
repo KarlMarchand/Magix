@@ -17,9 +17,9 @@ namespace magix_api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(LoginPlayerDto userInfos)
+        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(string username, string password)
         {
-            return Ok(await _playerService.Login(userInfos));
+            return Ok(await _playerService.Login(username, password));
         }
 
         [ValidateKey]
