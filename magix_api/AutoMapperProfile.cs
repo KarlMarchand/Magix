@@ -26,8 +26,6 @@ namespace magix_api
 
             CreateMap<Talent, GetTalentDto>();
             CreateMap<GetTalentDto, Talent>();
-
-            CreateMap<AvailableOptions, GetAvailableOptionsDto>();
         }
     }
 }
