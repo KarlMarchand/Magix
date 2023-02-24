@@ -2,15 +2,13 @@
 
 public partial class PlayedCard
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
-    public int Player { get; set; }
+    public Player Player { get; set; } = default!;
 
-    public int CardId { get; set; }
+    public Card CardId { get; set; } = default!;
 
     public int TimePlayed { get; set; }
 
     public int Victory { get; set; }
-
-    public virtual Player PlayerNavigation { get; set; } = default!;
 }

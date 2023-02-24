@@ -8,8 +8,6 @@ public partial class Deck
 
     public string Name { get; set; } = default!;
 
-    public int[] Cards { get; set; } = default!;
-
     public string Class { get; set; } = default!;
 
     public string Talent { get; set; } = default!;
@@ -17,6 +15,8 @@ public partial class Deck
     public string Faction { get; set; } = default!;
 
     public bool Active { get; set; } = true;
+
+    public virtual ICollection<Card> Cards { get; } = new List<Card>();
 
     public virtual ICollection<Game> Games { get; } = new List<Game>();
 

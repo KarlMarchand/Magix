@@ -5,7 +5,7 @@ public class ConvertibleModel
     private readonly Dictionary<string, string> _nameConversion;
     private readonly Dictionary<string, string> _reverseConversion;
 
-    public string Name { get; set; } = "";
+    public string Name { get; set; } = default!;
 
     protected ConvertibleModel(Dictionary<string, string> nameConversion)
     {

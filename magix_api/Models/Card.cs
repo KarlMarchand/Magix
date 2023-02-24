@@ -3,10 +3,10 @@ namespace magix_api;
 public class CustomCard
 {
     public string CardName { get; set; }
-    public string? Faction { get; set; }
+    public Faction? Faction { get; set; }
     public string? Sound { get; set; }
 
-    public CustomCard(string cardName, string? faction = null, string? sound = null)
+    public CustomCard(string cardName, Faction? faction = null, string? sound = null)
     {
         CardName = cardName;
         Faction = faction;
@@ -33,14 +33,14 @@ public class Card
     public int Atk { get; set; }
     public List<string> Mechanics { get; set; } = default!;
     public string Dedicated { get; set; } = default!;
-    public string? CardName { get; set; }
-    public string? Faction { get; set; }
+    public string CardName { get; set; } = default!;
+    public Faction? Faction { get; set; }
     public string? Sound { get; set; }
 
     private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
-            {0, new CustomCard("Missing Card")},
-            {1, new CustomCard("Minion", "empire")},
-            {2, new CustomCard("IG-100 MagnaGuard", "separatist")},
+            { 0, new CustomCard("Missing Card")},
+            { 1, new CustomCard("Minion", "empire")},
+            { 2, new CustomCard("IG-100 MagnaGuard", "separatist")},
             { 3, new CustomCard("Scout Trooper", "empire")},
             { 4, new CustomCard("74-Z Speeder Bike", "empire")},
             { 5, new CustomCard("Probe Droid", "empire")},

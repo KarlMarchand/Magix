@@ -1,4 +1,4 @@
-using magix_api.Dtos.TalentDto;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace magix_api;

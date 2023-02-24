@@ -1,5 +1,3 @@
-using magix_api.Dtos.HeroDto;
-
 namespace magix_api;
 
 public class Hero : ConvertibleModel
