@@ -4,6 +4,7 @@ namespace magix_api.Repositories
 {
     public interface IPlayerRepository
     {
-        Task<GetPlayerDto> GetPlayer(Player playerInfos);
+        Task<Player> GetPlayer(Player playerInfos);
+        Task<Player> GetProfile(int playerId);
     }
 }

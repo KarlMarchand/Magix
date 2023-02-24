@@ -2,8 +2,6 @@
 
 public partial class PlayerStat
 {
-    public int Id { get; set; }
-
     public long GamePlayed { get; set; }
 
     public decimal? Wins { get; set; }

@@ -19,14 +19,16 @@ namespace magix_api.Services.PlayerService
         public async Task<ServiceResponse<GetPlayerDto>> Login(string username, string password)
         {
             var serviceResponse = new ServiceResponse<GetPlayerDto>();
-            var response = await GameServerAPI.CallApi<Player>("signin", new Dictionary<string, string>() {
+            ServerResponse<Player> response = await GameServerAPI.CallApi<Player>("signin", new Dictionary<string, string>() {
                 { "username", username },
                 { "password", password }
             });
-            if (response != null && response.GetType() != typeof(string))
+            if (response.IsValid && response.Content != null)
             {
-                GetPlayerDto player = await _playerRepository.GetPlayer(response);
-                serviceResponse.Data = player;
+                Player incompletePlayer = response.Content;
+                incompletePlayer.Username = username;
+                Player player = await _playerRepository.GetPlayer(incompletePlayer);
+                serviceResponse.Data = _mapper.Map<GetPlayerDto>(player);
             }
             else
             {
@@ -39,14 +41,16 @@ namespace magix_api.Services.PlayerService
         public async Task<ServiceResponse<GetPlayerDto>> GetProfile(IdPlayerDto userInfos)
         {
             var serviceResponse = new ServiceResponse<GetPlayerDto>();
+            Player player = await _playerRepository.GetProfile(userInfos.Id);
+            serviceResponse.Data = _mapper.Map<GetPlayerDto>(player); 
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<string>> Logout(IdPlayerDto userInfos)
         {
             var serviceResponse = new ServiceResponse<string>();
-            var response = await GameServerAPI.CallApi<string>("signout", new Dictionary<string, string>() { { "key", userInfos.Key } });
-            serviceResponse.Data = response;
+            ServerResponse<string> response = await GameServerAPI.CallApi<string>("signout", new Dictionary<string, string>() { { "key", userInfos.Key } });
+            serviceResponse.Data = response.Content;
             return serviceResponse;
         }
     }
