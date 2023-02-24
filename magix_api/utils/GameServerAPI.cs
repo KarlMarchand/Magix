@@ -4,7 +4,7 @@ namespace magix_api.utils
 {
     public static class GameServerAPI
     {
-        public static async Task<T?> CallApi<T>(string service, Dictionary<string, string>? data = null)
+        public static async Task<ServerResponse<T>> CallApi<T>(string service, Dictionary<string, string>? data = null)
         {
             string apiURL = "https://magix.apps-de-cours.com/api/" + service;
 
@@ -25,24 +25,23 @@ namespace magix_api.utils
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 
-            if (json.Contains("<br"))
-            {
-                Console.WriteLine(json);
-            }
-
-            T? result = default;
-
-            Console.WriteLine(json);
+            ServerResponse<T> result;
             try
             {
-                result = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                T answer = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+                result = new(answer);
             }
-            catch (Exception e)
+            catch (JsonException)
             {
-                Console.WriteLine(json);
+                // Either failed entirely or the answer from the game server is a string detailing a bad request
+                if (json.Contains("<br"))
+                {
+                    Console.WriteLine(json);
+                }
+                result = new(json);
             }
+            
             return result;
-
         }
     }
 

@@ -39,8 +39,8 @@ namespace magix_api.Middlewares
 
         private async Task<bool> Validate(string key)
         {
-            string? response = await GameServerAPI.CallApi<string>("check-key", new Dictionary<string, string>() { { "key", key } });
-            return response != null && response.Equals("VALID_KEY");
+            ServerResponse<string>? response = await GameServerAPI.CallApi<string>("check-key", new Dictionary<string, string>() { { "key", key } });
+            return response.Content != null && response.Content.Equals("VALID_KEY");
         }
     }
     public class KeyRequest
