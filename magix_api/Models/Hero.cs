@@ -14,7 +14,7 @@ public class Hero : ConvertibleModel
             {"Warrior", "Soldier"},
             {"Mage", "Slicer"},
     };
-
+    public int Id { get; set; }
     public string Power { get; set; } = default!;
 
     public Hero() : base(_heroNameConversion) {}

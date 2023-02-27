@@ -8,6 +8,7 @@ public partial class Player
 
     public string Username { get; set; } = default!;
 
+    [NotMapped]
     public string? ClassName { get; set; }
 
     public int WinCount { get; set; }

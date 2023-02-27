@@ -13,6 +13,9 @@ public class Talent : ConvertibleModel
                 {"LifeBoost", "Life_Ritual"},
                 {"ExtraCard", "Scavenger"}
         };
+    
+    public int Id { get; set; }
+    
     [JsonPropertyName("desc")]
     public string Description { get; set; } = default!;
 

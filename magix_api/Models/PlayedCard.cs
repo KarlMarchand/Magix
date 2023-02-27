@@ -6,7 +6,7 @@ public partial class PlayedCard
 
     public Player Player { get; set; } = default!;
 
-    public Card CardId { get; set; } = default!;
+    public Card Card { get; set; } = default!;
 
     public int TimePlayed { get; set; }
 
