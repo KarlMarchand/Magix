@@ -23,6 +23,13 @@ namespace magix_api.Data
 
         public virtual DbSet<PlayerStat> PlayerStats { get; set; }
 
+        public virtual DbSet<Card> Cards { get; set; }
+        public virtual DbSet<Faction> Factions { get; set; }
+        public virtual DbSet<Hero> Heroes { get; set; }
+        public virtual DbSet<Talent> Talents { get; set; }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Deck>(entity =>
