@@ -4,16 +4,12 @@ using magix_api.Services.DeckService;
 using magix_api.Services.GameOptionsService;
 using magix_api.Repositories;
 using magix_api.Data;
-using Microsoft.EntityFrameworkCore;
 using magix_api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<MagixContext>(optionsBuilder =>
-{
-    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddSqlite<MagixContext>("Data Source=magix.db");
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,10 +21,10 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 }));
 
 // Add Custom Repositories
+builder.Services.AddSingleton<IGameOptionsRepo, GameOptionsRepo>();
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IDeckRepository, DeckRepository>();
-builder.Services.AddScoped<IGameOptionsRepo, GameOptionsRepo>();
 
 // Add Custom Services
 builder.Services.AddScoped<IPlayerService, PlayerService>();
@@ -60,5 +56,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.CreateDbIfNotExists();
 
 app.Run();
