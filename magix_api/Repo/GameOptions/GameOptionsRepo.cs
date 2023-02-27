@@ -4,7 +4,7 @@ using magix_api.Data;
 
 namespace magix_api.Repositories
 {
-    public class GameOptionsRepo
+    public class GameOptionsRepo : IGameOptionsRepo
     {
         private readonly IMemoryCache _memoryCache;
         private readonly MagixContext _context;
@@ -24,9 +24,10 @@ namespace magix_api.Repositories
                 try
                 {
                     ServerResponse<List<Card>> response = await GameServerAPI.CallApi<List<Card>>("cards");
-                    if (response.IsValid && response.Content != null) {
-                        result = response.Content;
-                        // var input = _memoryCache.Set("cards", result, TimeSpan.FromDays(1));
+                    if (response.IsValid && response.Content != null)
+                    {
+                        List<Card> apiCards = response.Content;
+                        // var input = _memoryCache.Set("cards", apiCards, TimeSpan.FromDays(1));
                     }
                 }
                 catch (Exception e)
@@ -39,8 +40,28 @@ namespace magix_api.Repositories
 
         public async Task<List<Faction>> GetAllFactions()
         {
+            // List<Faction>? result = null;
+            // result = _memoryCache.Get<List<Faction>>("factions");
+            // if (result is null)
+            // {
+            //     try
+            //     {
+            //         result = await _context.Factions...
+            //         if (result != null)
+            //         {
+            //             _memoryCache.Set("factions", result, TimeSpan.FromDays(1));
+            //         }
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         Console.WriteLine(e.Message);
+            //     }
+            // }
+            // return result ?? new List<Faction>();
+
             // This is sync code running async so that the method could change its data source for an async one without having repercussion anywhere else
-            var list = await Task.Run(() => {
+            var list = await Task.Run(() =>
+            {
                 return new List<Faction>(){
                     new Faction{Name="Empire",Description="Use the imperial war machine to crush your ennemy with expensive but powerful units."},
                     new Faction{Name="Rebel",Description="Rebellion are built on hope... and stealth. Experts in deception and ambush to strike when the enemy is off-guard."},

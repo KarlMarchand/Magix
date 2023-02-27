@@ -1,6 +1,7 @@
 using magix_api.Services.PlayerService;
 using magix_api.Services.GameService;
 using magix_api.Services.DeckService;
+using magix_api.Services.GameOptionsService;
 using magix_api.Repositories;
 using magix_api.Data;
 using Microsoft.EntityFrameworkCore;
@@ -27,11 +28,13 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IDeckRepository, DeckRepository>();
+builder.Services.AddScoped<IGameOptionsRepo, GameOptionsRepo>();
 
 // Add Custom Services
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeckService, DeckService>();
+builder.Services.AddScoped<IGameOptionsService, GameOptionsService>();
 
 var app = builder.Build();
 

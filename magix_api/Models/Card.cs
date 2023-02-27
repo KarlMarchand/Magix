@@ -3,10 +3,10 @@ namespace magix_api;
 public class CustomCard
 {
     public string CardName { get; set; }
-    public Faction? Faction { get; set; }
+    public string? Faction { get; set; }
     public string? Sound { get; set; }
 
-    public CustomCard(string cardName, Faction? faction = null, string? sound = null)
+    public CustomCard(string cardName, string? faction = null, string? sound = null)
     {
         CardName = cardName;
         Faction = faction;
@@ -17,9 +17,11 @@ public class CustomCard
 public class Card
 {
     private int _id;
-    public int Id { 
-        get => _id; 
-        set{
+    public int Id
+    {
+        get => _id;
+        set
+        {
             _id = value;
             int index = Card._customCards.ContainsKey(value) ? value : 0;
             CustomCard customData = Card._customCards[index];
@@ -34,7 +36,7 @@ public class Card
     public List<string> Mechanics { get; set; } = default!;
     public string Dedicated { get; set; } = default!;
     public string CardName { get; set; } = default!;
-    public Faction? Faction { get; set; }
+    public string? Faction { get; set; }
     public string? Sound { get; set; }
 
     private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{

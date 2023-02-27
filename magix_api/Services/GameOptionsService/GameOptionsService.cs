@@ -8,7 +8,7 @@ using magix_api.Repositories;
 
 namespace magix_api.Services.GameOptionsService
 {
-    public class GameOptionsService
+    public class GameOptionsService : IGameOptionsService
     {
         private readonly IMapper _mapper;
         private readonly IGameOptionsRepo _gameOptionsRepository;
@@ -29,11 +29,12 @@ namespace magix_api.Services.GameOptionsService
             var talents = await _gameOptionsRepository.GetAllTalents();
             var heroes = await _gameOptionsRepository.GetAllHeroes();
             var factions = await _gameOptionsRepository.GetAllFactions();
-            serviceResponse.Data = new GetAvailableOptionsDto{
-                Cards   = _mapper.Map<List<GetCardDto>>(cards),
+            serviceResponse.Data = new GetAvailableOptionsDto
+            {
+                Cards = _mapper.Map<List<GetCardDto>>(cards),
                 Talents = _mapper.Map<List<GetTalentDto>>(talents),
-                Heroes  = _mapper.Map<List<GetHeroDto>>(heroes),
-                Factions= _mapper.Map<List<GetFactionDto>>(factions),
+                Heroes = _mapper.Map<List<GetHeroDto>>(heroes),
+                Factions = _mapper.Map<List<GetFactionDto>>(factions),
             };
             return serviceResponse;
         }
