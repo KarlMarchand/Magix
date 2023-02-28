@@ -1,6 +1,6 @@
 namespace magix_api;
 
-public class ConvertibleModel
+public abstract class ConvertibleModel
 {
     private readonly Dictionary<string, string> _nameConversion;
     private readonly Dictionary<string, string> _reverseConversion;
@@ -25,15 +25,18 @@ public class ConvertibleModel
         return Name;
     }
 
-    public static string ConvertName(string originalData, Dictionary<string, string> dict)
+    private string ConvertName(string originalData, Dictionary<string, string> dict)
     {
         string? result;
 
         if (!dict.TryGetValue(originalData, out result))
         {
-            Console.WriteLine(string.Format("Can't seems to find the {0} string in specified converter.", originalData));
+            result = originalData;
+            MissConversion();
         }
 
-        return result ?? originalData;
+        return result;
     }
+
+    protected abstract void MissConversion();
 }

@@ -1,0 +1,16 @@
+{
+  "Id": 101,
+  "Cost": 3,
+  "Hp": 2,
+  "Atk": 2,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": [
+    "Battlecry: Return a random friendly minion to your hand"
+  ],
+  "Dedicated": "",
+  "CardName": null,
+  "Faction": null,
+  "Sound": null
+}

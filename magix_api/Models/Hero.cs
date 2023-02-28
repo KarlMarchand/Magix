@@ -1,3 +1,5 @@
+using magix_api.utils;
+
 namespace magix_api;
 
 public class Hero : ConvertibleModel
@@ -18,4 +20,9 @@ public class Hero : ConvertibleModel
     public string Power { get; set; } = default!;
 
     public Hero() : base(_heroNameConversion) {}
+
+    protected override void MissConversion()
+    {
+        MissingConversions.AddNewItem<Hero>(this);
+    }
 }

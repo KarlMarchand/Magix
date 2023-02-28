@@ -1,0 +1,17 @@
+{
+  "Id": 99,
+  "Cost": 7,
+  "Hp": 8,
+  "Atk": 1,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": [
+    "Taunt",
+    "Battlecry: Confuse a random enemy minion"
+  ],
+  "Dedicated": ")",
+  "CardName": null,
+  "Faction": null,
+  "Sound": null
+}

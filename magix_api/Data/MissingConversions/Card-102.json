@@ -1,0 +1,17 @@
+{
+  "Id": 102,
+  "Cost": 6,
+  "Hp": 2,
+  "Atk": 1,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": [
+    "Stealth",
+    "Battlecry: Give stealth to your left most minion"
+  ],
+  "Dedicated": "",
+  "CardName": null,
+  "Faction": null,
+  "Sound": null
+}

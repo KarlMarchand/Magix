@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using magix_api.utils;
 
 namespace magix_api;
 
@@ -20,4 +20,9 @@ public class Talent : ConvertibleModel
     public string Description { get; set; } = default!;
 
     public Talent() : base(_talentNameConversion) {}
+
+    protected override void MissConversion()
+    {
+        MissingConversions.AddNewItem<Talent>(this);
+    }
 }

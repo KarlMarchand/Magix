@@ -1,0 +1,17 @@
+{
+  "Id": 100,
+  "Cost": 5,
+  "Hp": 2,
+  "Atk": 5,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": [
+    "Stealth",
+    "Battlecry: Confuse a random enemy minion"
+  ],
+  "Dedicated": "",
+  "CardName": null,
+  "Faction": null,
+  "Sound": null
+}

@@ -1,0 +1,16 @@
+{
+  "Id": 97,
+  "Cost": 4,
+  "Hp": 1,
+  "Atk": 2,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": [
+    "Battlecry: Confuse a random enemy minion"
+  ],
+  "Dedicated": "PoulpePalpitant (1i\u00E8re place, H2022)",
+  "CardName": null,
+  "Faction": null,
+  "Sound": null
+}
