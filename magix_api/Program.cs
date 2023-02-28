@@ -21,7 +21,8 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 }));
 
 // Add Custom Repositories
-builder.Services.AddSingleton<IGameOptionsRepo, GameOptionsRepo>();
+builder.Services.AddSingleton<IFactionsRepo, FactionsRepo>();
+builder.Services.AddScoped<IGameOptionsRepo, GameOptionsRepo>();
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IDeckRepository, DeckRepository>();

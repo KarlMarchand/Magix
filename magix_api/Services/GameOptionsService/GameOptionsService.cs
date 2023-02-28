@@ -25,10 +25,10 @@ namespace magix_api.Services.GameOptionsService
         public async Task<ServiceResponse<GetAvailableOptionsDto>> GetAllOptions()
         {
             var serviceResponse = new ServiceResponse<GetAvailableOptionsDto>();
-            var cards = await _gameOptionsRepository.GetAllCards();
+            var factions = await _gameOptionsRepository.GetAllFactions();
             var talents = await _gameOptionsRepository.GetAllTalents();
             var heroes = await _gameOptionsRepository.GetAllHeroes();
-            var factions = await _gameOptionsRepository.GetAllFactions();
+            var cards = await _gameOptionsRepository.GetAllCards();
             serviceResponse.Data = new GetAvailableOptionsDto
             {
                 Cards = _mapper.Map<List<GetCardDto>>(cards),

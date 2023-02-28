@@ -9,20 +9,19 @@ namespace magix_api.Repositories
     {
         private readonly IMemoryCache _memoryCache;
         private readonly MagixContext _context;
-        private Dictionary <string, Faction> _customFactions;
+        private readonly IFactionsRepo _factionRepo;
 
-        public GameOptionsRepo(IMemoryCache memoryCache, MagixContext context)
+        public GameOptionsRepo(IMemoryCache memoryCache, MagixContext context, IFactionsRepo factionRepo)
         {
             _memoryCache = memoryCache;
             _context = context;
-            _customFactions = new();
-            GetAllFactions().RunSynchronously();
+            _factionRepo = factionRepo;
         }
 
         public async Task<List<Card>> GetAllCards()
         {
             List<Card>? result = null;
-            //result = _memoryCache.Get<List<Card>>("cards");
+            // result = _memoryCache.Get<List<Card>>("cards");
             if (result is null)
             {
                 try
@@ -31,11 +30,26 @@ namespace magix_api.Repositories
                     if (response.IsValid && response.Content != null)
                     {
                         List<Card> apiCards = response.Content;
-                        foreach (var card in apiCards)
+                        foreach (var apiCard in apiCards)
                         {
-                            CompleteCard(in card);
+                            CompleteCard(in apiCard);
+                            var card = _context.Cards.SingleOrDefault(c => c.Id == apiCard.Id);
+                            if (card is not null)
+                            {
+                                foreach(var property in card.GetType().GetProperties())
+                                {
+                                    if (property.Name != "Id")
+                                        property.SetValue(card, property.GetValue(apiCard));
+                                }
+                            }
+                            else 
+                            {
+                                _context.Cards.Add(apiCard);
+                            }
                         }
-                        // var input = _memoryCache.Set("cards", apiCards, TimeSpan.FromDays(1));
+                        await _context.SaveChangesAsync();
+                        result = _context.Cards.AsNoTracking().ToList();
+                        // var updatedList = _memoryCache.Set("cards", result, TimeSpan.FromDays(1));
                     }
                 }
                 catch (Exception e)
@@ -49,21 +63,18 @@ namespace magix_api.Repositories
         public async Task<List<Faction>> GetAllFactions()
         {
             List<Faction>? result = null;
-            result = _memoryCache.Get<List<Faction>>("factions");
+            // result = _memoryCache.Get<List<Faction>>("factions");
             if (result is null)
             {
                 try
                 {
+                    result = _factionRepo.GetAllFactions();
                     if (!_context.Factions.Any()) {
-                        await AddFactionsToDatabase();
+                        await AddFactionsToDatabase(result);
                     }
-                    result = _context.Factions
-                        .AsNoTracking()
-                        .ToList();
                     if (result != null && result.Count>0)
                     {
-                        _memoryCache.Set("factions", result, TimeSpan.FromDays(1));
-                        BuildFactionsDictionnary(result);
+                        // _memoryCache.Set("factions", result, TimeSpan.FromDays(1));
                     }
                 }
                 catch (Exception e)
@@ -88,9 +99,19 @@ namespace magix_api.Repositories
                         result = response.Content.Select(hero =>
                         {
                             hero.ToFrontend();
+                            var dbHero = _context.Heroes.SingleOrDefault(h => h.Name == hero.Name);
+                            if (dbHero is not null)
+                            {
+                                dbHero.Power = hero.Power; 
+                            }
+                            else 
+                            {
+                                _context.Heroes.Add(hero);
+                            }
                             return hero;
                         }).ToList();
                         // var input = _memoryCache.Set("heroes", result, TimeSpan.FromDays(1));
+                        await _context.SaveChangesAsync();
                     }
                 }
                 catch (Exception e)
@@ -115,9 +136,19 @@ namespace magix_api.Repositories
                         result = response.Content.Select(talent =>
                         {
                             talent.ToFrontend();
+                            var dbTalent = _context.Talents.SingleOrDefault(t => t.Name == talent.Name);
+                            if (dbTalent is not null)
+                            {
+                                dbTalent.Description = talent.Description;
+                            }
+                            else 
+                            {
+                                _context.Talents.Add(talent);
+                            }
                             return talent;
                         }).ToList();
                         // var input = _memoryCache.Set("talents", result, TimeSpan.FromDays(1));
+                        await _context.SaveChangesAsync();
                     }
                 }
                 catch (Exception e)
@@ -128,23 +159,21 @@ namespace magix_api.Repositories
             return result ?? new List<Talent>();
         }
 
-        private async Task AddFactionsToDatabase()
+        private async Task AddFactionsToDatabase(List<Faction> factions)
         {
-            var empireFaction = new Faction{Name=Faction.EMPIRE,Description="Use the imperial war machine to crush your ennemy with expensive but powerful units."};
-            var rebelFaction = new Faction{Name=Faction.REBEL,Description="Rebellion are built on hope... and stealth. Experts in deception and ambush to strike when the enemy is off-guard."};
-            var republicFaction = new Faction{Name=Faction.REPUBLIC,Description="Get behind the legendary Jedi and their mystical powers and beat those clankers."};
-            var separatistFaction = new Faction{Name=Faction.SEPARATIST,Description="Cheap troops and sheer numbers will win this war. They can't beat us all, we are legion."};
-            var criminalFaction = new Faction{Name=Faction.CRIMINAL,Description="When you need something done right, you hire the best of the best. With specialised troops and shady characters, the real power lies in the shadow."};
-            await _context.Factions.AddRangeAsync(new Faction[]{empireFaction, rebelFaction, republicFaction, separatistFaction, criminalFaction});
-        }
-
-        private Dictionary <string, Faction> BuildFactionsDictionnary(List<Faction> factions)
-        {
-            var dictionary = new Dictionary <string, Faction>();
-            factions.ForEach(f => {
-                dictionary.Add(f.Name, f);
-            });
-            return dictionary;
+            foreach(var faction in factions)
+            {
+                var dbFaction = _context.Factions.SingleOrDefault(f => f.Name == faction.Name);
+                if (dbFaction is not null)
+                {
+                    _context.Entry(dbFaction).CurrentValues.SetValues(faction);
+                }
+                else 
+                {
+                    _context.Factions.Add(faction);
+                }
+            }
+            await _context.SaveChangesAsync();
         }
 
         public void CompleteCard(in Card incompleteCard)
@@ -160,7 +189,7 @@ namespace magix_api.Repositories
             incompleteCard.CardName = customData.CardName;
             incompleteCard.Sound = customData.Sound;
             if (customData.Faction != null)
-                incompleteCard.Faction = _customFactions[customData.Faction];
+                incompleteCard.Faction = _factionRepo.GetFaction(customData.Faction);
         }
 
         private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
