@@ -16,7 +16,7 @@ public partial class Deck
 
     public bool Active { get; set; } = true;
 
-    public List<Card> Cards { get; set; } = new List<Card>();
-
     public virtual ICollection<Game> Games { get; } = new List<Game>();
+
+    public virtual ICollection<DeckCard> DeckCard { get; } = new List<DeckCard>();
 }

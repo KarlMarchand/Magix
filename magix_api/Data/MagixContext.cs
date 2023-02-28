@@ -18,21 +18,46 @@ namespace magix_api.Data
         public DbSet<PlayedCard> PlayedCards => Set<PlayedCard>();
         public DbSet<Player> Players => Set<Player>();
         public DbSet<Talent> Talents => Set<Talent>();
+        public DbSet<DeckCard> DeckCards => Set<DeckCard>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Card>()
                 .Property(e => e.Mechanics)
                 .HasConversion(new CsvListConverter());
+
+            modelBuilder.Entity<DeckCard>()
+                .HasKey(dc => new { dc.DeckIdRef, dc.CardIdRef });
+
+            modelBuilder.Entity<Card>()
+                .HasMany(c => c.DeckCard)
+                .WithOne(dc => dc.Card)
+                .HasForeignKey(dc => dc.CardIdRef);
+
+            modelBuilder.Entity<Deck>()
+                .HasMany(d => d.DeckCard)
+                .WithOne(dc => dc.Deck)
+                .HasForeignKey(dc => dc.DeckIdRef);
+
+            modelBuilder.Entity<DeckCard>()
+                .HasOne(dc => dc.Card)
+                .WithMany()
+                .HasForeignKey(dc => dc.CardIdRef);
+
+            modelBuilder.Entity<DeckCard>()
+                .HasOne(dc => dc.Deck)
+                .WithMany(d => d.DeckCard)
+                .HasForeignKey(dc => dc.DeckIdRef);
         }
     }
 
     public class CsvListConverter : ValueConverter<List<string>?, string>
     {
         public CsvListConverter() : base(
-            v => v == null ? string.Empty : string.Join(",", v),
-            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-        ){}
+            v => v == null ? string.Empty : string.Join("///", v),
+            v => v.Split("///", StringSplitOptions.RemoveEmptyEntries).ToList()
+        )
+        { }
     }
 }
 
