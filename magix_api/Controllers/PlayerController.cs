@@ -2,11 +2,12 @@ using magix_api.Dtos.PlayerDto;
 using magix_api.Services.PlayerService;
 using Microsoft.AspNetCore.Mvc;
 using magix_api.Middlewares;
+using System.ComponentModel.DataAnnotations;
 
 namespace magix_api.Controllers
 {
     [ApiController] //This means this is an API so it implements all the api's tools
-    [Route("api/[controller]")] // This means the controller can be accessed at the route api/The_name_of_this_controller
+    [Route("api/player")] // This means the controller can be accessed at the route api/The_name_of_this_controller
     public class PlayerController : ControllerBase //It must extends the ControllerBase's class from MVC 
     {
         private readonly IPlayerService _playerService;
@@ -17,7 +18,7 @@ namespace magix_api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(string username, string password)
+        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(string username, [DataType(DataType.Password)] string password)
         {
             return Ok(await _playerService.Login(username, password));
         }

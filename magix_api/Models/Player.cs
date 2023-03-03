@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace magix_api;
 
+[Index(nameof(Username), IsUnique = true)]
 public partial class Player
 {
     public int Id { get; set; }
 
+    [Required]
     public string Username { get; set; } = default!;
 
     [NotMapped]
@@ -30,8 +34,8 @@ public partial class Player
     public virtual ICollection<PlayedCard> PlayedCards { get; } = new List<PlayedCard>();
 
     [NotMapped]
-    public string? Key {get; set;}
-    
+    public string? Key { get; set; }
+
     [NotMapped]
     public PlayerStat? Stats { get; set; }
 }

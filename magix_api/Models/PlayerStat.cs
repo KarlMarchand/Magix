@@ -10,5 +10,5 @@ public partial class PlayerStat
 
     public decimal? RatioWins { get; set; }
 
-    public string? TopCards { get; set; }
+    public List<Card> TopCards { get; set; } = new List<Card>();
 }

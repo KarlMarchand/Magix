@@ -1,55 +1,76 @@
 using magix_api.Data;
-using magix_api.Dtos.PlayerDto;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 
 namespace magix_api.Repositories
 {
     public class PlayerRepository : IPlayerRepository
     {
         private readonly MagixContext _context;
-        private readonly IMapper _mapper;
 
-        public PlayerRepository(MagixContext context, IMapper mapper)
+        public PlayerRepository(MagixContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<Player> GetPlayer(Player serverPlayer)
+        public async Task<Player> GetPlayer(Player apiPlayer)
         {
-            // The serverPlayer only has the key, trophies and bestTrophyScore property of the player which must be then completed by the repository
-            var player = await _context.Players.FirstOrDefaultAsync(p => p.Username == serverPlayer.Username);
-            if (player is null)
-            {
-                player = await AddPlayer(serverPlayer.Username, serverPlayer.Trophies, serverPlayer.BestTrophyScore);
-            }
-            else
-            {
-                player.Trophies = serverPlayer.Trophies;
-                player.BestTrophyScore = serverPlayer.BestTrophyScore;
-                _context.SaveChanges();
-
-            }
-            // Complete info with player games stats in database
-            if (player != null)
-            {
-                // PlayerStat? stats = await _context.PlayerStats.FirstOrDefaultAsync(p => p.Id == player.Id);
-            }
+            var player = await _context.Players.FirstOrDefaultAsync(p => p.Username == apiPlayer.Username);
+            player = player is null ? await AddPlayer(apiPlayer) : await UpdatePlayer(player.Id, apiPlayer);
+            player.Key = apiPlayer.Key;
+            player.ClassName = apiPlayer.ClassName;
+            player.Stats = GetStats(player);
             return player;
         }
 
-        public async Task<Player> AddPlayer(string username, int trophies, int bestTrophyScore)
+        public async Task<Player> AddPlayer(Player apiPlayer)
         {
-            Player newPlayer = new Player{Username=username, Trophies = trophies, BestTrophyScore=bestTrophyScore};
-            await _context.Players.AddAsync(newPlayer);
-            Player? player = await _context.Players.FirstOrDefaultAsync(p => p.Username == username);
-            return player!;
+            await _context.Players.AddAsync(apiPlayer);
+            await _context.SaveChangesAsync();
+            Player player = await _context.Players.FirstAsync(p => p.Username == apiPlayer.Username);
+            return player;
         }
 
-        public async Task<Player> GetProfile(int playerId)
+        public async Task<Player> UpdatePlayer(int playerId, Player apiPlayer)
         {
-            throw new NotImplementedException();
+            var player = await _context.Players.SingleAsync(p => p.Id == playerId);
+            player.WinCount = apiPlayer.WinCount;
+            player.LossCount = apiPlayer.LossCount;
+            player.LastLogin = apiPlayer.LastLogin;
+            player.WelcomeText = apiPlayer.WelcomeText;
+            player.Trophies = apiPlayer.Trophies;
+            player.BestTrophyScore = apiPlayer.BestTrophyScore;
+            await _context.SaveChangesAsync();
+            return player;
+        }
+
+        public async Task<Player> GetCompleteProfile(int playerId)
+        {
+            var player = await _context.Players.Where(p => p.Id == playerId)
+                                                    .Include(p => p.Games)
+                                                    .Include(p => p.PlayedCards)
+                                                        .ThenInclude(pc => pc.Card)
+                                                    .SingleAsync();
+            player.Stats = GetStats(player);
+            return player;
+        }
+
+        private PlayerStat GetStats(Player player)
+        {
+            var stats = new PlayerStat
+            {
+                GamePlayed = player.Games.Count,
+                Wins = player.WinCount,
+                Loses = player.LossCount,
+                RatioWins = player.Games.Any() ? Math.Round((decimal)player.WinCount / player.Games.Count, 2) : null,
+                TopCards = player.PlayedCards
+                                .GroupBy(pc => pc.Card)
+                                .Select(g => new { Card = g.Key, VictoryCount = g.Sum(pc => pc.Victory) })
+                                .OrderByDescending(x => x.VictoryCount)
+                                .Take(3)
+                                .Select(x => x.Card)
+                                .ToList()
+            };
+            return stats ?? new PlayerStat();
         }
     }
 }

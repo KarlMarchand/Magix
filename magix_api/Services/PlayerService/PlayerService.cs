@@ -41,8 +41,8 @@ namespace magix_api.Services.PlayerService
         public async Task<ServiceResponse<GetPlayerDto>> GetProfile(IdPlayerDto userInfos)
         {
             var serviceResponse = new ServiceResponse<GetPlayerDto>();
-            Player player = await _playerRepository.GetProfile(userInfos.Id);
-            serviceResponse.Data = _mapper.Map<GetPlayerDto>(player); 
+            Player player = await _playerRepository.GetCompleteProfile(userInfos.Id);
+            serviceResponse.Data = _mapper.Map<GetPlayerDto>(player);
             return serviceResponse;
         }
 
