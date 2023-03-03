@@ -1,4 +1,6 @@
-﻿namespace magix_api;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace magix_api;
 
 public partial class Deck
 {
@@ -18,5 +20,8 @@ public partial class Deck
 
     public virtual ICollection<Game> Games { get; } = new List<Game>();
 
-    public virtual ICollection<DeckCard> DeckCard { get; } = new List<DeckCard>();
+    public virtual ICollection<DeckCard> DeckCards { get; } = new List<DeckCard>();
+
+    [NotMapped]
+    public List<Card> Cards { get; set; } = new();
 }
