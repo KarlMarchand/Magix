@@ -35,7 +35,7 @@ namespace magix_api.Data
                 .HasForeignKey(dc => dc.CardIdRef);
 
             modelBuilder.Entity<Deck>()
-                .HasMany(d => d.DeckCard)
+                .HasMany(d => d.DeckCards)
                 .WithOne(dc => dc.Deck)
                 .HasForeignKey(dc => dc.DeckIdRef);
 
@@ -46,7 +46,7 @@ namespace magix_api.Data
 
             modelBuilder.Entity<DeckCard>()
                 .HasOne(dc => dc.Deck)
-                .WithMany(d => d.DeckCard)
+                .WithMany(d => d.DeckCards)
                 .HasForeignKey(dc => dc.DeckIdRef);
         }
     }
