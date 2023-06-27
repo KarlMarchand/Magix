@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using magix_api.Services.GameService;
+using magix_api.Middlewares;
 
 namespace magix_api.Controllers
 {
@@ -13,5 +14,10 @@ namespace magix_api.Controllers
         {
             _gameService = gameService;
         }
+
+        // [ValidateKey]
+        // [HttpPost("observe")]
+        // public async Task<ActionResult<ServiceResponse>>
+
     }
 }
