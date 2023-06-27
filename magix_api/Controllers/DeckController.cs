@@ -55,7 +55,7 @@ namespace magix_api.Controllers
         }
 
         [ValidateKey]
-        [HttpPost("all-decks")]
+        [HttpPost("all")]
         public async Task<ActionResult<ServiceResponse<List<Deck>>>> GetAllDecks(IdPlayerDto playerInfos)
         {
             return Ok(await _deckService.GetAllDecks(playerInfos));
@@ -65,21 +65,21 @@ namespace magix_api.Controllers
         [HttpPost("select/{id}")]
         public async Task<ActionResult<ServiceResponse<Deck>>> SwitchDeck([FromRoute] int id, IdPlayerDto playerInfos)
         {
-            return Ok(await _deckService.SwitchDeck(id, playerInfos));
+            return Ok(await _deckService.SwitchDeck(playerInfos, id));
         }
 
         [ValidateKey]
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<Deck>>> AddDeck(IdPlayerDto playerInfos, Deck deck)
+        public async Task<ActionResult<ServiceResponse<Deck>>> CreateDeck(IdPlayerDto playerInfos, Deck deck)
         {
-            return Ok(await _deckService.AddDeck(playerInfos, deck));
+            return Ok(await _deckService.CreateDeck(playerInfos, deck));
         }
 
         [ValidateKey]
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<Deck>>> SaveDeck(IdPlayerDto playerInfos, Deck deck)
+        public async Task<ActionResult<ServiceResponse<Deck>>> UpdateDeck(IdPlayerDto playerInfos, Deck deck)
         {
-            return Ok(await _deckService.SaveDeck(playerInfos, deck));
+            return Ok(await _deckService.UpdateDeck(playerInfos, deck));
         }
 
         [ValidateKey]

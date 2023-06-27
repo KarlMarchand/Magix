@@ -2,11 +2,10 @@ namespace magix_api.Repositories
 {
     public interface IDeckRepository
     {
-        Task<Deck> AddDeck(int playerId, Deck deck);
-        Task<Deck> DeleteDeck(int playerId, Deck deck);
-        List<Deck> GetAllDecks(int playerId);
-        Task<Deck?> GetDeck(int playerId);
-        Task<Deck> SaveDeck(string playerKey, int playerId, Deck deck);
-        Task<Deck> SwitchDeck(int id, int playerId);
+        Task<Deck> CreateDeck(Deck deck);
+        Task<bool> DeleteDeck(Deck deck);
+        Task<List<Deck>> GetAllDecks(int playerId);
+        Task<Deck> GetDeck(int deckId);
+        Task<Deck> UpdateDeck(Deck deck);
     }
 }
