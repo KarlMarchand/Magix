@@ -1,8 +1,9 @@
 using magix_api.Dtos.PlayerDto;
 using magix_api.Services.PlayerService;
 using Microsoft.AspNetCore.Mvc;
-using magix_api.Middlewares;
+using magix_api.utils;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace magix_api.Controllers
 {
@@ -23,19 +24,18 @@ namespace magix_api.Controllers
             return Ok(await _playerService.Login(username, password));
         }
 
-        [ValidateKey]
         [HttpPost("logout")]
-        public async Task<ActionResult<ServiceResponse<string>>> Logout(IdPlayerDto userInfos)
+        [Authorize]
+        public async Task<ActionResult<ServiceResponse<string>>> Logout()
         {
-            return Ok(await _playerService.Logout(userInfos));
+            return Ok(await _playerService.Logout(User.GetPlayerKey()));
         }
 
-        [ValidateKey]
-        [HttpPost("profile")]
-        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> GetProfile(IdPlayerDto userInfos)
+        [HttpGet]
+        [Authorize(Policy = "ValidateKey")]
+        public async Task<ActionResult<ServiceResponse<GetPlayerStatsDto>>> GetProfile()
         {
-            return Ok(await _playerService.GetProfile(userInfos));
+            return Ok(await _playerService.GetProfile(User.GetPlayerId()));
         }
-
     }
 }

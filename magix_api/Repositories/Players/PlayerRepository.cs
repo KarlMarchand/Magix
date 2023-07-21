@@ -18,16 +18,14 @@ namespace magix_api.Repositories
             player = player is null ? await AddPlayer(apiPlayer) : await UpdatePlayer(player.Id, apiPlayer);
             player.Key = apiPlayer.Key;
             player.ClassName = apiPlayer.ClassName;
-            player.Stats = GetStats(player);
             return player;
         }
 
-        public async Task<Player> AddPlayer(Player apiPlayer)
+        public async Task<Player> AddPlayer(Player newPlayer)
         {
-            await _context.Players.AddAsync(apiPlayer);
+            await _context.Players.AddAsync(newPlayer);
             await _context.SaveChangesAsync();
-            Player player = await _context.Players.FirstAsync(p => p.Username == apiPlayer.Username);
-            return player;
+            return newPlayer;
         }
 
         public async Task<Player> UpdatePlayer(int playerId, Player apiPlayer)
@@ -43,34 +41,28 @@ namespace magix_api.Repositories
             return player;
         }
 
-        public async Task<Player> GetCompleteProfile(int playerId)
+        public async Task<PlayerStat> GetPlayerStats(int playerId)
         {
-            var player = await _context.Players.Where(p => p.Id == playerId)
+            Player player = await _context.Players.Where(p => p.Id == playerId)
                                                     .Include(p => p.Games)
                                                     .Include(p => p.PlayedCards)
                                                         .ThenInclude(pc => pc.Card)
                                                     .SingleAsync();
-            player.Stats = GetStats(player);
-            return player;
-        }
-
-        private PlayerStat GetStats(Player player)
-        {
-            var stats = new PlayerStat
+            return new PlayerStat
             {
                 GamePlayed = player.Games.Count,
                 Wins = player.WinCount,
                 Loses = player.LossCount,
                 RatioWins = player.Games.Any() ? Math.Round((decimal)player.WinCount / player.Games.Count, 2) : null,
                 TopCards = player.PlayedCards
-                                .GroupBy(pc => pc.Card)
+                                .Where(pc => pc.Card != null)
+                                .GroupBy(pc => pc.Card!)
                                 .Select(g => new { Card = g.Key, VictoryCount = g.Sum(pc => pc.Victory) })
                                 .OrderByDescending(x => x.VictoryCount)
                                 .Take(3)
                                 .Select(x => x.Card)
                                 .ToList()
             };
-            return stats ?? new PlayerStat();
         }
     }
 }

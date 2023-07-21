@@ -1,40 +1,33 @@
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using System.IdentityModel.Tokens.Jwt;
 using magix_api.utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace magix_api.Middlewares
 {
-    public class ValidateKeyAttribute : ActionFilterAttribute
+    public class ValidateKeyRequirement : IAuthorizationRequirement
     {
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+
+    }
+
+    public class ValidateKeyHandler : AuthorizationHandler<ValidateKeyRequirement>
+    {
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
+                                                       ValidateKeyRequirement requirement)
         {
-            string? contentType = context.HttpContext.Request.ContentType;
-            if (contentType == null || !contentType.Equals("application/json", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("Middleware");
+            var keyClaim = context.User.FindFirst(c => c.Type == "key")?.Value;
+
+            if (string.IsNullOrEmpty(keyClaim))
             {
-                context.Result = new BadRequestResult();
                 return;
             }
 
-            context.HttpContext.Request.Body.Position = 0;
-            var requestBody = await JsonSerializer.DeserializeAsync<KeyRequest>(context.HttpContext.Request.Body, new JsonSerializerOptions
+            if (!await Validate(keyClaim))
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (requestBody is null || string.IsNullOrEmpty(requestBody.Key))
-            {
-                context.Result = new BadRequestResult();
                 return;
             }
 
-            if (!await Validate(requestBody.Key))
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
-
-            await next();
+            context.Succeed(requirement);
         }
 
         private async Task<bool> Validate(string key)
@@ -43,9 +36,4 @@ namespace magix_api.Middlewares
             return response.Content != null && response.Content.Equals("VALID_KEY");
         }
     }
-    public class KeyRequest
-    {
-        public string Key { get; set; } = default!;
-    }
-
 }

@@ -10,7 +10,7 @@ public partial class Player
     public int Id { get; set; }
 
     [Required]
-    public string Username { get; set; } = default!;
+    public required string Username { get; set; }
 
     [NotMapped]
     public string? ClassName { get; set; }
@@ -27,11 +27,11 @@ public partial class Player
 
     public int BestTrophyScore { get; set; }
 
-    public virtual ICollection<Deck> Decks { get; } = new List<Deck>();
+    public virtual IList<Deck> Decks { get; set; }
 
-    public virtual ICollection<Game> Games { get; } = new List<Game>();
+    public virtual IList<Game> Games { get; set; }
 
-    public virtual ICollection<PlayedCard> PlayedCards { get; } = new List<PlayedCard>();
+    public virtual IList<PlayedCard> PlayedCards { get; set; }
 
     [NotMapped]
     public string? Key { get; set; }
