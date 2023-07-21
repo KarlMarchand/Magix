@@ -19,9 +19,8 @@ public class Card
     public string? Dedicated { get; set; }
     public string? CardName { get; set; }
     public string? FactionName { get; set; }
-    public Faction? Faction { get; set; }
     public string? Sound { get; set; }
-    public virtual ICollection<DeckCard> DeckCard { get; } = new List<DeckCard>();
+    public virtual ICollection<DeckCard>? DeckCard { get; set; }
 
     public void CompleteCard()
     {

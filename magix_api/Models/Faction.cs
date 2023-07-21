@@ -9,6 +9,6 @@ public class Faction
     public static readonly string REPUBLIC = "Republic";
 
     public int Id { get; set; }
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     public string Description { get; set; } = default!;
 }

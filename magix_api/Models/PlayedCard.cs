@@ -3,12 +3,10 @@
 public partial class PlayedCard
 {
     public int Id { get; set; }
-
-    public Player Player { get; set; } = default!;
-
-    public Card Card { get; set; } = default!;
-
+    public int PlayerId { get; set; }
+    public virtual Player? Player { get; set; }
+    public int CardId { get; set; }
+    public virtual Card? Card { get; set; }
     public int TimePlayed { get; set; }
-
     public int Victory { get; set; }
 }
