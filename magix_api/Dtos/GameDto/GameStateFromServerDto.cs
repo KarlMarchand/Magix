@@ -1,6 +1,6 @@
 namespace magix_api.Dtos.GameDto
 {
-    public class GameStateFromServer
+    public class GameStateFromServerDto
     {
         public string? username;
         public int? RemainingTurnTime;
@@ -14,7 +14,7 @@ namespace magix_api.Dtos.GameDto
         public string? WelcomeText;
         public string? HeroClass;
         public int? RemainingCardsCount;
-        public GameStateFromServer? Opponent;
+        public GameStateFromServerDto? Opponent;
         public List<string>? LatestActions;
         public int? handSize;
     }

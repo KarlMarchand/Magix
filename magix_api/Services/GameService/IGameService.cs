@@ -5,10 +5,10 @@ namespace magix_api.Services.GameService
 {
     public interface IGameService
     {
-        Task<ServiceResponse<string>> joinGame(IdPlayerDto playerInfos, string type, string? mode, string? privateKey);
-        Task<ServiceResponse<GameStateFromServer>> observeGame(IdPlayerDto playerInfos, string username);
-        Task<ServiceResponse<GameStateFromServer>> gameAction(IdPlayerDto playerInfos, string actionType, int? cardUid, int? targetUid);
-        Task<ServerResponse<GameStateFromServer>> getGameState(IdPlayerDto playerInfos);
-        Task<ServerResponse<bool>> saveGameResult(IdPlayerDto playerInfos, string opponent, bool victory, List<Card> deck);
+        Task<ServiceResponse<string>> JoinGameAsync(string playerKey, string type, string? mode, string? privateKey);
+        Task<ServiceResponse<GameStateContainerDto>> ObserveGameAsync(string playerKey, string username);
+        Task<ServiceResponse<GameStateContainerDto>> GameActionAsync(string playerKey, GameActionDto gameAction);
+        Task<ServiceResponse<GameStateContainerDto>> GetGameStateAsync(string playerKey);
+        Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, int deckId);
     }
 }

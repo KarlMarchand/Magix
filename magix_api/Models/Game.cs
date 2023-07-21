@@ -4,13 +4,15 @@ public partial class Game
 {
     public int Id { get; set; }
 
-    public Deck Deck { get; set; } = default!;
+    public int DeckId { get; set; }
+    public virtual Deck? Deck { get; set; }
 
-    public string Opponent { get; set; } = default!;
+    public string? Opponent { get; set; }
 
     public DateTime Date { get; set; } = DateTime.Now;
 
     public bool Won { get; set; }
 
-    public Player player { get; set; } = default!;
+    public int PlayerId { get; set; }
+    public virtual Player? Player { get; set; }
 }

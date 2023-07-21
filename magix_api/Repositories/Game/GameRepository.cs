@@ -10,5 +10,12 @@ namespace magix_api.Repositories
         {
             _context = context;
         }
+
+        public async Task<Game> CreateGame(Game game)
+        {
+            var entry = await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
+            return entry.Entity;
+        }
     }
 }
