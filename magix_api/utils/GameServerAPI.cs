@@ -29,18 +29,15 @@ namespace magix_api.utils
             try
             {
                 T answer = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
-                result = new(answer);
+                result = new ServerResponse<T>(answer);
             }
             catch (JsonException)
             {
-                // Either failed entirely or the answer from the game server is a string detailing a bad request
-                if (json.Contains("<br"))
-                {
-                    Console.WriteLine(json);
-                }
-                result = new(json);
+                // Either failed entirely or the answer from the game server is a string detailing a 
+                // bad request instead of the expected object.
+                result = ServerResponse<T>.GetServerResponseFromError(json);
             }
-            
+
             return result;
         }
     }

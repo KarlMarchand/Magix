@@ -27,27 +27,27 @@ namespace magix_api.Data
                 .HasConversion(new CsvListConverter());
 
             modelBuilder.Entity<DeckCard>()
-                .HasKey(dc => new { dc.DeckIdRef, dc.CardIdRef });
+                .HasKey(dc => new { dc.DeckId, dc.CardId });
 
             modelBuilder.Entity<Card>()
                 .HasMany(c => c.DeckCard)
                 .WithOne(dc => dc.Card)
-                .HasForeignKey(dc => dc.CardIdRef);
+                .HasForeignKey(dc => dc.CardId);
 
             modelBuilder.Entity<Deck>()
                 .HasMany(d => d.DeckCards)
                 .WithOne(dc => dc.Deck)
-                .HasForeignKey(dc => dc.DeckIdRef);
+                .HasForeignKey(dc => dc.DeckId);
 
             modelBuilder.Entity<DeckCard>()
                 .HasOne(dc => dc.Card)
                 .WithMany()
-                .HasForeignKey(dc => dc.CardIdRef);
+                .HasForeignKey(dc => dc.CardId);
 
             modelBuilder.Entity<DeckCard>()
                 .HasOne(dc => dc.Deck)
                 .WithMany(d => d.DeckCards)
-                .HasForeignKey(dc => dc.DeckIdRef);
+                .HasForeignKey(dc => dc.DeckId);
         }
     }
 

@@ -12,10 +12,15 @@ public class ServerResponse<T>
         _error = null;
     }
 
-    public ServerResponse(string errorMessage)
+    private ServerResponse(string errorMessage)
     {
         _content = default;
         _error = errorMessage;
+    }
+
+    public static ServerResponse<T> GetServerResponseFromError(string errorMessage)
+    {
+        return new ServerResponse<T>(errorMessage);
     }
 
     public bool IsError => _error != null;
