@@ -16,7 +16,7 @@ public partial class Deck
     public virtual Faction? Faction { get; set; }
     public bool Active { get; set; } = true;
     public virtual ICollection<Game>? Games { get; }
-    public virtual ICollection<DeckCard>? DeckCards { get; }
+    public virtual ICollection<DeckCard>? DeckCards { get; set; }
     [NotMapped]
     public List<Card>? Cards { get; set; }
 }

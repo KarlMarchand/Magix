@@ -13,16 +13,24 @@ public abstract class ConvertibleModel
         _reverseConversion = nameConversion.ToDictionary((i) => i.Value, (i) => i.Key);
     }
 
-    public string ToFrontend()
+    public void ToFrontend()
     {
-        Name = ConvertName(Name, _nameConversion);
-        return Name;
+        Name = GetFrontendName();
     }
 
-    public string ToServer()
+    public void ToServer()
     {
-        Name = ConvertName(Name, _reverseConversion);
-        return Name;
+        Name = GetServerName();
+    }
+
+    public string GetFrontendName()
+    {
+        return ConvertName(Name, _nameConversion);
+    }
+
+    public string GetServerName()
+    {
+        return ConvertName(Name, _reverseConversion);
     }
 
     private string ConvertName(string originalData, Dictionary<string, string> dict)

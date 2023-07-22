@@ -19,9 +19,9 @@ namespace magix_api.Repositories
             return deck;
         }
 
-        public async Task<bool> DeleteDeck(Deck deck)
+        public async Task<bool> DeleteDeck(int deckId)
         {
-            return (await _context.Decks.Where(d => d.Id == deck.Id).ExecuteDeleteAsync()) > 0;
+            return (await _context.Decks.Where(d => d.Id == deckId).ExecuteDeleteAsync()) > 0;
         }
 
         public async Task<List<Deck>> GetAllDecks(int playerId)

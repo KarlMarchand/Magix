@@ -37,7 +37,9 @@ namespace magix_api.Repositories
                                 foreach (var property in card.GetType().GetProperties())
                                 {
                                     if (property.Name != "Id")
+                                    {
                                         property.SetValue(card, property.GetValue(apiCard));
+                                    }
                                 }
                             }
                             else
@@ -61,6 +63,25 @@ namespace magix_api.Repositories
         public async Task<Card?> GetCardById(int id)
         {
             return await _context.Cards.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<List<Card>> GetCardsByIds(List<int> cardIds)
+        {
+            var distinctCards = await _context.Cards.Where(card => cardIds.Contains(card.Id)).ToListAsync();
+            List<Card> finalCardList = new List<Card>();
+            foreach (var id in cardIds)
+            {
+                var card = distinctCards.FirstOrDefault(c => c.Id == id);
+                if (card != null)
+                {
+                    finalCardList.Add(card);
+                } 
+                else
+                {
+                    throw new Exception("An error occured while retrieving one of the Card");
+                }
+            }
+            return finalCardList;
         }
     }
 }

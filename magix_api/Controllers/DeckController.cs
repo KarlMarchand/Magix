@@ -53,44 +53,44 @@ namespace magix_api.Controllers
 
         [HttpGet("{deckId}")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<List<Deck>>>> GetDeck([FromRoute] int deckId)
+        public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetDeck([FromRoute] int deckId)
         {
             return Ok(await _deckService.GetDeck(deckId));
         }
 
         [HttpGet("All")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<List<Deck>>>> GetAllDecks()
+        public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetAllDecks()
         {
             return Ok(await _deckService.GetAllDecks(User.GetPlayerId()));
         }
 
         [HttpPost("Switch")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<Deck>>> SwitchDeck(int deckId)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> SwitchDeck(int deckId)
         {
             return Ok(await _deckService.SwitchDeck(User.GetPlayerKey(), deckId));
         }
 
         [HttpPost]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<Deck>>> CreateDeck(DeckDto deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> CreateDeck(DeckDto deck)
         {
             return Ok(await _deckService.CreateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck));
         }
 
         [HttpPut]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<Deck>>> UpdateDeck(Deck deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> UpdateDeck(Deck deck)
         {
             return Ok(await _deckService.UpdateDeck(User.GetPlayerKey(), deck));
         }
 
         [HttpDelete]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<Deck>>> DeleteDeck(Deck deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> DeleteDeck(int deckId)
         {
-            return Ok(await _deckService.DeleteDeck(User.GetPlayerKey(), User.GetPlayerId(), deck));
+            return Ok(await _deckService.DeleteDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId));
         }
     }
 }

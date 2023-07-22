@@ -19,6 +19,8 @@ namespace magix_api
 
             CreateMap<DeckDto, Deck>();
             CreateMap<Deck, DeckDto>();
+            CreateMap<GetDeckDto, Deck>();
+            CreateMap<Deck, GetDeckDto>();
 
             CreateMap<Card, GetCardDto>();
             CreateMap<GetCardDto, Card>();

@@ -29,20 +29,38 @@ namespace magix_api.Services.DeckService
             _factionRepo = factionRepo;
         }
 
-        public async Task<ServiceResponse<Deck>> CreateDeck(string playerKey, int playerId, DeckDto deck)
+        public async Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, DeckDto deck)
         {
-            ServiceResponse<Deck> response = new(){Success = false};
+            // TODO: Ajouter la possibilité de faire des brouillons
+
+            ServiceResponse<GetDeckDto> response = new(){Success = false};
 
             var hero = await _heroRepo.GetHeroById(deck.HeroId);
             var talent = await _talentRepo.GetTalentById(deck.TalentId);
+            var faction = await _factionRepo.GetFactionById(deck.FactionId);
 
             if (hero != null && talent != null)
             {
-                if (await SendDeckServer(playerKey, deck.Cards, hero.Name, talent.Name))
+                if (await SendDeckServer(playerKey, deck.Cards, hero.GetServerName(), talent.GetServerName()))
                 {
-                    var newDeck = _mapper.Map<Deck>(deck);
-                    newDeck.PlayerId = playerId;
-                    response.Data = await _deckRepo.CreateDeck(newDeck);
+                    List<int> cardIds = deck.Cards.Select(c => c.Id).ToList();
+                    List<Card> cards = await _cardRepo.GetCardsByIds(cardIds);
+
+                    var cardCounts = cardIds.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
+
+                    var newDeck = new Deck
+                    {
+                        Name = deck.Name,
+                        PlayerId = playerId,
+                        Talent = talent,
+                        Hero = hero,
+                        Faction = faction,
+                        Active = deck.Active,
+                        Cards = cards,
+                        DeckCards = cardCounts.Select(kv => new DeckCard { CardId = kv.Key, Quantity = kv.Value }).ToList()
+                    };
+                    Deck createdDeck = await _deckRepo.CreateDeck(newDeck);
+                    response.Data = _mapper.Map<GetDeckDto>(createdDeck);
                     response.Success = response.Data != null;
                 }
             } 
@@ -54,64 +72,64 @@ namespace magix_api.Services.DeckService
             return response;
         }
 
-        public async Task<ServiceResponse<Deck>> DeleteDeck(string playerKey, int playerId, Deck deck)
+        public async Task<ServiceResponse<GetDeckDto>> DeleteDeck(string playerKey, int playerId, int deckId)
         {
-            ServiceResponse<Deck> response = new();
-            response.Success = await _deckRepo.DeleteDeck(deck);
+            ServiceResponse<GetDeckDto> response = new();
+            response.Success = await _deckRepo.DeleteDeck(deckId);
             if (response.Success)
             {
                 // To prevent a desynchronization with the gameServer, we switch to another deck after
                 var newDeck = (await _deckRepo.GetAllDecks(playerId)).FirstOrDefault();
                 if (newDeck != null && await SendDeckServer(playerKey, newDeck))
                 {
-                    response.Data = newDeck;
+                    response.Data = _mapper.Map<GetDeckDto>(newDeck);
                 }
             }
             return response;
         }
 
-        public async Task<ServiceResponse<List<Deck>>> GetAllDecks(int playerId)
+        public async Task<ServiceResponse<List<GetDeckDto>>> GetAllDecks(int playerId)
         {
-            ServiceResponse<List<Deck>> response = new();
-            response.Data = await _deckRepo.GetAllDecks(playerId);
+            ServiceResponse<List<GetDeckDto>> response = new();
+            response.Data = _mapper.Map<List<GetDeckDto>>(await _deckRepo.GetAllDecks(playerId));
             return response;
         }
 
-        public async Task<ServiceResponse<Deck>> UpdateDeck(string playerKey, Deck deck)
+        public async Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, Deck deck)
         {
-            ServiceResponse<Deck> response = new();
+            ServiceResponse<GetDeckDto> response = new();
 
             var successfullySent = await SendDeckServer(playerKey, deck);
 
             if (successfullySent)
             {
-                response.Data = await _deckRepo.UpdateDeck(deck);
+                response.Data = _mapper.Map<GetDeckDto>(await _deckRepo.UpdateDeck(deck));
                 response.Success = response.Data != null;
             }
 
             return response;
         }
 
-        public async Task<ServiceResponse<Deck>> SwitchDeck(string playerKey, int id)
+        public async Task<ServiceResponse<GetDeckDto>> SwitchDeck(string playerKey, int id)
         {
-            ServiceResponse<Deck> response = new();
+            ServiceResponse<GetDeckDto> response = new();
 
             var deck = await _deckRepo.GetDeck(id);
 
             var successfullySent = await SendDeckServer(playerKey, deck);
             if (successfullySent)
             {
-                response.Data = deck;
+                response.Data = _mapper.Map<GetDeckDto>(deck);
                 response.Success = response.Data != null;
             }
 
             return response;
         }
 
-        public async Task<ServiceResponse<Deck>> GetDeck(int id)
+        public async Task<ServiceResponse<GetDeckDto>> GetDeck(int id)
         {
-            ServiceResponse<Deck> response = new();
-            response.Data = await _deckRepo.GetDeck(id);
+            ServiceResponse<GetDeckDto> response = new();
+            response.Data = _mapper.Map<GetDeckDto>(await _deckRepo.GetDeck(id));
             return response;
         }
 
@@ -166,14 +184,22 @@ namespace magix_api.Services.DeckService
 
         private static async Task<bool> SendDeckServer(string playerKey, Deck deck)
         {
-            List<DeckCardDto> cardList = deck.Cards?.Select(c => new DeckCardDto(){Id = c.Id}).ToList() ?? new();
-            string className = deck.Hero?.ToServer() ?? string.Empty;
-            string initialTalent = deck.Talent?.ToServer() ?? string.Empty;
+            if (deck.Hero == null || deck.Talent == null || deck.Cards == null || deck.Cards.Count < 30)
+            {
+                return false;
+            }
+            List<DeckCardDto> cardList = deck.Cards.Select(c => new DeckCardDto(){Id = c.Id}).ToList();
+            string className = deck.Hero.GetServerName();
+            string initialTalent = deck.Talent.GetServerName();
             return await SendDeckServer(playerKey, cardList, className, initialTalent);
         }
 
         private static async Task<bool> SendDeckServer(string playerKey, List<DeckCardDto> deck, string className, string initialTalent)
         {
+            if (string.IsNullOrEmpty(className) || string.IsNullOrEmpty(initialTalent) || deck.Count < 30)
+            {
+                return false;
+            }
             //string apiUrl = "/users/deck/save";
 
             //string jsonDeck = JsonSerializer.Serialize(deck);
