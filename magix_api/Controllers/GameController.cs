@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using magix_api.Services.GameService;
 using magix_api.Dtos.GameDto;
-using Microsoft.AspNetCore.Authorization;
+using magix_api.Services.GameService;
 using magix_api.utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace magix_api.Controllers
 {
@@ -44,7 +44,7 @@ namespace magix_api.Controllers
 
         [HttpPost("save")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<bool>>> SaveGameResultAsync(string opponent, bool victory, int deckId)
+        public async Task<ActionResult<ServiceResponse<bool>>> SaveGameResultAsync(string opponent, bool victory, Guid deckId)
         {
             return Ok(await _gameService.SaveGameResultAsync(User.GetPlayerId(), opponent, victory, deckId));
         }

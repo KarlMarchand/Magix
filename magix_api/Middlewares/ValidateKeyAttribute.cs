@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using magix_api.utils;
 using Microsoft.AspNetCore.Authorization;
 
@@ -14,7 +13,6 @@ namespace magix_api.Middlewares
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                        ValidateKeyRequirement requirement)
         {
-            Console.WriteLine("Middleware");
             var keyClaim = context.User.FindFirst(c => c.Type == "key")?.Value;
 
             if (string.IsNullOrEmpty(keyClaim))

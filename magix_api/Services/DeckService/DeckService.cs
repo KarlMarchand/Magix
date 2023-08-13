@@ -1,4 +1,3 @@
-using System.Text.Json;
 using AutoMapper;
 using magix_api.Dtos.CardDto;
 using magix_api.Dtos.DeckDto;
@@ -7,6 +6,7 @@ using magix_api.Dtos.HeroDto;
 using magix_api.Dtos.TalentDto;
 using magix_api.Repositories;
 using magix_api.utils;
+using System.Text.Json;
 
 namespace magix_api.Services.DeckService
 {
@@ -29,61 +29,85 @@ namespace magix_api.Services.DeckService
             _factionRepo = factionRepo;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, DeckDto deck)
+        public async Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, DeckDto newDeck)
         {
-            // TODO: Ajouter la possibilité de faire des brouillons
+            // TODO: Add possibility to create a draft
+            // TODO: Call GetAllOptions on database creation and then Add seeding of decks, players and stats
+            return await UpsertDeck(playerKey, playerId, newDeck, _deckRepo.CreateDeck);
+        }
 
-            ServiceResponse<GetDeckDto> response = new(){Success = false};
+        public async Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, int playerId, DeckDto updateDeckDto)
+        {
+            return await UpsertDeck(playerKey, playerId, updateDeckDto, _deckRepo.UpdateDeck);
+        }
 
-            var hero = await _heroRepo.GetHeroById(deck.HeroId);
-            var talent = await _talentRepo.GetTalentById(deck.TalentId);
-            var faction = await _factionRepo.GetFactionById(deck.FactionId);
+        // Insert or Update a deck
+        private async Task<ServiceResponse<GetDeckDto>> UpsertDeck(string playerKey, int playerId, DeckDto deckDto, Func<Deck, Task<Deck>> saveAction)
+        {
+            ServiceResponse<GetDeckDto> response = new();
 
-            if (hero != null && talent != null)
+            var deck = _mapper.Map<Deck>(deckDto);
+
+            deck.PlayerId = playerId;
+
+            // Validate if the deck is conform to the business rules
+            var validationResponse = await ValidateDeck(deck);
+            if (!validationResponse.Success)
             {
-                if (await SendDeckServer(playerKey, deck.Cards, hero.GetServerName(), talent.GetServerName()))
-                {
-                    List<int> cardIds = deck.Cards.Select(c => c.Id).ToList();
-                    List<Card> cards = await _cardRepo.GetCardsByIds(cardIds);
-
-                    var cardCounts = cardIds.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
-
-                    var newDeck = new Deck
-                    {
-                        Name = deck.Name,
-                        PlayerId = playerId,
-                        Talent = talent,
-                        Hero = hero,
-                        Faction = faction,
-                        Active = deck.Active,
-                        Cards = cards,
-                        DeckCards = cardCounts.Select(kv => new DeckCard { CardId = kv.Key, Quantity = kv.Value }).ToList()
-                    };
-                    Deck createdDeck = await _deckRepo.CreateDeck(newDeck);
-                    response.Data = _mapper.Map<GetDeckDto>(createdDeck);
-                    response.Success = response.Data != null;
-                }
-            } 
-            else
-            {
-                response.Message = "Couldn't find the hero or talent";
+                response.Success = false;
+                response.Message = validationResponse.Message;
+                return response;
             }
 
+            if (await ActivateDeck(playerKey, deck))
+            {
+                // Convert the list of card Ids into a list of Cards
+                List<int> cardIds = deckDto.Cards.Select(c => c.Id).ToList();
+                deck.Cards = await _cardRepo.GetCardsByIds(cardIds);
+
+                // Transform the repeating cards in a Id -> Qty
+                var cardCounts = cardIds.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
+                deck.DeckCards = cardCounts.Select(kv => new DeckCard { CardId = kv.Key, Quantity = kv.Value }).ToList();
+
+                response.Data = _mapper.Map<GetDeckDto>(await saveAction(deck));
+                response.Success = response.Data != null;
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "InvalidDeckGameServer";
+            }
             return response;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> DeleteDeck(string playerKey, int playerId, int deckId)
+        public async Task<ServiceResponse<GetDeckDto>> GetDeck(Guid id)
         {
             ServiceResponse<GetDeckDto> response = new();
-            response.Success = await _deckRepo.DeleteDeck(deckId);
-            if (response.Success)
+            var deck = await _deckRepo.GetDeck(id);
+            if (deck != null)
             {
-                // To prevent a desynchronization with the gameServer, we switch to another deck after
-                var newDeck = (await _deckRepo.GetAllDecks(playerId)).FirstOrDefault();
-                if (newDeck != null && await SendDeckServer(playerKey, newDeck))
-                {
-                    response.Data = _mapper.Map<GetDeckDto>(newDeck);
-                }
+                response.Data = _mapper.Map<GetDeckDto>(deck);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "DeckNotFound";
+            }
+            return response;
+        }
+
+        public async Task<ServiceResponse<GetDeckDto>> GetActiveDeck(int playerId)
+        {
+            ServiceResponse<GetDeckDto> response = new();
+            var deck = await _deckRepo.GetDeck();
+            if (deck != null)
+            {
+                response.Data = _mapper.Map<GetDeckDto>(deck);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "DeckNotFound";
             }
             return response;
         }
@@ -95,41 +119,55 @@ namespace magix_api.Services.DeckService
             return response;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, Deck deck)
+        // Will delete the deck only if there's another deck to switch to after since the Game Server needs an active deck at all time
+        public async Task<ServiceResponse<GetDeckDto>> DeleteDeck(string playerKey, int playerId, Guid deckId)
         {
             ServiceResponse<GetDeckDto> response = new();
 
-            var successfullySent = await SendDeckServer(playerKey, deck);
-
-            if (successfullySent)
+            // To prevent a desynchronization with the gameServer, we switch to another deck after
+            var nextDeck = (await _deckRepo.GetAllDecks(playerId)).Where(d => d.Id != deckId).FirstOrDefault();
+            if (nextDeck != null)
             {
-                response.Data = _mapper.Map<GetDeckDto>(await _deckRepo.UpdateDeck(deck));
-                response.Success = response.Data != null;
+                var couldDelete = await _deckRepo.DeleteDeck(deckId, playerId);
+                if (couldDelete && await ActivateDeck(playerKey, nextDeck))
+                {
+                    response.Success = true;
+                    response.Data = _mapper.Map<GetDeckDto>(nextDeck);
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = couldDelete ? "InvalidDeckGameServer" : "CouldNotDelete";
+                }
             }
-
+            else
+            {
+                response.Success = false;
+                response.Message = "NoOtherDeck";
+            }
             return response;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> SwitchDeck(string playerKey, int id)
+        // Switch a deck for another one
+        public async Task<ServiceResponse<GetDeckDto>> SwitchDeck(string playerKey, int playerId, Guid id)
         {
             ServiceResponse<GetDeckDto> response = new();
 
             var deck = await _deckRepo.GetDeck(id);
 
-            var successfullySent = await SendDeckServer(playerKey, deck);
-            if (successfullySent)
+            if (deck != null)
             {
-                response.Data = _mapper.Map<GetDeckDto>(deck);
-                response.Success = response.Data != null;
+                if (await ActivateDeck(playerKey, deck))
+                {
+                    response.Data = _mapper.Map<GetDeckDto>(deck);
+                    response.Success = response.Data != null;
+                }
             }
-
-            return response;
-        }
-
-        public async Task<ServiceResponse<GetDeckDto>> GetDeck(int id)
-        {
-            ServiceResponse<GetDeckDto> response = new();
-            response.Data = _mapper.Map<GetDeckDto>(await _deckRepo.GetDeck(id));
+            else
+            {
+                response.Success = false;
+                response.Message = "DeckNotFound";
+            }
             return response;
         }
 
@@ -182,40 +220,86 @@ namespace magix_api.Services.DeckService
             return serviceResponse;
         }
 
-        private static async Task<bool> SendDeckServer(string playerKey, Deck deck)
+        // Activate the passed deck in the database and Game Server
+        private async Task<bool> ActivateDeck(string playerKey, Deck deck)
         {
-            if (deck.Hero == null || deck.Talent == null || deck.Cards == null || deck.Cards.Count < 30)
+            bool deckSavedToServer = await SaveDeckToGameServer(playerKey, deck);
+
+            if (deckSavedToServer)
             {
-                return false;
+                await _deckRepo.UpdateActiveDeck(deck);
             }
-            List<DeckCardDto> cardList = deck.Cards.Select(c => new DeckCardDto(){Id = c.Id}).ToList();
-            string className = deck.Hero.GetServerName();
-            string initialTalent = deck.Talent.GetServerName();
-            return await SendDeckServer(playerKey, cardList, className, initialTalent);
+            return deckSavedToServer;
         }
 
-        private static async Task<bool> SendDeckServer(string playerKey, List<DeckCardDto> deck, string className, string initialTalent)
+        // Send the deck to the Game Server and return if the deck was accepted and saved
+        private async Task<bool> SaveDeckToGameServer(string playerKey, Deck deck)
         {
-            if (string.IsNullOrEmpty(className) || string.IsNullOrEmpty(initialTalent) || deck.Count < 30)
+            List<DeckCardDto> cardList = deck.Cards!.Select(c => new DeckCardDto() { Id = c.Id }).ToList();
+            string heroName = deck.Hero!.GetServerName();
+            string talentName = deck.Talent!.GetServerName();
+
+            string apiUrl = "/users/deck/save";
+
+            string jsonDeck = JsonSerializer.Serialize(cardList);
+
+            Dictionary<string, string> data = new()
             {
-                return false;
-            }
-            //string apiUrl = "/users/deck/save";
+                {"key", playerKey},
+                {"deck", jsonDeck},
+                {"className", heroName},
+                {"initialTalent", talentName}
+            };
 
-            //string jsonDeck = JsonSerializer.Serialize(deck);
+            ServerResponse<bool> res = await GameServerAPI.CallApi<bool>(apiUrl, data);
 
-            //Dictionary<string, string> data = new()
-            //{
-            //    {"key", playerKey},
-            //    {"deck", jsonDeck},
-            //    {"className", className},
-            //    {"initialTalent", initialTalent}
-            //};
-
-            //ServerResponse<bool> res = await GameServerAPI.CallApi<bool>(apiUrl, data);
-
-            //return res.IsValid && res.Content;
-            return true;
+            return res.IsValid && res.Content;
         }
+
+        // Validate the business rules for a new or updated deck
+        private async Task<ServiceResponse<bool>> ValidateDeck(Deck deck)
+        {
+            var response = new ServiceResponse<bool>();
+
+            if (deck.Cards == null || deck.Cards.Count != 30)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "InvalidNumberOfCards";
+                return response;
+            }
+
+            deck.Hero = deck.Hero ?? await _heroRepo.GetHeroById(deck.HeroId);
+            if (deck.Hero == null)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "CantFindHero";
+                return response;
+            }
+
+            deck.Talent = deck.Talent ?? await _talentRepo.GetTalentById(deck.TalentId);
+            if (deck.Talent == null)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "CantFindTalent";
+                return response;
+            }
+
+            deck.Faction = deck.Faction ?? await _factionRepo.GetFactionById(deck.FactionId);
+            if (deck.Faction == null)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "CantFindFaction";
+                return response;
+            }
+
+            response.Data = true;
+            response.Success = true;
+            return response;
+        }
+
     }
 }

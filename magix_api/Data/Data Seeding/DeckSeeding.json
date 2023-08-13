@@ -1,7 +1,7 @@
 {
   [
     {
-      "name": "Test1",
+      "name": "Test1-Active-deck",
       "heroId": 1,
       "talentId": 1,
       "factionId": 1,
@@ -44,7 +44,7 @@
       "heroId": 1,
       "talentId": 1,
       "factionId": 1,
-      "active": true,
+      "active": false,
       "cards": [
         { "id": 11 },
         { "id": 11 },
@@ -83,7 +83,7 @@
       "heroId": 1,
       "talentId": 1,
       "factionId": 1,
-      "active": true,
+      "active": false,
       "cards": [
         { "id": 11 },
         { "id": 11 },
@@ -122,7 +122,7 @@
       "heroId": 1,
       "talentId": 1,
       "factionId": 1,
-      "active": true,
+      "active": false,
       "cards": [
         { "id": 11 },
         { "id": 11 },
@@ -161,7 +161,7 @@
       "heroId": 1,
       "talentId": 1,
       "factionId": 1,
-      "active": true,
+      "active": false,
       "cards": [
         { "id": 11 },
         { "id": 11 },

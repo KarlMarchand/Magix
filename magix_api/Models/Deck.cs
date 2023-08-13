@@ -4,7 +4,7 @@ namespace magix_api;
 
 public partial class Deck
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     public int PlayerId { get; set; }
     public virtual Player? Player { get; set; }
     public required string Name { get; set; }
@@ -14,9 +14,9 @@ public partial class Deck
     public virtual Talent? Talent { get; set; }
     public int FactionId { get; set; }
     public virtual Faction? Faction { get; set; }
-    public bool Active { get; set; } = true;
+    public bool Active { get; set; } = false;
     public virtual ICollection<Game>? Games { get; }
-    public virtual ICollection<DeckCard>? DeckCards { get; set; }
+    public virtual ICollection<DeckCard> DeckCards { get; set; } = new List<DeckCard>();
     [NotMapped]
     public List<Card>? Cards { get; set; }
 }

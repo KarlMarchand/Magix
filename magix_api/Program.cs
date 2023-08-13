@@ -1,27 +1,33 @@
-using magix_api.Services.PlayerService;
-using magix_api.Services.GameService;
-using magix_api.Services.DeckService;
-using magix_api.Repositories;
 using magix_api.Data;
 using magix_api.Middlewares;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using magix_api.Repositories;
 using magix_api.Services.AuthentificationService;
+using magix_api.Services.DeckService;
+using magix_api.Services.GameService;
+using magix_api.Services.InitializationService;
+using magix_api.Services.PlayerService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSqlite<MagixContext>("Data Source=magix.db");
+builder.Services.AddDbContext<MagixContext>(options =>
+{
+    options.UseLazyLoadingProxies();
+    options.UseSqlite("Data Source=magix.db");
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => {
+builder.Services.AddSwaggerGen(c =>
+{
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "JWTToken_Auth_API",
+        Title = "Magix API",
         Version = "v1"
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -93,6 +99,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeckService, DeckService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddHostedService<InitializationService>();
 
 var app = builder.Build();
 

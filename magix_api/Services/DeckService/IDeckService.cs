@@ -8,12 +8,13 @@ namespace magix_api.Services.DeckService
 {
     public interface IDeckService
     {
-        Task<ServiceResponse<GetDeckDto>> GetDeck(int id);
+        Task<ServiceResponse<GetDeckDto>> GetDeck(Guid id);
+        Task<ServiceResponse<GetDeckDto>> GetActiveDeck(int playerId);
         Task<ServiceResponse<List<GetDeckDto>>> GetAllDecks(int playerId);
-        Task<ServiceResponse<GetDeckDto>> SwitchDeck(string playerKey, int deckId);
+        Task<ServiceResponse<GetDeckDto>> SwitchDeck(string playerKey, int playerId, Guid deckId);
         Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, DeckDto deck);
-        Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, Deck deck);
-        Task<ServiceResponse<GetDeckDto>> DeleteDeck(string playerKey, int playerId, int deckId);
+        Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, int playerId, DeckDto deck);
+        Task<ServiceResponse<GetDeckDto>> DeleteDeck(string playerKey, int playerId, Guid deckId);
         Task<ServiceResponse<GetAvailableOptionsDto>> GetAllOptions();
         Task<ServiceResponse<List<GetCardDto>>> GetAllCards();
         Task<ServiceResponse<List<GetFactionDto>>> GetAllFactions();

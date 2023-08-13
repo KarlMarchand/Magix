@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using magix_api.Services.DeckService;
+using magix_api.Dtos.CardDto;
 using magix_api.Dtos.DeckDto;
+using magix_api.Dtos.FactionDto;
 using magix_api.Dtos.HeroDto;
 using magix_api.Dtos.TalentDto;
-using magix_api.Dtos.FactionDto;
-using magix_api.Dtos.CardDto;
-using Microsoft.AspNetCore.Authorization;
+using magix_api.Services.DeckService;
 using magix_api.utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace magix_api.Controllers
 {
@@ -21,31 +21,31 @@ namespace magix_api.Controllers
             _deckService = deckService;
         }
 
-        [HttpGet("Options/All")]
+        [HttpGet("options/all")]
         public async Task<ActionResult<ServiceResponse<GetAvailableOptionsDto>>> GetAllOptions()
         {
             return Ok(await _deckService.GetAllOptions());
         }
 
-        [HttpGet("Options/Cards")]
+        [HttpGet("options/cards")]
         public async Task<ActionResult<ServiceResponse<List<GetCardDto>>>> GetAllCards()
         {
             return Ok(await _deckService.GetAllCards());
         }
 
-        [HttpGet("Options/Factions")]
+        [HttpGet("options/factions")]
         public async Task<ActionResult<ServiceResponse<List<GetFactionDto>>>> GetAllFactions()
         {
             return Ok(await _deckService.GetAllFactions());
         }
 
-        [HttpGet("Options/Heroes")]
+        [HttpGet("options/heroes")]
         public async Task<ActionResult<ServiceResponse<List<GetHeroDto>>>> GetAllHeroes()
         {
             return Ok(await _deckService.GetAllHeroes());
         }
 
-        [HttpGet("Options/Talents")]
+        [HttpGet("options/talents")]
         public async Task<ActionResult<ServiceResponse<List<GetTalentDto>>>> GetAllTalents()
         {
             return Ok(await _deckService.GetAllTalents());
@@ -53,23 +53,30 @@ namespace magix_api.Controllers
 
         [HttpGet("{deckId}")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetDeck([FromRoute] int deckId)
+        public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetDeck([FromRoute] Guid deckId)
         {
             return Ok(await _deckService.GetDeck(deckId));
         }
 
-        [HttpGet("All")]
+        [HttpGet("all")]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetAllDecks()
         {
             return Ok(await _deckService.GetAllDecks(User.GetPlayerId()));
         }
 
-        [HttpPost("Switch")]
+        [HttpGet("active")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> SwitchDeck(int deckId)
+        public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetActiveDeck()
         {
-            return Ok(await _deckService.SwitchDeck(User.GetPlayerKey(), deckId));
+            return Ok(await _deckService.GetActiveDeck(User.GetPlayerId()));
+        }
+
+        [HttpPost("switch")]
+        [Authorize(Policy = "ValidateKey")]
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> SwitchDeck(Guid deckId)
+        {
+            return Ok(await _deckService.SwitchDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId));
         }
 
         [HttpPost]
@@ -81,14 +88,21 @@ namespace magix_api.Controllers
 
         [HttpPut]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> UpdateDeck(Deck deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> UpdateDeck(DeckDto deck)
         {
-            return Ok(await _deckService.UpdateDeck(User.GetPlayerKey(), deck));
+            try
+            {
+                return Ok(await _deckService.UpdateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck));
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
         [HttpDelete]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> DeleteDeck(int deckId)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> DeleteDeck(Guid deckId)
         {
             return Ok(await _deckService.DeleteDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId));
         }

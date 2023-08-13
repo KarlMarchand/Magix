@@ -1,9 +1,9 @@
 using magix_api.Dtos.PlayerDto;
 using magix_api.Services.PlayerService;
-using Microsoft.AspNetCore.Mvc;
 using magix_api.utils;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace magix_api.Controllers
 {
