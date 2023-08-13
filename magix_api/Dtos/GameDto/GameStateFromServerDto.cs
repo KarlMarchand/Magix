@@ -1,21 +1,37 @@
+using magix_api.Dtos.CardDto;
+
 namespace magix_api.Dtos.GameDto
 {
     public class GameStateFromServerDto
     {
-        public string? username;
-        public int? RemainingTurnTime;
-        public bool? YourTurn;
-        public bool? HeroPowerAlreadyUsed;
-        public int? Hp;
-        public int? Mp;
-        public int? MaxMp;
-        public List<Card> Hand = new();
-        public List<Card> Board = new();
-        public string? WelcomeText;
-        public string? HeroClass;
-        public int? RemainingCardsCount;
-        public GameStateFromServerDto? Opponent;
-        public List<string>? LatestActions;
-        public int? handSize;
+        public string? Username { get; set; }
+        public int? RemainingTurnTime { get; set; }
+        public bool? YourTurn { get; set; }
+        public bool? HeroPowerAlreadyUsed { get; set; }
+        public int? Hp { get; set; }
+        public int? Mp { get; set; }
+        public int? MaxMp { get; set; }
+        public List<CardFromGameServerDto> Hand { get; set; } = new();
+        public List<CardFromGameServerDto> Board { get; set; } = new();
+        public string? WelcomeText { get; set; }
+        public string? HeroClass { get; set; }
+        public int? RemainingCardsCount { get; set; }
+        public GameStateFromServerDto? Opponent { get; set; }
+        public List<LatestActionDto> LatestActions { get; set; } = new();
+        public int? HandSize { get; set; }
+    }
+
+    public class LatestActionDto
+    {
+        public int? Id { get; set; }
+        public string? From { get; set; }
+        public ActionDetailsDto? Action { get; set; }
+    }
+
+    public class ActionDetailsDto
+    {
+        public string? Type { get; set; }
+        public int? Uid { get; set; }
+        public int? Id { get; set; }
     }
 }

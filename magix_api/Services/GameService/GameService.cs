@@ -94,7 +94,7 @@ namespace magix_api.Services.GameService
             return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(this.GetUrl("observe"), data));
         }
 
-        public async Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, int deckId)
+        public async Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId)
         {
             ServiceResponse<bool> response = new();
 
@@ -109,7 +109,7 @@ namespace magix_api.Services.GameService
 
             var savedGame = await _gameRepo.CreateGame(game);
 
-            if (savedGame != null && savedGame.Id > 0)
+            if (savedGame != null)
             {
                 response.Data = true;
             }

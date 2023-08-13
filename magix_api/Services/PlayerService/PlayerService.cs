@@ -1,8 +1,8 @@
 using AutoMapper;
-using magix_api.utils;
 using magix_api.Dtos.PlayerDto;
 using magix_api.Repositories;
 using magix_api.Services.AuthentificationService;
+using magix_api.utils;
 
 namespace magix_api.Services.PlayerService
 {

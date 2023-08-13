@@ -2,9 +2,9 @@
 
 public partial class Game
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int DeckId { get; set; }
+    public Guid DeckId { get; set; }
     public virtual Deck? Deck { get; set; }
 
     public string? Opponent { get; set; }
