@@ -19,6 +19,6 @@ namespace magix_api.Dtos.PlayerDto
 
         public int BestTrophyScore { get; set; }
 
-        public string? Jwt { get; set; }
+        public string? Token { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace magix_api.Services.PlayerService
                 incompletePlayer.Username = username;
                 Player player = await _playerRepository.GetPlayer(incompletePlayer);
                 GetPlayerDto playerOutput = _mapper.Map<GetPlayerDto>(player);
-                playerOutput.Jwt = _authentificationService.GenerateJwtToken(player);
+                playerOutput.Token = _authentificationService.GenerateJwtToken(player);
                 serviceResponse.Data = playerOutput;
             }
             else

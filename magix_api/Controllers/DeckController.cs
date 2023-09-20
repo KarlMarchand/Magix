@@ -1,3 +1,4 @@
+using magix_api.Custom_Exceptions;
 using magix_api.Dtos.CardDto;
 using magix_api.Dtos.DeckDto;
 using magix_api.Dtos.FactionDto;
@@ -24,66 +25,77 @@ namespace magix_api.Controllers
         [HttpGet("options/all")]
         public async Task<ActionResult<ServiceResponse<GetAvailableOptionsDto>>> GetAllOptions()
         {
-            return Ok(await _deckService.GetAllOptions());
+            var response = await _deckService.GetAllOptions();
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("options/cards")]
         public async Task<ActionResult<ServiceResponse<List<GetCardDto>>>> GetAllCards()
         {
-            return Ok(await _deckService.GetAllCards());
+            var response = await _deckService.GetAllCards();
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("options/factions")]
         public async Task<ActionResult<ServiceResponse<List<GetFactionDto>>>> GetAllFactions()
         {
-            return Ok(await _deckService.GetAllFactions());
+            var response = await _deckService.GetAllFactions();
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("options/heroes")]
         public async Task<ActionResult<ServiceResponse<List<GetHeroDto>>>> GetAllHeroes()
         {
-            return Ok(await _deckService.GetAllHeroes());
+            var response = await _deckService.GetAllHeroes();
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("options/talents")]
         public async Task<ActionResult<ServiceResponse<List<GetTalentDto>>>> GetAllTalents()
         {
-            return Ok(await _deckService.GetAllTalents());
+            var response = await _deckService.GetAllTalents();
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("{deckId}")]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetDeck([FromRoute] Guid deckId)
         {
-            return Ok(await _deckService.GetDeck(deckId));
+            var response = await _deckService.GetDeck(deckId);
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpGet("all")]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetAllDecks()
         {
-            return Ok(await _deckService.GetAllDecks(User.GetPlayerId()));
+            var response = await _deckService.GetAllDecks(User.GetPlayerId());
+            return response.Success ? Ok(response) : NotFound(response);
+
         }
 
         [HttpGet("active")]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<List<GetDeckDto>>>> GetActiveDeck()
         {
-            return Ok(await _deckService.GetActiveDeck(User.GetPlayerId()));
+            var response = await _deckService.GetActiveDeck(User.GetPlayerId());
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
-        [HttpPost("switch")]
+        [HttpPost("switch/{deckId}")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> SwitchDeck(Guid deckId)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> SwitchDeck([FromRoute] Guid deckId)
         {
-            return Ok(await _deckService.SwitchDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId));
+            var response = await _deckService.SwitchDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPost]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<GetDeckDto>>> CreateDeck(DeckDto deck)
         {
-            return Ok(await _deckService.CreateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck));
+            var response = await _deckService.CreateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck);
+            return response.Success ? Created(string.Empty, response) : BadRequest(response);
         }
 
         [HttpPut]
@@ -92,19 +104,21 @@ namespace magix_api.Controllers
         {
             try
             {
-                return Ok(await _deckService.UpdateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck));
+                var response = await _deckService.UpdateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck);
+                return Ok(response);
             }
-            catch (UnauthorizedAccessException)
+            catch (ResourceUnauthorizedException)
             {
                 return Forbid();
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{deckId}")]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> DeleteDeck(Guid deckId)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> DeleteDeck([FromRoute] Guid deckId)
         {
-            return Ok(await _deckService.DeleteDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId));
+            var response = await _deckService.DeleteDeck(User.GetPlayerKey(), User.GetPlayerId(), deckId);
+            return response.Success ? Ok() : NotFound(response);
         }
     }
 }

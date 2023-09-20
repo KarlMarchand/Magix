@@ -3,13 +3,12 @@ using magix_api.Services.PlayerService;
 using magix_api.utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace magix_api.Controllers
 {
-    [ApiController] //This means this is an API so it implements all the api's tools
-    [Route("api/player")] // This means the controller can be accessed at the route api/The_name_of_this_controller
-    public class PlayerController : ControllerBase //It must extends the ControllerBase's class from MVC 
+    [ApiController]
+    [Route("api/player")]
+    public class PlayerController : ControllerBase
     {
         private readonly IPlayerService _playerService;
 
@@ -19,23 +18,25 @@ namespace magix_api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login(string username, [DataType(DataType.Password)] string password)
+        public async Task<ActionResult<ServiceResponse<GetPlayerDto>>> Login([FromBody] LoginDto loginInformations)
         {
-            return Ok(await _playerService.Login(username, password));
+            var response = await _playerService.Login(loginInformations.Username, loginInformations.Password);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPost("logout")]
         [Authorize]
         public async Task<ActionResult<ServiceResponse<string>>> Logout()
         {
-            return Ok(await _playerService.Logout(User.GetPlayerKey()));
+            return Ok((await _playerService.Logout(User.GetPlayerKey())));
         }
 
         [HttpGet]
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<GetPlayerStatsDto>>> GetProfile()
         {
-            return Ok(await _playerService.GetProfile(User.GetPlayerId()));
+            var response = await _playerService.GetProfile(User.GetPlayerId());
+            return response.Success ? Ok(response) : NotFound(response);
         }
     }
 }
