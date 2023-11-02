@@ -1,7 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
 import "../sass/loginStyle.scss";
-import { ErrorMessage, User, UserLogin } from "../types/userTypes";
+import { User } from "../types/userProfile";
+import { UserLogin } from "../types/userLogin";
+import { ServerResponse } from "../types/serverResponse";
 
 const LoginPage: React.FC = () => {
 	const { setUser, login } = useAuth();
@@ -23,13 +25,12 @@ const LoginPage: React.FC = () => {
 	}, [username, pwd]);
 
 	const submitCredentials = useCallback(async (logins: UserLogin) => {
-		login(logins).then((response: User | ErrorMessage) => {
-			if ("error" in response) {
-				const errorResponse = response as ErrorMessage;
-				setErrMsg(errorResponse.message);
+		login(logins).then((response: ServerResponse<User>) => {
+			if (response.success && response.data) {
+				setUser(response.data);
 			} else {
-				const userResponse = response as User;
-				setUser(userResponse);
+				setErrMsg("Votre nom d'usager ou votre mot de passe est invalide.");
+				setPwd("");
 			}
 		});
 	}, []);
@@ -37,12 +38,6 @@ const LoginPage: React.FC = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		submitCredentials({ username, password: pwd });
-	};
-
-	const handleGuest = (e: React.MouseEvent) => {
-		setUsername("");
-		setPwd("");
-		submitCredentials({ username: "guest", password: "" });
 	};
 
 	return (
@@ -88,22 +83,6 @@ const LoginPage: React.FC = () => {
 									<button className="btn" id="btn-connexion">
 										Connection
 									</button>
-								</div>
-								<div>
-									<p>
-										Click{" "}
-										<span
-											onClick={handleGuest}
-											style={{
-												textDecoration: "underline",
-												fontWeight: "bold",
-												cursor: "pointer",
-											}}
-										>
-											here
-										</span>{" "}
-										for a guest account.
-									</p>
 								</div>
 							</form>
 						</div>

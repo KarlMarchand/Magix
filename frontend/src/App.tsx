@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/protectedRoute";
 import { AuthProvider } from "./context/AuthProvider";
-import LoginPage from "./pages/LoginPage";
-import LobbyPage from "./pages/LobbyPage";
-import GamePage from "./pages/GamePage";
-import DeckPage from "./pages/DeckPage";
-import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/loginPage";
+import LobbyPage from "./pages/lobbyPage";
+import GamePage from "./pages/gamePage";
+import DeckPage from "./pages/deckPage";
+import ProfilePage from "./pages/profilePage";
 
 function App() {
 	return (

@@ -1,21 +1,27 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { request, getRequest, API_URL_USERS } from "../utils/requestHandler";
-import { ErrorMessage, User, UserLogin } from "../types/userTypes";
+import { useSessionStorage } from "../hooks/useSessionStorage";
+import { RequestHandler } from "../utils/requestHandler";
+import { UserLogin } from "../types/userLogin";
+import { User } from "../types/userProfile";
+import { ServerResponse } from "../types/serverResponse";
 
 interface AuthContextInterface {
-	user: string;
+	user: User | null;
 	setUser: (user: User) => void;
-	login: (userData: UserLogin) => Promise<User>;
+	login: (userData: UserLogin) => Promise<ServerResponse<User>>;
 	logout: () => void;
 }
 
 const authContextDefault: AuthContextInterface = {
-	user: "",
+	user: null,
 	setUser: () => null,
 	login: async () => {
-		return {};
+		return {
+			data: null,
+			success: false,
+			message: "You must login first",
+		} as ServerResponse<User>;
 	},
 	logout: () => null,
 };
@@ -23,13 +29,18 @@ const authContextDefault: AuthContextInterface = {
 const AuthContext = createContext<AuthContextInterface>(authContextDefault);
 
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
-	const [user, setUser] = useLocalStorage("user", null);
+	const [user, setUser] = useSessionStorage("user", null);
 	const navigate = useNavigate();
 
-	const login = async (userData: UserLogin): Promise<User | ErrorMessage> => {
-		const res = await getRequest(API_URL_USERS + "GetAll");
-		console.log(res);
-		return {}; //request(API_URL_USERS, userData);
+	const login = async (userData: UserLogin): Promise<ServerResponse<User>> => {
+		const response = await RequestHandler.post<User>("player/login", userData);
+
+		if (response.success && response.data?.token) {
+			RequestHandler.setAccessToken(response.data.token);
+			localStorage.setItem("username", userData.username);
+		}
+
+		return response;
 	};
 
 	const logout = useCallback(() => {
