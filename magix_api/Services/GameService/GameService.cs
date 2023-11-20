@@ -17,8 +17,6 @@ namespace magix_api.Services.GameService
 
         public async Task<ServiceResponse<GameStateContainerDto>> GameActionAsync(string playerKey, GameActionDto gameAction)
         {
-            ServiceResponse<GameStateContainerDto> response = new();
-
             Dictionary<string, string> data = new() { { "key", playerKey }, { "type", gameAction.actionType } };
 
             if (gameAction.cardUid != null)
@@ -40,12 +38,18 @@ namespace magix_api.Services.GameService
 
             Dictionary<string, string> data = new() { { "key", playerKey } };
 
-            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(this.GetUrl("state"), data));
+            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("state"), data));
         }
 
         public async Task<ServiceResponse<string>> JoinGameAsync(string playerKey, string type, string? mode, string? privateKey)
         {
             ServiceResponse<string> response = new();
+
+            if (string.IsNullOrEmpty(type))
+            {
+                response.Success = false;
+                return response;
+            }
 
             Dictionary<string, string> data = new()
             {
@@ -63,7 +67,7 @@ namespace magix_api.Services.GameService
                 data.Add("privateKey", privateKey);
             }
 
-            ServerResponse<string> res = await GameServerAPI.CallApi<string>(this.GetUrl("auto-match"), data);
+            ServerResponse<string> res = await GameServerAPI.CallApi<string>(GetUrl("auto-match"), data);
 
             if (res.IsValid)
             {
@@ -91,7 +95,7 @@ namespace magix_api.Services.GameService
                 {"username", username},
             };
 
-            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(this.GetUrl("observe"), data));
+            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("observe"), data));
         }
 
         public async Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId)
@@ -124,7 +128,7 @@ namespace magix_api.Services.GameService
 
         private string GetUrl(string service)
         {
-            return this._baseApiUrl + service;
+            return _baseApiUrl + service;
         }
 
         private async Task<ServiceResponse<GameStateContainerDto>> ProcessGameResponse(

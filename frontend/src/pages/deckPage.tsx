@@ -1,6 +1,6 @@
 import React from "react";
 
-const DeckPage = () => {
+const DeckPage: React.FC = () => {
 	return <div>Deck Page</div>;
 };
 
