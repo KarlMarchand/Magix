@@ -1,7 +1,15 @@
 import React from "react";
+import Starfield from "../components/Starfield";
 
-const GamePage = () => {
-	return <div>Game Page</div>;
+const GamePage: React.FC = () => {
+	return (
+		<main>
+			<div className="container">
+				<div id="game" className="subContainer"></div>
+			</div>
+			<Starfield />
+		</main>
+	);
 };
 
 export default GamePage;
