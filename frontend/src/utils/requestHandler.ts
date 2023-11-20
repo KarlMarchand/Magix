@@ -1,8 +1,10 @@
 import { ServerResponse } from "../types/serverResponse";
+import AuthHelper from "./AuthHelper";
 
 export class RequestHandler {
 	private static BASE_API_URL: string = "https://localhost:7194/api/";
 	private static accessToken: string | null = null;
+	private static invalidTokenErrorString: string = "INVALID_KEY";
 
 	static setAccessToken = (token: string) => {
 		RequestHandler.accessToken = token;
@@ -57,6 +59,13 @@ export class RequestHandler {
 
 		const response: Response = await fetch(RequestHandler.BASE_API_URL.concat(url), options);
 
-		return response.json();
+		const result = await response.json();
+
+		if (typeof result === "string" && result === this.invalidTokenErrorString) {
+			this.accessToken = null;
+			AuthHelper.forceLogout();
+		}
+
+		return result;
 	};
 }

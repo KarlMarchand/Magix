@@ -24,11 +24,11 @@ namespace magix_api.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPost("logout")]
+        [HttpGet("logout")]
         [Authorize]
         public async Task<ActionResult<ServiceResponse<string>>> Logout()
         {
-            return Ok((await _playerService.Logout(User.GetPlayerKey())));
+            return Ok(await _playerService.Logout(User.GetPlayerKey()));
         }
 
         [HttpGet]
