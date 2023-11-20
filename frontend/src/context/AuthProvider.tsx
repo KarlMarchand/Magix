@@ -1,14 +1,15 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import { useSessionStorage } from "../hooks/UseSessionStorage";
 import { RequestHandler } from "../utils/requestHandler";
 import { UserLogin } from "../types/userLogin";
 import { User } from "../types/userProfile";
 import { ServerResponse } from "../types/serverResponse";
+import AuthHelper from "../utils/AuthHelper";
 
 interface AuthContextInterface {
 	user: User | null;
-	setUser: (user: User) => void;
+	setUser: (user: User | null) => void;
 	login: (userData: UserLogin) => Promise<ServerResponse<User>>;
 	logout: () => void;
 }
@@ -35,7 +36,8 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
 	const login = async (userData: UserLogin): Promise<ServerResponse<User>> => {
 		const response = await RequestHandler.post<User>("player/login", userData);
 
-		if (response.success && response.data?.token) {
+		if (response.success && response.data) {
+			setUser(response.data);
 			RequestHandler.setAccessToken(response.data.token);
 			localStorage.setItem("username", userData.username);
 		}
@@ -43,10 +45,18 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
 		return response;
 	};
 
-	const logout = useCallback(() => {
-		setUser(null);
-		navigate("/", { replace: true });
+	const logout = useCallback(async () => {
+		try {
+			const _ = await RequestHandler.get<string>("player/logout");
+			setUser(null);
+			navigate("/", { replace: true });
+		} catch (error) {
+			// Handle API call error
+			console.error("API error during logout:", error);
+		}
 	}, [navigate, setUser]);
+
+	const forceLogout = AuthHelper.forceLogout;
 
 	const value = useMemo(
 		() => ({
@@ -54,6 +64,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
 			setUser,
 			login,
 			logout,
+			forceLogout,
 		}),
 		[user]
 	);
