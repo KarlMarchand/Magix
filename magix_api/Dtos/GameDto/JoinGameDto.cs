@@ -2,7 +2,7 @@
 {
     public class JoinGameDto
     {
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
         public string? Mode { get; set; }
         public string? PrivateKey { get; set; }
     }
