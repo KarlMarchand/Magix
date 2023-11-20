@@ -1,0 +1,24 @@
+import React from "react";
+import { useAuth } from "../context/AuthProvider";
+
+interface AvatarProps {
+	playerClassName?: string;
+}
+
+const Avatar: React.FC<AvatarProps> = ({ playerClassName }) => {
+	const { user } = useAuth();
+
+	const getAvatarImageUrl = () => {
+		const className = playerClassName || user?.className || "AcePilot";
+		return `url("../../static/img/classe/${className.replace(/\s+/g, "")}.webp")`;
+	};
+
+	const avatarImageUrl = getAvatarImageUrl();
+	const avatarStyle = {
+		backgroundImage: `${avatarImageUrl}, linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue))`,
+	};
+
+	return <div className="avatar" style={avatarStyle}></div>;
+};
+
+export default Avatar;
