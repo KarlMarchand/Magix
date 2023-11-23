@@ -1,6 +1,6 @@
-import { Card } from "./card";
+import Card from "./Card";
 
-export type GameState = {
+type GameState = {
 	Username?: string;
 	RemainingTurnTime?: number;
 	YourTurn?: boolean;
@@ -17,6 +17,7 @@ export type GameState = {
 	LatestActions: LatestAction[];
 	HandSize?: number;
 };
+export default GameState;
 
 export type LatestAction = {
 	Id?: number;

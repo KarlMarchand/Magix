@@ -2,9 +2,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import "../sass/loginStyle.scss";
-import { User } from "../types/userProfile";
-import { UserLogin } from "../types/userLogin";
-import { ServerResponse } from "../types/serverResponse";
+import User from "../types/UserProfile";
+import UserLogin from "../types/UserLogin";
+import ServerResponse from "../types/ServerResponse";
 import Starfield from "../components/Starfield";
 
 const LoginPage: React.FC = () => {

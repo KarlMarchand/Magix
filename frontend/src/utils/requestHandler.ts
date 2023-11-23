@@ -1,7 +1,7 @@
-import { ServerResponse } from "../types/serverResponse";
+import ServerResponse from "../types/ServerResponse";
 import AuthHelper from "./AuthHelper";
 
-export class RequestHandler {
+class RequestHandler {
 	private static BASE_API_URL: string = "https://localhost:7194/api/";
 	private static accessToken: string | null = null;
 	private static invalidTokenErrorString: string = "INVALID_KEY";
@@ -69,3 +69,5 @@ export class RequestHandler {
 		return result;
 	};
 }
+
+export default RequestHandler;

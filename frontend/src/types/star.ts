@@ -1,6 +1,6 @@
-import { ISprite } from "./Interfaces/isprite";
+import ISprite from "./Interfaces/Isprite";
 
-export class Star implements ISprite {
+class Star implements ISprite {
 	private color: string = "white";
 	private position: { x: number; y: number; z: number };
 	private canvasCenter: { x: number; y: number };
@@ -37,3 +37,5 @@ export class Star implements ISprite {
 		}
 	}
 }
+
+export default Star;

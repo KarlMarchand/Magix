@@ -1,6 +1,8 @@
-import { GameState } from "./gameState";
+import GameState from "./GameState";
 
-export type GameStateContainer = {
+type GameStateContainer = {
 	GameState?: GameState;
 	Message?: string;
 };
+
+export default GameStateContainer;

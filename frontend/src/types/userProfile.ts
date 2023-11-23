@@ -1,4 +1,4 @@
-export type User = {
+type User = {
 	username: string;
 	className: string;
 	winCount: number;
@@ -9,3 +9,5 @@ export type User = {
 	bestTrophyScore: number;
 	token: string;
 };
+
+export default User;

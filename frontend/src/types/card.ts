@@ -1,4 +1,4 @@
-export type Card = {
+type Card = {
 	Id: number;
 	Cost: number;
 	Hp: number;
@@ -12,3 +12,5 @@ export type Card = {
 	State?: string;
 	FactionName?: string;
 };
+
+export default Card;

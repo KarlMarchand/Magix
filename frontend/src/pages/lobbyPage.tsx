@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import Avatar from "../components/Avatar";
 import HomeOne3DScene from "../components/HomeOne3DScene";
-import { RequestHandler } from "../utils/requestHandler";
-import { useSessionStorage } from "../hooks/UseSessionStorage";
-import { GameStateContainer } from "../types/GameStateContainer";
+import RequestHandler from "../utils/requestHandler";
+import useSessionStorage from "../hooks/UseSessionStorage";
+import GameStateContainer from "../types/GameStateContainer";
 
 const LobbyPage: React.FC = () => {
 	const { logout, user } = useAuth();

@@ -1,7 +1,7 @@
-import { ISprite } from "./Interfaces/isprite";
+import ISprite from "./Interfaces/Isprite";
 import shipImg from "../assets/img/Ship.png";
 
-export class Ship implements ISprite {
+class Ship implements ISprite {
 	private img: HTMLImageElement = new Image();
 	private position: { x: number; y: number } = { x: 0, y: 0 };
 	private originalWidth: number = 2000;
@@ -47,3 +47,5 @@ export class Ship implements ISprite {
 		}
 	}
 }
+
+export default Ship;

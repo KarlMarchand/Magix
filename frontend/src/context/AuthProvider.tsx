@@ -1,10 +1,10 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from "../hooks/UseSessionStorage";
-import { RequestHandler } from "../utils/requestHandler";
-import { UserLogin } from "../types/userLogin";
-import { User } from "../types/userProfile";
-import { ServerResponse } from "../types/serverResponse";
+import useSessionStorage from "../hooks/UseSessionStorage";
+import RequestHandler from "../utils/requestHandler";
+import UserLogin from "../types/UserLogin";
+import User from "../types/UserProfile";
+import ServerResponse from "../types/ServerResponse";
 import AuthHelper from "../utils/AuthHelper";
 
 interface AuthContextInterface {
