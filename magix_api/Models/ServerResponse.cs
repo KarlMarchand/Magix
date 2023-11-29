@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace magix_api;
 
 // The class has a limitation where ServerResponse<string> will always be valid
+[NotMapped]
 public class ServerResponse<T>
 {
     private readonly T? _content;

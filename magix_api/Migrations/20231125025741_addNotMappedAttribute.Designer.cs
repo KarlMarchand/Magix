@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using magix_api.Data;
 
@@ -10,9 +11,11 @@ using magix_api.Data;
 namespace magix_api.Migrations
 {
     [DbContext(typeof(MagixContext))]
-    partial class MagixContextModelSnapshot : ModelSnapshot
+    [Migration("20231125025741_addNotMappedAttribute")]
+    partial class addNotMappedAttribute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

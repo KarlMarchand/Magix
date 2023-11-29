@@ -1,4 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace magix_api;
+
+[NotMapped]
 
 public class ServiceResponse<T>
 {

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace magix_api;
 
@@ -11,9 +11,6 @@ public partial class Player
 
     [Required]
     public required string Username { get; set; }
-
-    [NotMapped]
-    public string? ClassName { get; set; }
 
     public int WinCount { get; set; }
 
@@ -27,11 +24,11 @@ public partial class Player
 
     public int BestTrophyScore { get; set; }
 
-    public virtual IList<Deck> Decks { get; set; }
+    public virtual IList<Deck>? Decks { get; set; }
 
-    public virtual IList<Game> Games { get; set; }
+    public virtual IList<Game>? Games { get; set; }
 
-    public virtual IList<PlayedCard> PlayedCards { get; set; }
+    public virtual IList<PlayedCard>? PlayedCards { get; set; }
 
     [NotMapped]
     public string? Key { get; set; }

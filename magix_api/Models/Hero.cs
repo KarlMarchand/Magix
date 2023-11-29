@@ -1,9 +1,11 @@
 using magix_api.utils;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace magix_api;
 
 public class Hero : ConvertibleModel
 {
+    [NotMapped]
     private static readonly Dictionary<string, string> _heroNameConversion = new Dictionary<string, string>{
             {"DemonHunter", "Bounty_Hunter"},
             {"Hunter", "Ace_Pilot"},
@@ -19,7 +21,7 @@ public class Hero : ConvertibleModel
     public int Id { get; set; }
     public string Power { get; set; } = default!;
 
-    public Hero() : base(_heroNameConversion) {}
+    public Hero() : base(_heroNameConversion) { }
 
     protected override void MissConversion()
     {

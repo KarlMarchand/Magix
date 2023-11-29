@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace magix_api;
 
 public abstract class ConvertibleModel
 {
+    [NotMapped]
     private readonly Dictionary<string, string> _nameConversion;
+    [NotMapped]
     private readonly Dictionary<string, string> _reverseConversion;
 
     public string Name { get; set; } = default!;
