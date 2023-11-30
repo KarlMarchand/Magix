@@ -10,7 +10,7 @@ const Avatar: React.FC<AvatarProps> = ({ playerClassName }) => {
 
 	const getAvatarImageUrl = () => {
 		const className = playerClassName || user?.className || "AcePilot";
-		return `url("../../static/img/classe/${className.replace(/\s+/g, "")}.webp")`;
+		return `url("assets/img/classe/${className.replace(/\s+/g, "")}.webp")`;
 	};
 
 	const avatarImageUrl = getAvatarImageUrl();

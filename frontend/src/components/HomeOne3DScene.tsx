@@ -15,6 +15,7 @@ import {
 	InitRenderer,
 	CleanScene,
 } from "./ThreeJs/ThreeJsInit";
+import hologram from "../assets/hologram.png";
 
 interface ThreeSceneProps {
 	startGameAnimation: boolean;
@@ -38,7 +39,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ startGameAnimation, onAnimation
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 
-		const holoTexture = new THREE.TextureLoader().load("./static/img/hologram.png");
+		const holoTexture = new THREE.TextureLoader().load(hologram);
 		const gltfLoader = new GLTFLoader();
 
 		setDsProjection(InitProjection(scene, holoTexture, gltfLoader));

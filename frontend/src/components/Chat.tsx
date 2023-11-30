@@ -6,8 +6,8 @@ const Chat: React.FC = () => {
 
 	useEffect(() => {
 		if (chatUrl !== "") {
-			let iframe = document.querySelector("#chat") as HTMLIFrameElement;
-			let styles = {
+			const iframe = document.querySelector("#chat") as HTMLIFrameElement;
+			const styles = {
 				fontColor: "#fff",
 				backgroundColor: "rgba(0, 0, 0, 0)",
 				fontGoogleName: "Roboto",
@@ -26,14 +26,16 @@ const Chat: React.FC = () => {
 	}, [chatUrl]);
 
 	useEffect(() => {
-		RequestHandler.get<string>("chat").then((response) => {
-			if (response.success && response.data) {
-				setChatUrl(response.data);
-			}
-		});
+		if (!chatUrl) {
+			RequestHandler.get<string>("chat").then((response) => {
+				if (response.success && response.data) {
+					setChatUrl(response.data);
+				}
+			});
+		}
 	}, []);
 
-	return <iframe id="chat" src={chatUrl}></iframe>;
+	return <>{chatUrl !== "" && <iframe id="chat" src={chatUrl}></iframe>}</>;
 };
 
 export default Chat;

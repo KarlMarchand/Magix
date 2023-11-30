@@ -30,7 +30,7 @@ export const InitProjection = (scene: THREE.Scene, holoTexture: THREE.Texture, g
 	cylinder.translateY(1);
 	dsProjection.add(cylinder);
 
-	gltfLoader.load("static/DeathStar/scene.gltf", (gltf) => {
+	gltfLoader.load("assets/threeJsModels/deathStar/scene.gltf", (gltf) => {
 		gltf.scene.scale.set(0.0001, 0.0001, 0.0001);
 		gltf.scene.translateY(2.25);
 		gltf.scene.rotateY(1);
@@ -62,11 +62,11 @@ export const InitTable = (scene: THREE.Scene, holoTexture: THREE.Texture): THREE
 };
 
 export const InitModels = (scene: THREE.Scene, gltfLoader: GLTFLoader): void => {
-	gltfLoader.load("static/Room/scene.gltf", (gltf) => {
+	gltfLoader.load("assets/threeJsModels/room/scene.gltf", (gltf) => {
 		scene.add(gltf.scene);
 	});
 
-	gltfLoader.load("static/C3PO/scene.gltf", (gltf) => {
+	gltfLoader.load("assets/threeJsModels/c3PO/scene.gltf", (gltf) => {
 		gltf.scene.scale.set(0.01, 0.01, 0.01);
 		gltf.scene.rotateY(3.7);
 		gltf.scene.translateX(-2.25);
@@ -75,7 +75,7 @@ export const InitModels = (scene: THREE.Scene, gltfLoader: GLTFLoader): void => 
 		scene.add(gltf.scene);
 	});
 
-	gltfLoader.load("static/R2/scene.gltf", (gltf) => {
+	gltfLoader.load("assets/threeJsModels/r2/scene.gltf", (gltf) => {
 		gltf.scene.scale.set(1.25, 1.25, 1.25);
 		gltf.scene.rotateY(2.75);
 		gltf.scene.translateZ(1);

@@ -10,10 +10,10 @@ namespace magix_api.Controllers
     {
         [HttpGet]
         [Authorize(Policy = "ValidateKey")]
-        public ActionResult<string> GetChat()
+        public ActionResult<ServiceResponse<string>> GetChat()
         {
             string key = User.GetPlayerKey();
-            return Ok("https://magix.apps-de-cours.com/server/#/chat/" + key);
+            return Ok(new ServiceResponse<string> { Data = $"https://magix.apps-de-cours.com/server/#/chat/{key}" });
         }
     }
 }
