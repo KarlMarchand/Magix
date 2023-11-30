@@ -1,6 +1,6 @@
 @import "./variables.scss";
 
-main {
+div #profile-page {
 	flex-direction: column;
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -25,42 +25,11 @@ main {
 		z-index: 2;
 	}
 
-	.container {
+	.blue-container {
 		position: absolute;
 		left: unquote("max(10%, 90px)");
 		width: 80vw;
 		align-self: center;
-
-		.subContainer {
-			height: fit-content;
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-
-			* {
-				position: relative;
-				font-size: 2em;
-				left: unquote("max(110px, 10vw)");
-			}
-
-			h1 {
-				text-transform: uppercase;
-			}
-		}
-	}
-
-	@media screen and (max-width: 650px) {
-		margin: inherit;
-
-		.container {
-			position: static;
-			margin-bottom: 30px;
-
-			.subContainer * {
-				align-self: center;
-				left: 0px;
-			}
-		}
 	}
 }
 
@@ -75,7 +44,7 @@ main {
 		background: linear-gradient(0.25turn, var(--dark-blue-tp), var(--light-blue));
 		height: unquote("max(200px, 15vw)");
 		width: unquote("max(200px, 15vw)");
-		mask: url("../assets/img/trophy.png") center/contain no-repeat;
+		mask: url("assets/img/trophy.png") center/contain no-repeat;
 	}
 
 	#trophy-wrap {
@@ -87,10 +56,6 @@ main {
 	align-self: center;
 	width: 30vw;
 	min-width: 300px;
-
-	.subContainer > p {
-		width: 100%;
-	}
 
 	#graph {
 		margin-top: 20px;
@@ -164,36 +129,6 @@ main {
 	}
 }
 
-#games-history {
-	padding: 2% 5% 5% 5%;
-
-	table {
-		font-family: arial, sans-serif;
-		border-collapse: collapse;
-		width: 100%;
-		margin: 30px auto;
-	}
-
-	td,
-	th {
-		border: 1px solid #dddddd;
-		text-align: left;
-		padding: 10px;
-	}
-
-	th {
-		background-color: var(--dark-grey);
-	}
-
-	tr:nth-child(odd) {
-		background-color: var(--background-blue);
-	}
-
-	@media screen and (max-width: 650px) {
-		overflow-x: scroll;
-	}
-}
-
 #top-cards {
 	position: relative;
 	display: flex;
@@ -229,12 +164,5 @@ main {
 				background-position: 0% 50%;
 			}
 		}
-	}
-
-	@media screen and (max-width: 650px) {
-		flex-direction: column-reverse;
-		--card-height: 50vw;
-		--card-text-size: calc(var(--card-height) * 0.02);
-		--card-width: calc(var(--card-height) / 1.5);
 	}
 }

@@ -59,20 +59,6 @@
 	width: 300px;
 }
 
-.loading-symbol {
-	height: 150px;
-	margin-bottom: 10px;
-	width: 150px;
-	filter: drop-shadow(0 0 0.75rem var(--light-blue));
-
-	& > img {
-		height: 100%;
-		width: 100%;
-		background: linear-gradient(0.25turn, var(--dark-blue-tp), var(--light-blue));
-		animation: loading 20s linear infinite;
-	}
-}
-
 .loading-text {
 	align-self: flex-start;
 	color: #fff;
@@ -295,11 +281,7 @@
 			margin: 0px;
 		}
 
-		.subcontainer {
-			animation: fade-in 1s forwards;
-		}
-
-		&.container {
+		&.blue-container {
 			animation: fade-in 1s forwards;
 		}
 
@@ -396,26 +378,8 @@
 		}
 	}
 
-	.subContainer {
-		display: flex;
-		justify-content: space-between;
-		font-size: 1.5rem;
-	}
-
 	.infoJoueur > p {
 		text-transform: capitalize;
-	}
-
-	@media screen and (max-width: 950px) {
-		.subContainer {
-			flex-direction: column;
-		}
-	}
-
-	@media screen and (max-width: 1600px) {
-		.subContainer {
-			font-size: 0.75rem;
-		}
 	}
 }
 
@@ -481,8 +445,8 @@
 
 	div {
 		background: var(--dark-blue);
-		background-image: url(../assets/img/horizontal-lined-bg.png);
-		mask: url(../assets/img/life.png) center/contain no-repeat;
+		background-image: url(assets/img/horizontal-lined-bg.png);
+		mask: url(assets/img/life.png) center/contain no-repeat;
 		font-size: 3em;
 		height: 2em;
 		width: 2em;
@@ -565,12 +529,12 @@
 
 		&.defeat {
 			background-size: 2048px 1030px;
-			background-image: url("../assets/img/darth.webp");
+			background-image: url("assets/img/darth.webp");
 		}
 
 		&.victory {
 			background-size: 2048px 1030px;
-			background-image: url("../assets/img/luke.webp");
+			background-image: url("assets/img/luke.webp");
 		}
 	}
 
