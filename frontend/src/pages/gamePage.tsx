@@ -4,9 +4,7 @@ import Starfield from "../components/Starfield";
 const GamePage: React.FC = () => {
 	return (
 		<main>
-			<div className="container">
-				<div id="game" className="subContainer"></div>
-			</div>
+			<div id="game" className="blue-container" />
 			<Starfield />
 		</main>
 	);

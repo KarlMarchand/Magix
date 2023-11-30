@@ -1,3 +1,4 @@
+using magix_api.Dtos;
 using magix_api.Dtos.GameDto;
 using magix_api.Services.GameService;
 using magix_api.utils;
@@ -8,7 +9,6 @@ namespace magix_api.Controllers
 {
     [ApiController]
     [Route("api/game")]
-    [Authorize]
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
@@ -19,6 +19,7 @@ namespace magix_api.Controllers
         }
 
         [HttpPost("join")]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<string>>> JoinGameAsync([FromBody] JoinGameDto gameInfos)
         {
             var response = await _gameService.JoinGameAsync(User.GetPlayerKey(), gameInfos.Type, gameInfos.Mode, gameInfos.PrivateKey);
@@ -26,6 +27,7 @@ namespace magix_api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<GameStateContainerDto>>> GameActionAsync([FromBody] GameActionDto gameAction)
         {
             var response = await _gameService.GameActionAsync(User.GetPlayerKey(), gameAction);
@@ -33,6 +35,7 @@ namespace magix_api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<GameStateContainerDto>>> GetGameStateAsync()
         {
             var response = await _gameService.GetGameStateAsync(User.GetPlayerKey());
@@ -40,6 +43,7 @@ namespace magix_api.Controllers
         }
 
         [HttpGet("observe/{username}")]
+        [Authorize]
         public async Task<ActionResult<ServiceResponse<GameStateContainerDto>>> ObserveGameAsync(string username)
         {
             var response = await _gameService.ObserveGameAsync(User.GetPlayerKey(), username);
@@ -51,6 +55,18 @@ namespace magix_api.Controllers
         public async Task<ActionResult<ServiceResponse<bool>>> SaveGameResultAsync([FromBody] SaveGameDto gameToSave)
         {
             var response = await _gameService.SaveGameResultAsync(User.GetPlayerId(), gameToSave.Opponent, gameToSave.Victory, gameToSave.DeckId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpGet("history")]
+        [Authorize]
+        public async Task<ActionResult<ServiceResponse<PaginatedResponse<GameResultDto>>>> GetGameHistoryAsync(
+            [FromQuery] string? playerId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 30)
+        {
+            var playerIdInt = string.IsNullOrWhiteSpace(playerId) ? User.GetPlayerId() : int.Parse(playerId);
+            var response = await _gameService.GetGamesHistoryAsync(playerIdInt, pageNumber, pageSize);
             return response.Success ? Ok(response) : BadRequest(response);
         }
     }

@@ -7,4 +7,5 @@ enum GameType {
 enum GameMode {
 	Standard = "STANDARD",
 	Coop = "COOP",
+	Arena = "ARENA",
 }

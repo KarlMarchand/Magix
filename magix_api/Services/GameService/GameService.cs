@@ -1,3 +1,5 @@
+using AutoMapper;
+using magix_api.Dtos;
 using magix_api.Dtos.GameDto;
 using magix_api.Repositories;
 using magix_api.utils;
@@ -9,9 +11,11 @@ namespace magix_api.Services.GameService
         private readonly IGameRepository _gameRepo;
         private readonly string _baseApiUrl = "games/";
         private readonly HashSet<string> _validAnswers = new() { "WAITING", "LAST_GAME_WON", "LAST_GAME_LOST", "NOT_IN_GAME" };
+        private readonly IMapper _mapper;
 
-        public GameService(IGameRepository gameRepo)
+        public GameService(IGameRepository gameRepo, IMapper mapper)
         {
+            _mapper = mapper;
             _gameRepo = gameRepo;
         }
 
@@ -121,6 +125,30 @@ namespace magix_api.Services.GameService
             {
                 response.Data = false;
                 response.Message = "Failed to create game";
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<PaginatedResponse<GameResultDto>>> GetGamesHistoryAsync(int playerIdInt, int pageNumber, int pageSize)
+        {
+            var gameHistory = await _gameRepo.GetGamesHistoryAsync(playerIdInt, pageNumber, pageSize);
+
+            var mappedGameHistory = _mapper.Map<PaginatedResponse<GameResultDto>>(gameHistory);
+
+            ServiceResponse<PaginatedResponse<GameResultDto>> response = new()
+            {
+                Data = mappedGameHistory
+            };
+
+            if (mappedGameHistory == null)
+            {
+                response.Success = false;
+                response.Message = "Player not found";
+            }
+            else if (!mappedGameHistory.Items.Any())
+            {
+                response.Message = "No games history available";
             }
 
             return response;

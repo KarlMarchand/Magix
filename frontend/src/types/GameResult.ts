@@ -1,8 +1,9 @@
 type GameResult = {
-	date: string;
+	id: string;
+	date: Date;
 	won: boolean;
-	class: string;
 	opponent: string;
+	deck?: Deck;
 };
 
 export default GameResult;
