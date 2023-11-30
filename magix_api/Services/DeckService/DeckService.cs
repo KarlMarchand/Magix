@@ -6,6 +6,7 @@ using magix_api.Dtos.HeroDto;
 using magix_api.Dtos.TalentDto;
 using magix_api.Repositories;
 using magix_api.utils;
+using magix_api.utils.Constants;
 using System.Text.Json;
 
 namespace magix_api.Services.DeckService
@@ -29,20 +30,20 @@ namespace magix_api.Services.DeckService
             _factionRepo = factionRepo;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, DeckDto newDeck)
+        public async Task<ServiceResponse<GetDeckDto>> CreateDeck(string playerKey, int playerId, CreateDeckDto newDeck)
         {
             // TODO: Add possibility to create a draft
-            // TODO: Call GetAllOptions on database creation and then Add seeding of decks, players and stats
+            // TODO: Add seeding of decks, players and stats for demonstration
             return await UpsertDeck(playerKey, playerId, newDeck, _deckRepo.CreateDeck);
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, int playerId, DeckDto updateDeckDto)
+        public async Task<ServiceResponse<GetDeckDto>> UpdateDeck(string playerKey, int playerId, CreateDeckDto updateDeckDto)
         {
             return await UpsertDeck(playerKey, playerId, updateDeckDto, _deckRepo.UpdateDeck);
         }
 
         // Insert or Update a deck
-        private async Task<ServiceResponse<GetDeckDto>> UpsertDeck(string playerKey, int playerId, DeckDto deckDto, Func<Deck, Task<Deck>> saveAction)
+        private async Task<ServiceResponse<GetDeckDto>> UpsertDeck(string playerKey, int playerId, CreateDeckDto deckDto, Func<Deck, Task<Deck>> saveAction)
         {
             ServiceResponse<GetDeckDto> response = new();
 
@@ -96,19 +97,27 @@ namespace magix_api.Services.DeckService
             return response;
         }
 
-        public async Task<ServiceResponse<GetDeckDto>> GetActiveDeck(int playerId)
+        public async Task<ServiceResponse<GetDeckDto>> GetActiveDeck(int playerId, string? playerKey = null)
         {
             ServiceResponse<GetDeckDto> response = new();
-            var deck = await _deckRepo.GetDeck();
+            var deck = await _deckRepo.GetActiveDeck(playerId);
             if (deck != null)
             {
                 response.Data = _mapper.Map<GetDeckDto>(deck);
+            }
+            else if (playerKey != null)
+            {
+                // The first time a player logs in the game, they don't have a deck so we
+                // Try to get the active deck from the game server and converts it as their first deck
+                // Should eventually be changed to a default deck instead
+                return await GetDeckFromGameServer(playerKey, playerId);
             }
             else
             {
                 response.Success = false;
                 response.Message = "DeckNotFound";
             }
+
             return response;
         }
 
@@ -251,9 +260,9 @@ namespace magix_api.Services.DeckService
                 {"initialTalent", talentName}
             };
 
-            ServerResponse<bool> res = await GameServerAPI.CallApi<bool>(apiUrl, data);
+            ServerResponse<string> resultFromGameServer = await GameServerAPI.CallApi<string>(apiUrl, data);
 
-            return res.IsValid && res.Content;
+            return resultFromGameServer.IsValid && resultFromGameServer.Content == GameServerResponses.DeckSaved;
         }
 
         // Validate the business rules for a new or updated deck
@@ -301,5 +310,37 @@ namespace magix_api.Services.DeckService
             return response;
         }
 
+        private async Task<ServiceResponse<GetDeckDto>> GetDeckFromGameServer(string playerKey, int playerId)
+        {
+            var response = new ServiceResponse<GetDeckDto>();
+
+            var data = new Dictionary<string, string>() { { "key", playerKey } };
+            var resultFromGameServer = await GameServerAPI.CallApi<DeckFromServerDto>("users/deck", data);
+
+            if (resultFromGameServer.IsValid && resultFromGameServer.Content != null)
+            {
+                var deckServer = resultFromGameServer.Content;
+                var hero = await _heroRepo.GetHeroByName(new Hero { Name = deckServer.ClassName }.GetFrontendName());
+                var talent = await _talentRepo.GetTalentByName(new Talent { Name = deckServer.InitialTalent }.GetFrontendName());
+                if (hero != null && talent != null)
+                {
+                    return await CreateDeck(playerKey, playerId, new CreateDeckDto
+                    {
+                        Name = "Default",
+                        HeroId = hero.Id,
+                        TalentId = talent.Id,
+                        FactionId = 1,
+                        Cards = _mapper.Map<List<DeckCardDto>>(deckServer.Deck)
+                    });
+                }
+                response.Message = "Could not Find Hero or Talent";
+            }
+            else
+            {
+                response.Message = "Problem with the Game Server";
+            }
+
+            return response;
+        }
     }
 }

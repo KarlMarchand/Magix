@@ -1,2 +1,0 @@
--   Redirection post-login
--   Regarder le fichier starfield.js et le transformer en component

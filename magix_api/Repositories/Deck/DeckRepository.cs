@@ -38,25 +38,36 @@ namespace magix_api.Repositories
             return decks;
         }
 
-        public async Task<Deck?> GetDeck(Guid? deckId = null, int? playerId = null)
+        public async Task<Deck?> GetActiveDeck(int playerId)
         {
-            Deck? deck = null;
-            var query = _context.Decks
+            Deck? deck = await _context.Decks
                 .Include(d => d.Faction)
                 .Include(d => d.Hero)
                 .Include(d => d.Talent)
                 .Include(p => p.DeckCards)
-                    .ThenInclude(p => p.Card);
+                    .ThenInclude(p => p.Card)
+                .FirstOrDefaultAsync(d => d.PlayerId == playerId && d.Active);
 
-            if (deckId != null)
+            if (deck != null)
             {
-                deck = await query.FirstOrDefaultAsync(d => d.Id == deckId);
+                deck.Cards = deck.DeckCards
+                    .SelectMany(dc => Enumerable.Repeat(dc.Card!, dc.Quantity))
+                    .ToList();
             }
-            else if (playerId != null)
-            {
-                // This means we're looking for the active deck.
-                deck = await query.FirstOrDefaultAsync(d => d.PlayerId == playerId && d.Active);
-            }
+
+            return deck;
+        }
+
+        public async Task<Deck?> GetDeck(Guid deckId)
+        {
+            Deck? deck = await _context.Decks
+                .Include(d => d.Faction)
+                .Include(d => d.Hero)
+                .Include(d => d.Talent)
+                .Include(p => p.DeckCards)
+                    .ThenInclude(p => p.Card)
+                .FirstOrDefaultAsync(d => d.Id == deckId);
+
 
             if (deck != null)
             {

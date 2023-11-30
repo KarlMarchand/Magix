@@ -92,7 +92,7 @@ namespace magix_api.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> CreateDeck(DeckDto deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> CreateDeck(CreateDeckDto deck)
         {
             var response = await _deckService.CreateDeck(User.GetPlayerKey(), User.GetPlayerId(), deck);
             return response.Success ? Created(string.Empty, response) : BadRequest(response);
@@ -100,7 +100,7 @@ namespace magix_api.Controllers
 
         [HttpPut]
         [Authorize(Policy = "ValidateKey")]
-        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> UpdateDeck(DeckDto deck)
+        public async Task<ActionResult<ServiceResponse<GetDeckDto>>> UpdateDeck(CreateDeckDto deck)
         {
             try
             {

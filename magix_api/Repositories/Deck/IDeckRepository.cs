@@ -5,7 +5,8 @@ namespace magix_api.Repositories
         Task<Deck> CreateDeck(Deck deck);
         Task<bool> DeleteDeck(Guid deckId, int requesterId);
         Task<List<Deck>> GetAllDecks(int playerId);
-        Task<Deck?> GetDeck(Guid? deckId = null, int? playerId = null);
+        Task<Deck?> GetDeck(Guid deckId);
+        Task<Deck?> GetActiveDeck(int playerId);
         Task<Deck> UpdateDeck(Deck deck);
         Task UpdateActiveDeck(Deck deck);
     }

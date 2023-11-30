@@ -4,5 +4,7 @@
     {
         Task<List<Hero>> GetAllHeroes();
         Task<Hero?> GetHeroById(int id);
+        Task<Hero?> GetHeroByName(string name);
+
     }
 }

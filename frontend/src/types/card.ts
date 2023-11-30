@@ -1,16 +1,16 @@
 type Card = {
-	Id: number;
-	Cost: number;
-	Hp: number;
-	Atk: number;
-	Mechanics?: string[];
-	Dedicated?: string;
-	CardNa: string;
-	Sound?: string;
-	Uid?: number;
-	BaseHP?: number;
-	State?: string;
-	FactionName?: string;
+	id: number;
+	cost: number;
+	hp: number;
+	atk: number;
+	mechanics?: string[];
+	dedicated?: string;
+	cardName: string;
+	sound?: string;
+	uid?: number;
+	baseHP?: number;
+	state?: string;
+	factionName?: string;
 };
 
 export default Card;

@@ -2,7 +2,7 @@ using magix_api.Dtos.CardDto;
 
 namespace magix_api.Dtos.DeckDto
 {
-    public class DeckDto
+    public class CreateDeckDto
     {
         public Guid? Id { get; set; }
         public string Name { get; set; } = default!;

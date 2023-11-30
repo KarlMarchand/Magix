@@ -99,6 +99,8 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeckService, DeckService>();
 builder.Services.AddScoped<IGameService, GameService>();
+
+// Seed the Database
 builder.Services.AddHostedService<InitializationService>();
 
 var app = builder.Build();

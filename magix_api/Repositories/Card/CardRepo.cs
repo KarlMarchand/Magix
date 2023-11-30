@@ -74,8 +74,9 @@ namespace magix_api.Repositories
                 var card = distinctCards.FirstOrDefault(c => c.Id == id);
                 if (card != null)
                 {
+                    card.CompleteCard();
                     finalCardList.Add(card);
-                } 
+                }
                 else
                 {
                     throw new Exception("An error occured while retrieving one of the Card");

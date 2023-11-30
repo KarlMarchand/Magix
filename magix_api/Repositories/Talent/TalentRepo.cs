@@ -57,5 +57,10 @@ namespace magix_api.Repositories
         {
             return await _context.Talents.FirstOrDefaultAsync(t => t.Id == id);
         }
+
+        public async Task<Talent?> GetTalentByName(string name)
+        {
+            return await _context.Talents.FirstOrDefaultAsync(t => t.Name == name);
+        }
     }
 }

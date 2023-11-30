@@ -17,7 +17,6 @@ namespace magix_api.Repositories
             var player = await _context.Players.FirstOrDefaultAsync(p => p.Username == apiPlayer.Username);
             player = player is null ? await AddPlayer(apiPlayer) : await UpdatePlayer(player.Id, apiPlayer);
             player.Key = apiPlayer.Key;
-            player.ClassName = apiPlayer.ClassName;
             return player;
         }
 
