@@ -80,33 +80,30 @@ const GameHistoryTable: React.FC = () => {
 	};
 
 	return (
-		<div className="blue-container">
-			<div className="flex-column" id="games-history">
-				<h1 className="title-section">Game history</h1>
-				<Table striped bordered hover>
-					<thead>
-						<tr>
-							<th className="text-white">Date</th>
-							<th className="text-white">Win/Lose</th>
-							<th className="text-white">Deck</th>
-							<th className="text-white">Opponent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{gamesHistory.map((game: GameResult) => {
-							return (
-								<tr key={game.id}>
-									<td>{game.date.toLocaleDateString()}</td>
-									{game.won ? <td>Victory</td> : <td style={{ color: "#F96D52" }}>Defeat</td>}
-									<td>{game.deck?.name}</td>
-									<td>{game.opponent}</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</Table>
-				<div className="pagination-controls">{renderPagination()}</div>
-			</div>
+		<div className="d-flex flex-column align-items-center" data-bs-theme="dark">
+			<Table striped bordered hover>
+				<thead>
+					<tr>
+						<th className="text-white">Date</th>
+						<th className="text-white">Win/Lose</th>
+						<th className="text-white">Deck</th>
+						<th className="text-white">Opponent</th>
+					</tr>
+				</thead>
+				<tbody>
+					{gamesHistory.map((game: GameResult) => {
+						return (
+							<tr key={game.id}>
+								<td>{game.date.toLocaleDateString()}</td>
+								{game.won ? <td>Victory</td> : <td style={{ color: "#F96D52" }}>Defeat</td>}
+								<td>{game.deck?.name}</td>
+								<td>{game.opponent}</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</Table>
+			<div className="pagination-controls">{renderPagination()}</div>
 		</div>
 	);
 };

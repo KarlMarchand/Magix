@@ -14,7 +14,7 @@ const GameChat: React.FC<GameChatProp> = ({ opened, toggleHandler, surrenderHand
 				<span className="saber"></span>
 				<span className="saber"></span>
 			</div>
-			<button className="btn big-btn" onClick={surrenderHandler}>
+			<button className="custom-btn custom-btn-big" onClick={surrenderHandler}>
 				Surrender The Game
 			</button>
 			<Chat />

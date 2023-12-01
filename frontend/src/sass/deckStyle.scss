@@ -29,16 +29,6 @@
 		justify-content: space-between;
 		padding: 4px 3%;
 	}
-
-	@media screen and (max-width: 950px) {
-		.avatar {
-			display: none;
-		}
-
-		.btn {
-			padding: 0.5em;
-		}
-	}
 }
 
 .card-list {

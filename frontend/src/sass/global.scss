@@ -12,7 +12,7 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-	overflow: hidden; /* This prevents the scrollbar */
+	// overflow: hidden; /* This prevents the scrollbar */
 	height: 100vh;
 	width: 100vw;
 }
@@ -50,11 +50,17 @@ body {
 	position: fixed;
 	top: 5px;
 	left: 5px;
-	content: "";
 	width: 50px;
 	height: 50px;
 	background-color: var(--dark-blue);
-	mask: url("assets/img/arrow.png") center/contain no-repeat;
+	-webkit-mask-image: url("assets/img/arrow.png");
+	mask-image: url("assets/img/arrow.png");
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
 
 	&:hover {
 		background-color: var(--light-blue);
@@ -85,7 +91,7 @@ body {
 	}
 }
 
-.btn {
+.custom-btn {
 	background-color: var(--background-blue);
 	background-image: url(assets/img/horizontal-lined-bg.png);
 	padding: 1rem 2rem;
@@ -113,35 +119,22 @@ body {
 	}
 }
 
-form > * {
-	display: flex;
-	margin: 1em;
-	justify-content: space-evenly;
-	align-items: center;
-
-	label {
-		margin-right: 1em;
-	}
-
-	input {
-		background-color: var(--background-blue);
-		border: 0.1rem solid var(--light-blue);
-		color: white;
-		padding-inline: 0.5rem;
-		min-height: 2rem;
-	}
+.custom-input {
+	background-color: var(--background-blue);
+	border: 0.1rem solid var(--light-blue);
+	color: white;
+	padding-inline: 0.5rem;
+	min-height: 2rem;
 }
 
-#chatContainer .rotating-symbol {
-	display: block;
+#right-container .symbole-wrapper {
+	position: absolute;
 	bottom: 10%;
-	left: 33%;
 }
 
 .rotating-symbol {
 	width: 125px;
 	height: 125px;
-	position: absolute;
 }
 
 .rotating-symbol > img {
@@ -175,7 +168,7 @@ form > * {
 	background-position: center;
 }
 
-.infoJoueur {
+.section-title {
 	text-align: center;
 	font-weight: bold;
 	font-size: larger;
@@ -194,13 +187,6 @@ form > * {
 	justify-content: space-between;
 	margin: 3px 0;
 	font-size: larger;
-}
-
-.title-section {
-	font-size: 2em;
-	align-self: center;
-	text-align: center;
-	width: unquote("max(350px, 50%)");
 }
 
 .blue-shadow-text {
@@ -281,7 +267,7 @@ form > * {
 		font-size: 1.5em;
 	}
 
-	.btn {
+	.custom-btn {
 		width: 1.5em;
 		height: 1.5em;
 		padding: 0;
@@ -361,7 +347,7 @@ h1.yellow-title {
 	transition: 0.5s;
 }
 
-.alert:before {
+.alert-message:before {
 	content: "";
 	position: absolute;
 	width: 0;
@@ -376,7 +362,7 @@ h1.yellow-title {
 	height: 20px;
 }
 
-.alert:after {
+.alert-message:after {
 	content: "";
 	position: absolute;
 	width: 0;
@@ -391,6 +377,15 @@ h1.yellow-title {
 	height: 20px;
 }
 
+.alert-message {
+	text-transform: capitalize;
+
+	span {
+		text-transform: uppercase;
+		margin-right: 30px;
+	}
+}
+
 .starfield {
 	position: absolute;
 	width: 100%;
@@ -398,38 +393,6 @@ h1.yellow-title {
 	top: 0;
 	left: 0;
 	z-index: -1;
-}
-
-.cover {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	pointer-events: none;
-	z-index: 999;
-
-	&::after {
-		content: "";
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 1px;
-		height: 1px;
-		border-radius: 50%;
-		box-shadow: 0 0 0 100vw rgba(0, 0, 0, 1);
-		transform: translate(-50%, -50%);
-		transition: box-shadow 4s ease-in-out;
-	}
-}
-
-.opening.cover::after {
-	animation: zoom-in 6s forwards 2s;
-}
-
-.closing.cover::after {
-	animation: zoom-out 4s forwards;
 }
 
 .fade-out {
