@@ -10,9 +10,10 @@ import StartGameForm from "../components/StartGameForm";
 import { GameType, GameMode } from "../types/GameTypeOptions";
 import ErrorMessage from "../components/MessageBox/ErrorMessage";
 import ServerResponse from "../types/ServerResponse";
+import News from "../components/News/News";
 
 const LobbyPage: React.FC = () => {
-	const { logout } = useAuth();
+	const { logout, user } = useAuth();
 	const navigate = useNavigate();
 	const [returningPlayer, setReturningPlayer] = useSessionStorage("returningPlayer", false);
 	const [_, setObservingKey] = useSessionStorage("observing", null);
@@ -82,16 +83,24 @@ const LobbyPage: React.FC = () => {
 					>
 						<StartGameForm onStartGame={handleStartGame} />
 						<button onClick={() => handleNavigation("/profile")} className="custom-btn custom-btn-big">
-							Profile
+							PROFILE
 						</button>
 						<button onClick={() => handleNavigation("/deck")} className="custom-btn custom-btn-big">
-							Deck
+							DECK
 						</button>
 						<button onClick={logout} className="custom-btn custom-btn-big">
-							Disconnect
+							DISCONNECT
 						</button>
 					</div>
-					<div className="col-6 h-100 d-flex flex-column justify-content-center align-items-center">
+					<div className="col h-100 d-flex flex-column align-items-center">
+						<div
+							className={`section-title mb-4 blue-container w-100 ${
+								isNavigating ? "slide-out-top" : "slide-in-top"
+							}`}
+						>
+							<h1>{user?.username}</h1>
+						</div>
+						<News className={isNavigating ? "slide-out-bottom" : "slide-in-bottom"} />
 						<ErrorMessage errorMessage={errorMessage} errorMessageHandler={() => setErrorMessage("")} />
 					</div>
 					<div

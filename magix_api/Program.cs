@@ -5,6 +5,7 @@ using magix_api.Services.AuthentificationService;
 using magix_api.Services.DeckService;
 using magix_api.Services.GameService;
 using magix_api.Services.InitializationService;
+using magix_api.Services.NewsService;
 using magix_api.Services.PlayerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -99,6 +100,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeckService, DeckService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<INewsService, NewsService>();
 
 // Seed the Database
 builder.Services.AddHostedService<InitializationService>();

@@ -1,0 +1,23 @@
+.news-container {
+	overflow: hidden;
+	overflow-y: scroll;
+	color: yellow;
+	text-align: justify;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	border: solid var(--light-blue);
+}
+
+.news-container::-webkit-scrollbar {
+	display: none;
+}
+
+.news-entry h2 {
+	font-size: 1.5em;
+	text-shadow: 1px 1px 2px black;
+}
+
+.news-entry p {
+	font-size: 1em;
+	text-shadow: 1px 1px 2px black;
+}
