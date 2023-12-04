@@ -123,3 +123,11 @@
 		}
 	}
 }
+
+.stat-line {
+	display: flex;
+	width: unquote("max(200px, 15vw)");
+	justify-content: space-between;
+	margin: 3px 0;
+	font-size: larger;
+}

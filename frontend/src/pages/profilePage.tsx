@@ -3,9 +3,9 @@ import RequestHandler from "../utils/requestHandler";
 import PlayerStats from "../types/PlayerStats";
 import ServerResponse from "../types/ServerResponse";
 import { useAuth } from "../context/AuthProvider";
-import { Link } from "react-router-dom";
 import "../sass/profileStyle.scss";
 import GameHistoryTable from "../components/GameHistoryTable";
+import BackButton from "../components/BackButton/BackButton";
 
 const ProfilePage: React.FC = () => {
 	const { user } = useAuth();
@@ -36,6 +36,7 @@ const ProfilePage: React.FC = () => {
 
 	return (
 		<div id="profile-page" className="d-flex flex-column align-items-center p-3 fade-in">
+			<BackButton />
 			<section aria-label="Player-Infos" className="w-75 mb-5">
 				<div className="section-title mb-4 blue-container">
 					<h1>{user?.username}</h1>
@@ -100,7 +101,6 @@ const ProfilePage: React.FC = () => {
 					<GameHistoryTable />
 				</div>
 			</section>
-			<Link to="/lobby" className="arrow"></Link>
 		</div>
 	);
 };

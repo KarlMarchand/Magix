@@ -1,0 +1,177 @@
+.fade-out {
+	animation: fade-out 2s forwards !important;
+
+	@keyframes fade-out {
+		0% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0;
+		}
+	}
+}
+
+.fade-in {
+	animation: fade-in 2s forwards !important;
+
+	@keyframes fade-in {
+		0% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: (scale(1));
+	}
+
+	50% {
+		transform: (scale(0.9));
+	}
+
+	100% {
+		transform: (scale(1));
+	}
+}
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.slide-in-left {
+	animation: slideInFromLeft 2s ease-out forwards;
+
+	@keyframes slideInFromLeft {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+}
+
+.slide-in-right {
+	animation: slideInFromRight 2s ease-out forwards;
+
+	@keyframes slideInFromRight {
+		from {
+			transform: translateX(100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+}
+
+.slide-out-left {
+	animation: slideOutToLeft 2s ease-out forwards;
+
+	@keyframes slideOutToLeft {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-100%);
+		}
+	}
+}
+
+.slide-out-right {
+	animation: slideOutToRight 2s ease-out forwards;
+
+	@keyframes slideOutToRight {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(100%);
+		}
+	}
+}
+
+.slide-in-top {
+	animation: slideInFromTop 2s ease-out forwards;
+
+	@keyframes slideInFromTop {
+		from {
+			transform: translateY(-100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+}
+
+.slide-out-top {
+	animation: slideOutToTop 2s ease-out forwards;
+
+	@keyframes slideOutToTop {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(-100%);
+		}
+	}
+}
+
+.slide-in-bottom {
+	animation: slideInFrombottom 2s ease-out forwards;
+
+	@keyframes slideInFrombottom {
+		from {
+			transform: translateY(100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+}
+
+.slide-out-bottom {
+	animation: slideOutTobottom 2s ease-out forwards;
+
+	@keyframes slideOutTobottom {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(100%);
+		}
+	}
+}
+
+.highlight {
+	animation: neonRotate 2.5s ease-in infinite;
+
+	@keyframes neonRotate {
+		0% {
+			border-image: linear-gradient(#6e3391, #dd2476, #1c64ff) 1;
+		}
+
+		50% {
+			border-image: linear-gradient(360deg, #6e3391, #dd2476, #1c64ff) 1;
+		}
+
+		100% {
+			border-image: linear-gradient(#6e3391, #dd2476, #1c64ff) 1;
+		}
+	}
+}

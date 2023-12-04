@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./rotatingSymbol.scss";
 import empireSymbole from "../../assets/factions/empire-symbol.png";
 import rebelSymbole from "../../assets/factions/rebel-symbol.png";
 import republicSymbole from "../../assets/factions/republic-symbol.png";
