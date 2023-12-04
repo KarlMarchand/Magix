@@ -1,5 +1,6 @@
 import React from "react";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
+import "./avatar.scss";
 
 interface AvatarProps {
 	playerClassName?: string;

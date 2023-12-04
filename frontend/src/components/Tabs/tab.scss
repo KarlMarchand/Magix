@@ -1,0 +1,21 @@
+.tabs {
+	color: white;
+	background-color: transparent;
+	border: 0.1rem solid var(--light-blue);
+	font-size: 1.5em;
+	letter-spacing: 0.15em;
+
+	&:not(:last-child) {
+		border-right: none;
+	}
+}
+
+.active-tabs {
+	border-bottom: none;
+}
+
+.tab-content {
+	overflow-y: scroll;
+	border: 0.1rem solid var(--light-blue);
+	border-top: none;
+}

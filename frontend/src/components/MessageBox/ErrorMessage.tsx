@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./messageBox.scss";
 
 interface ErrorMessageProps {
 	errorMessage: string;
@@ -14,12 +15,12 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage, errorMessageH
 	};
 
 	useEffect(() => {
-		setShouldClose(errorMessage != "");
+		setShouldClose(errorMessage === "");
 	}, [errorMessage]);
 
 	return (
 		<>
-			{shouldClose && (
+			{!shouldClose && (
 				<div className="message-container">
 					<div className="alert-message alert-danger" onClick={handleClick}>
 						<span>Error</span>

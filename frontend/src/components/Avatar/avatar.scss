@@ -1,0 +1,32 @@
+.avatar {
+	align-self: center;
+	height: calc(100px + 4vw);
+	width: calc(100px + 4vw);
+	border: calc(5px + 0.4vw) solid transparent;
+	background-origin: border-box;
+	background-clip: content-box, border-box;
+	background-size: cover;
+	box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
+	border-radius: 50%;
+	background-position: center;
+}
+
+#profile-page .avatar {
+	height: unquote("max(200px, 15vw)");
+	width: unquote("max(200px, 15vw)");
+}
+
+.playerInfos .avatar {
+	max-width: 15vw;
+	max-height: 15vw;
+	cursor: pointer;
+
+	&:hover {
+		filter: drop-shadow(0px 0px 15px var(--light-blue));
+	}
+}
+
+.opponent.playerInfos .avatar {
+	background-image: var(--opponentAvatar),
+		linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue));
+}
