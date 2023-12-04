@@ -367,25 +367,10 @@
 			font-size: 4em;
 		}
 	}
-
-	.avatar {
-		max-width: 15vw;
-		max-height: 15vw;
-		cursor: pointer;
-
-		&:hover {
-			filter: drop-shadow(0px 0px 15px var(--light-blue));
-		}
-	}
 }
 
 .opponent.playerInfos {
 	grid-area: playerOpp;
-
-	.avatar {
-		background-image: var(--opponentAvatar),
-			linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue));
-	}
 }
 
 .self.playerInfos {

@@ -47,7 +47,7 @@ const StartGameForm: React.FC<StartGameFormProps> = ({ onStartGame }) => {
 	return (
 		<>
 			{Object.keys(gameSettings).map((type) => (
-				<div key={type}>
+				<div key={type} id={`${type.toLowerCase()}-form-wrapper`}>
 					<button
 						type="button"
 						onClick={() => handleGameStart(type as GameType)}

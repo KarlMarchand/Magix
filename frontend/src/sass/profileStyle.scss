@@ -1,14 +1,8 @@
 @import "./variables.scss";
 
-div #profile-page {
+#profile-page {
 	overflow-y: scroll;
 	height: 100%;
-	background-color: var(--grey);
-
-	.avatar {
-		height: unquote("max(200px, 15vw)");
-		width: unquote("max(200px, 15vw)");
-	}
 }
 
 #trophy-wrap {

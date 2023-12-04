@@ -4,7 +4,6 @@ import PlayerStats from "../types/PlayerStats";
 import ServerResponse from "../types/ServerResponse";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
-import CardContainer from "../components/CardContainer";
 import "../sass/profileStyle.scss";
 import GameHistoryTable from "../components/GameHistoryTable";
 
@@ -36,7 +35,7 @@ const ProfilePage: React.FC = () => {
 	}, []);
 
 	return (
-		<div id="profile-page" className="d-flex flex-column align-items-center p-3">
+		<div id="profile-page" className="d-flex flex-column align-items-center p-3 fade-in">
 			<section aria-label="Player-Infos" className="w-75 mb-5">
 				<div className="section-title mb-4 blue-container">
 					<h1>{user?.username}</h1>
@@ -84,7 +83,14 @@ const ProfilePage: React.FC = () => {
 					<h1>Most Victorious Cards</h1>
 				</div>
 				<div id="top-cards" className="card-container">
-					{playerStats && <CardContainer cards={playerStats.topCards} classSup={["flip"]} />}
+					{playerStats &&
+						playerStats.topCards.map((card, i) => {
+							return (
+								<span className="flip" key={card.id}>
+									{card.cardName}
+								</span>
+							);
+						})}
 				</div>
 			</section>
 
