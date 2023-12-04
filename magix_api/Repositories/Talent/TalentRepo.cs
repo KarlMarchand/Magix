@@ -18,8 +18,7 @@ namespace magix_api.Repositories
 
         public async Task<List<Talent>> GetAllTalents()
         {
-            List<Talent>? result = null;
-            // result = _memoryCache.Get<List<Talent>>("talents");
+            List<Talent>? result = _memoryCache.Get<List<Talent>>("talents");
             if (result is null)
             {
                 try
@@ -41,7 +40,7 @@ namespace magix_api.Repositories
                             }
                             return talent;
                         }).ToList();
-                        // var input = _memoryCache.Set("talents", result, TimeSpan.FromDays(1));
+                        var input = _memoryCache.Set("talents", result, TimeSpan.FromDays(1));
                         await _context.SaveChangesAsync();
                     }
                 }

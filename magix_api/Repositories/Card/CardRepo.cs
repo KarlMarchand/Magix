@@ -18,8 +18,7 @@ namespace magix_api.Repositories
 
         public async Task<List<Card>> GetAllCards()
         {
-            List<Card>? result = null;
-            // result = _memoryCache.Get<List<Card>>("cards");
+            List<Card>? result = _memoryCache.Get<List<Card>>("cards");
             if (result is null)
             {
                 try
@@ -27,29 +26,9 @@ namespace magix_api.Repositories
                     ServerResponse<List<Card>> response = await GameServerAPI.CallApi<List<Card>>("cards");
                     if (response.IsValid && response.Content != null)
                     {
-                        List<Card> apiCards = response.Content;
-                        foreach (var apiCard in apiCards)
-                        {
-                            apiCard.CompleteCard();
-                            var card = _context.Cards.SingleOrDefault(c => c.Id == apiCard.Id);
-                            if (card is not null)
-                            {
-                                foreach (var property in card.GetType().GetProperties())
-                                {
-                                    if (property.Name != "Id")
-                                    {
-                                        property.SetValue(card, property.GetValue(apiCard));
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                _context.Cards.Add(apiCard);
-                            }
-                        }
-                        await _context.SaveChangesAsync();
-                        result = _context.Cards.AsNoTracking().ToList();
-                        // var updatedList = _memoryCache.Set("cards", result, TimeSpan.FromDays(1));
+                        result = response.Content;
+                        await UpdateDatabaseCardsDataAsync(result);
+                        var updatedList = _memoryCache.Set("cards", result, TimeSpan.FromDays(1));
                     }
                 }
                 catch (Exception e)
@@ -83,6 +62,32 @@ namespace magix_api.Repositories
                 }
             }
             return finalCardList;
+        }
+
+        private async Task UpdateDatabaseCardsDataAsync(List<Card> cards)
+        {
+            var cardIds = cards.Select(c => c.Id).ToList();
+            var existingCards = await _context.Cards.Where(c => cardIds.Contains(c.Id)).ToListAsync();
+            var existingCardsDict = existingCards.ToDictionary(c => c.Id, c => c);
+
+            var properties = typeof(Card).GetProperties().Where(p => p.Name != "Id" && p.CanWrite).ToList();
+
+            foreach (var apiCard in cards)
+            {
+                if (existingCardsDict.TryGetValue(apiCard.Id, out var card))
+                {
+                    foreach (var property in properties)
+                    {
+                        var newValue = property.GetValue(apiCard);
+                        property.SetValue(card, newValue);
+                    }
+                }
+                else
+                {
+                    _context.Cards.Add(apiCard);
+                }
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,15 @@
+{
+  "Id": 103,
+  "Cost": 0,
+  "Hp": 0,
+  "Atk": 0,
+  "Uid": null,
+  "BaseHP": null,
+  "State": null,
+  "Mechanics": null,
+  "Dedicated": null,
+  "CardName": null,
+  "FactionName": null,
+  "Sound": null,
+  "DeckCard": null
+}

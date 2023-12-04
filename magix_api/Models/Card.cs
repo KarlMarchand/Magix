@@ -1,11 +1,20 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using magix_api.utils;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace magix_api;
 
 public class Card
 {
-    public int Id { get; set; }
+    private int _id;
+    public int Id
+    {
+        get => _id;
+        set
+        {
+            _id = value;
+            CompleteCard();
+        }
+    }
     public int Cost { get; set; }
     public int Hp { get; set; }
     public int Atk { get; set; }
@@ -24,18 +33,19 @@ public class Card
 
     public void CompleteCard()
     {
-        int index = _customCards.ContainsKey(Id) ? Id : 0;
-        if (index == 0)
+        if (!_customCards.TryGetValue(Id, out CustomCard? customData))
         {
             MissingConversions.AddNewItem<Card>(this);
+            CardName = "Missing Card";
+            return;
         }
-        CustomCard customData = _customCards[index];
         CardName = customData.CardName;
         Sound = customData.Sound;
         FactionName = customData.Faction;
     }
 
-    private static readonly Dictionary<int, CustomCard> _customCards = new Dictionary<int, CustomCard>{
+    private static readonly Dictionary<int, CustomCard> _customCards = new()
+    {
             { 0, new CustomCard("Missing Card")},
             { 1, new CustomCard("Minion")},
             { 2, new CustomCard("IG-100 MagnaGuard", Faction.SEPARATIST)},

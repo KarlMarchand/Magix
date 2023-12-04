@@ -18,8 +18,7 @@ namespace magix_api.Repositories
 
         public async Task<List<Hero>> GetAllHeroes()
         {
-            List<Hero>? result = null;
-            // result = _memoryCache.Get<List<Hero>>("heroes");
+            List<Hero>? result = _memoryCache.Get<List<Hero>>("heroes");
             if (result is null)
             {
                 try
@@ -41,7 +40,7 @@ namespace magix_api.Repositories
                             }
                             return hero;
                         }).ToList();
-                        // var input = _memoryCache.Set("heroes", result, TimeSpan.FromDays(1));
+                        var input = _memoryCache.Set("heroes", result, TimeSpan.FromDays(1));
                         await _context.SaveChangesAsync();
                     }
                 }
