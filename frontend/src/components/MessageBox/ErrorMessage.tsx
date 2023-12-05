@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./messageBox.scss";
 
-interface ErrorMessageProps {
+interface ErrorMessageProps extends React.HTMLProps<HTMLDivElement> {
 	errorMessage: string;
 	errorMessageHandler?: () => void;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage, errorMessageHandler }) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage, errorMessageHandler, className, ...htmlProps }) => {
 	const [shouldClose, setShouldClose] = useState<boolean>(true);
 
 	const handleClick = () => {
@@ -21,7 +21,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage, errorMessageH
 	return (
 		<>
 			{!shouldClose && (
-				<div className="message-container">
+				<div {...htmlProps} className={`message-container ${className}`}>
 					<div className="alert-message alert-danger" onClick={handleClick}>
 						<span>Error</span>
 						{errorMessage}
