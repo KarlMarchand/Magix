@@ -1,0 +1,27 @@
+.modal-content {
+	color: white !important;
+	background-color: rgba(0, 0, 0, 0.8) !important;
+	filter: drop-shadow(5px 5px 5px var(--dark-blue-tp));
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		border: solid var(--light-blue);
+		background: var(--background-blue);
+		background-image: url(assets/img/horizontal-lined-bg.png);
+		z-index: -1;
+	}
+
+	.modal-footer {
+		display: flex;
+		justify-content: center;
+	}
+
+	.btn-close {
+		background-color: var(--light-blue);
+	}
+}

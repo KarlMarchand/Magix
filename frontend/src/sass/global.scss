@@ -80,12 +80,32 @@ body {
 	}
 }
 
+.edit-btn {
+	fill: var(--light-blue);
+	cursor: pointer;
+
+	&:hover {
+		fill: white;
+		filter: drop-shadow(0px 0px 15px var(--light-blue));
+	}
+
+	&:active {
+		fill: var(--light-blue);
+	}
+}
+
 .custom-input {
 	background-color: var(--background-blue);
 	border: 0.1rem solid var(--light-blue);
 	color: white;
 	padding-inline: 0.5rem;
 	min-height: 2rem;
+
+	&:focus {
+		color: white !important;
+		border: 0.1rem solid white;
+		background-color: var(--background-blue) !important;
+	}
 }
 
 .section-title {
