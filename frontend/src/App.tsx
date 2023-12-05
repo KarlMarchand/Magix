@@ -6,6 +6,7 @@ import LobbyPage from "./pages/LobbyPage";
 import GamePage from "./pages/GamePage";
 import DeckPage from "./pages/DeckPage";
 import ProfilePage from "./pages/ProfilePage";
+import { DeckManagerProvider } from "./context/DeckManagerContext/DeckManagerContext";
 
 function App() {
 	return (
@@ -13,7 +14,14 @@ function App() {
 			<Routes>
 				<Route path="/" element={<ProtectedRoute />}>
 					<Route path="/lobby" element={<LobbyPage />}></Route>
-					<Route path="/deck" element={<DeckPage />}></Route>
+					<Route
+						path="/deck"
+						element={
+							<DeckManagerProvider>
+								<DeckPage />
+							</DeckManagerProvider>
+						}
+					></Route>
 					<Route path="/profile" element={<ProfilePage />}></Route>
 					<Route path="/game" element={<GamePage />}></Route>
 				</Route>
