@@ -1,5 +1,5 @@
 import React from "react";
-import { useDeckManager } from "../../../context/DeckManagerContext/DeckManagerContext";
+import { useDeckManager } from "@context/DeckManagerContext/DeckManagerContext";
 
 const CardsTab: React.FC = () => {
 	const { availableFactionsList } = useDeckManager();

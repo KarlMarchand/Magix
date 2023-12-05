@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import RequestHandler from "../../utils/RequestHandler";
-import NewsEntry from "../../types/NewsEntry";
+import RequestHandler from "@utils/RequestHandler";
+import NewsEntry from "@customTypes/NewsEntry";
 import "./news.scss";
 
 const News: React.FC<React.HTMLProps<HTMLDivElement>> = ({ className, ...restProps }) => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, ModalProps, Form } from "react-bootstrap";
-import { useDeckManager } from "../../../context/DeckManagerContext/DeckManagerContext";
+import { useDeckManager } from "@context/DeckManagerContext/DeckManagerContext";
 import "./deckNameModal.scss";
 
 const DeckNameModal: React.FC<ModalProps> = (props) => {
@@ -18,7 +18,7 @@ const DeckNameModal: React.FC<ModalProps> = (props) => {
 	};
 
 	return (
-		<Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+		<Modal {...props} size="lg" centered id="DeckNameModal">
 			<Modal.Header closeButton>
 				<Modal.Title id="contained-modal-title-vcenter">Edit Deck Name</Modal.Title>
 			</Modal.Header>

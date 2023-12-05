@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import RequestHandler from "../utils/RequestHandler";
+import { useAuth } from "@context/AuthProvider";
+import RequestHandler from "@utils/RequestHandler";
 
 const ProtectedRoute: React.FC = () => {
 	const { user } = useAuth();

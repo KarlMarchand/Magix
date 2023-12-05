@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import RequestHandler from "../utils/RequestHandler";
+import RequestHandler from "@utils/RequestHandler";
 
 const Chat: React.FC = () => {
 	const [chatUrl, setChatUrl] = useState<string>("");

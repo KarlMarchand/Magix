@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./rotatingSymbol.scss";
-import empireSymbole from "../../assets/factions/empire-symbol.png";
-import rebelSymbole from "../../assets/factions/rebel-symbol.png";
-import republicSymbole from "../../assets/factions/republic-symbol.png";
-import separatistSymbole from "../../assets/factions/separatist-symbol.png";
-import criminalSymbole from "../../assets/factions/criminal-symbol.png";
+import empireSymbole from "@assets/factions/empire-symbol.png";
+import rebelSymbole from "@assets/factions/rebel-symbol.png";
+import republicSymbole from "@assets/factions/republic-symbol.png";
+import separatistSymbole from "@assets/factions/separatist-symbol.png";
+import criminalSymbole from "@assets/factions/criminal-symbol.png";
 
 const symbolUrls = [empireSymbole, rebelSymbole, republicSymbole, separatistSymbole, criminalSymbole];
 

@@ -1,4 +1,4 @@
-import Card from "../../types/Card";
+import Card from "@customTypes/Card";
 
 export const convertCardArrayToRecord = (cardsArray: Card[]): Record<number, number> => {
 	const cardsRecord: Record<number, number> = {};

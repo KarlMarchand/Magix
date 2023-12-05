@@ -15,7 +15,7 @@ import {
 	InitRenderer,
 	CleanScene,
 } from "./ThreeJs/ThreeJsInit";
-import hologram from "../assets/hologram.png";
+import hologram from "@assets/hologram.png";
 
 interface ThreeSceneProps {
 	startGameAnimation: boolean;

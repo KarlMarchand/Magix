@@ -1,15 +1,15 @@
 import { createContext, useState, useEffect, useMemo, useContext } from "react";
-import RequestHandler from "../../utils/RequestHandler";
-import Deck from "../../types/Deck/Deck";
-import Faction from "../../types/Faction";
-import Hero from "../../types/Hero";
-import Talent from "../../types/Talent";
-import Card from "../../types/Card";
-import AvailableDeckOptions from "../../types/AvailableDeckOptions";
+import RequestHandler from "@utils/RequestHandler";
+import Deck from "@customTypes/Deck/Deck";
+import Faction from "@customTypes/Faction";
+import Hero from "@customTypes/Hero";
+import Talent from "@customTypes/Talent";
+import Card from "@customTypes/Card";
+import AvailableDeckOptions from "@customTypes/AvailableDeckOptions";
 import { convertCardArrayToRecord } from "./CardListConversions";
-import DeckOperationResult from "../../types/Deck/DeckOperationResult";
-import DeckState, { DEFAULT_DECK_STATE } from "../../types/Deck/DeckState";
-import CreateDeck from "../../types/Deck/CreateDeck";
+import DeckOperationResult from "@customTypes/Deck/DeckOperationResult";
+import DeckState, { DEFAULT_DECK_STATE } from "@customTypes/Deck/DeckState";
+import CreateDeck from "@customTypes/Deck/CreateDeck";
 
 interface DeckManagerContextInterface {
 	setCurrentDeck: (deck?: Deck) => void;
