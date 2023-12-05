@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import RequestHandler from "../utils/requestHandler";
+import RequestHandler from "../utils/RequestHandler";
 import useSessionStorage from "../hooks/UseSessionStorage";
-import GameStateContainer from "../types/GameStateContainer";
+import GameStateContainer from "../types/Game/GameStateContainer";
 import Chat from "../components/Chat";
 import RotatingSymbol from "../components/RotatingSymbol/RotatingSymbol";
 import StartGameForm from "../components/StartGameForm";
-import { GameType, GameMode } from "../types/GameTypeOptions";
+import { GameType, GameMode } from "../types/Game/GameTypeOptions";
 import ErrorMessage from "../components/MessageBox/ErrorMessage";
 import ServerResponse from "../types/ServerResponse";
 import News from "../components/News/News";
@@ -94,14 +94,18 @@ const LobbyPage: React.FC = () => {
 					</div>
 					<div className="col h-100 d-flex flex-column align-items-center">
 						<div
-							className={`section-title mb-4 blue-container w-100 ${
+							className={`section-title blue-container w-100 mb-1 ${
 								isNavigating ? "slide-out-top" : "slide-in-top"
 							}`}
 						>
 							<h1>{user?.username}</h1>
 						</div>
+						<ErrorMessage
+							className="mt-1 mb-2"
+							errorMessage={errorMessage}
+							errorMessageHandler={() => setErrorMessage("")}
+						/>
 						<News className={isNavigating ? "slide-out-bottom" : "slide-in-bottom"} />
-						<ErrorMessage errorMessage={errorMessage} errorMessageHandler={() => setErrorMessage("")} />
 					</div>
 					<div
 						id="right-container"

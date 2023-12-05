@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import useSessionStorage from "../hooks/UseSessionStorage";
-import RequestHandler from "../utils/requestHandler";
+import RequestHandler from "../utils/RequestHandler";
 import UserLogin from "../types/UserLogin";
 import User from "../types/UserProfile";
 import ServerResponse from "../types/ServerResponse";

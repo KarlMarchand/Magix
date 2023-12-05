@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RequestHandler from "../../utils/requestHandler";
+import RequestHandler from "../../utils/RequestHandler";
 import NewsEntry from "../../types/NewsEntry";
 import "./news.scss";
 

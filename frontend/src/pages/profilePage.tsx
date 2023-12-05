@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RequestHandler from "../utils/requestHandler";
+import RequestHandler from "../utils/RequestHandler";
 import PlayerStats from "../types/PlayerStats";
 import ServerResponse from "../types/ServerResponse";
 import { useAuth } from "../context/AuthProvider";

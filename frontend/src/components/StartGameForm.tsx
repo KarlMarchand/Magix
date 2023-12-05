@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GameType, GameMode, GameInput, gameSettings } from "../types/GameTypeOptions";
+import { GameType, GameMode, GameInput, gameSettings } from "../types/Game/GameTypeOptions";
 
 type StartGameFormProps = {
 	onStartGame: (gameType: GameType, gameMode: GameMode | null, gameKey: string | null) => void;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import GameResult from "../types/GameResult";
+import GameResult from "../types/Game/GameResult";
 import { Table, Pagination } from "react-bootstrap";
-import RequestHandler from "../utils/requestHandler";
+import RequestHandler from "../utils/RequestHandler";
 
 const pageSide = 30;
 
