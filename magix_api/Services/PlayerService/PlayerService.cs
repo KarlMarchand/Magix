@@ -42,8 +42,7 @@ namespace magix_api.Services.PlayerService
                 playerOutput.Token = _authentificationService.GenerateJwtToken(player);
 
                 // Set the active deck of the player
-                var activeDeckResult = await _deckService.GetActiveDeck(player.Id, player.Key);
-                playerOutput.ActiveDeck = activeDeckResult.Success ? activeDeckResult.Data : null;
+                await _deckService.GetActiveDeck(player.Id, player.Key);
 
                 serviceResponse.Data = playerOutput;
             }

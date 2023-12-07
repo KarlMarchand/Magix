@@ -19,6 +19,7 @@ namespace magix_api.Services.DeckService
         private readonly IDeckRepository _deckRepo;
         private readonly IMapper _mapper;
         private readonly IFactionsRepo _factionRepo;
+        private const string DEFAULT_DECK_NAME = "Deck from Magix";
 
         public DeckService(IMapper mapper, IDeckRepository deckRepo, ITalentRepo talentRepo, IHeroRepo heroRepo, ICardRepo cardRepo, IFactionsRepo factionRepo)
         {
@@ -232,17 +233,24 @@ namespace magix_api.Services.DeckService
         // Activate the passed deck in the database and Game Server
         private async Task<bool> ActivateDeck(string playerKey, Deck deck)
         {
-            bool deckSavedToServer = await SaveDeckToGameServer(playerKey, deck);
+            bool activated = true;
 
-            if (deckSavedToServer)
+            //if (deck.Name != DEFAULT_DECK_NAME)
+            //{
+            //    activated = await SaveDeckToGameServer(playerKey, deck);
+            //}
+
+            activated = await SaveDeckToGameServer(playerKey, deck);
+
+            if (activated)
             {
                 await _deckRepo.UpdateActiveDeck(deck);
             }
-            return deckSavedToServer;
+            return activated;
         }
 
         // Send the deck to the Game Server and return if the deck was accepted and saved
-        private async Task<bool> SaveDeckToGameServer(string playerKey, Deck deck)
+        private static async Task<bool> SaveDeckToGameServer(string playerKey, Deck deck)
         {
             List<DeckCardDto> cardList = deck.Cards!.Select(c => new DeckCardDto() { Id = c.Id }).ToList();
             string heroName = deck.Hero!.GetServerName();
@@ -250,7 +258,11 @@ namespace magix_api.Services.DeckService
 
             string apiUrl = "/users/deck/save";
 
-            string jsonDeck = JsonSerializer.Serialize(cardList);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = new LowerCaseNamingPolicy(),
+            };
+            string jsonDeck = JsonSerializer.Serialize(cardList, options);
 
             Dictionary<string, string> data = new()
             {
@@ -278,7 +290,7 @@ namespace magix_api.Services.DeckService
                 return response;
             }
 
-            deck.Hero = deck.Hero ?? await _heroRepo.GetHeroById(deck.HeroId);
+            deck.Hero ??= await _heroRepo.GetHeroById(deck.HeroId);
             if (deck.Hero == null)
             {
                 response.Data = false;
@@ -287,7 +299,7 @@ namespace magix_api.Services.DeckService
                 return response;
             }
 
-            deck.Talent = deck.Talent ?? await _talentRepo.GetTalentById(deck.TalentId);
+            deck.Talent ??= await _talentRepo.GetTalentById(deck.TalentId);
             if (deck.Talent == null)
             {
                 response.Data = false;
@@ -296,7 +308,7 @@ namespace magix_api.Services.DeckService
                 return response;
             }
 
-            deck.Faction = deck.Faction ?? await _factionRepo.GetFactionById(deck.FactionId);
+            deck.Faction ??= await _factionRepo.GetFactionById(deck.FactionId);
             if (deck.Faction == null)
             {
                 response.Data = false;
@@ -326,7 +338,7 @@ namespace magix_api.Services.DeckService
                 {
                     return await CreateDeck(playerKey, playerId, new CreateDeckDto
                     {
-                        Name = "Default",
+                        Name = DEFAULT_DECK_NAME,
                         HeroId = hero.Id,
                         TalentId = talent.Id,
                         FactionId = 1,

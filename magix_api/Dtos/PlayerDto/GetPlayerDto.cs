@@ -1,6 +1,3 @@
-
-using magix_api.Dtos.DeckDto;
-
 namespace magix_api.Dtos.PlayerDto
 {
     public class GetPlayerDto
@@ -13,6 +10,5 @@ namespace magix_api.Dtos.PlayerDto
         public int Trophies { get; set; }
         public int BestTrophyScore { get; set; }
         public string? Token { get; set; }
-        public GetDeckDto? ActiveDeck { get; set; }
     }
 }
