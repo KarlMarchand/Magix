@@ -1,0 +1,20 @@
+.bar-chart {
+	margin: 0px 20px;
+	display: flex;
+	height: 8vh;
+
+	.deckCost {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		height: 100%;
+		width: 10%;
+		text-align: center;
+		overflow: visible;
+	}
+
+	.bar {
+		background-color: var(--dark-blue-tp);
+		border: 1px solid var(--light-blue);
+	}
+}
