@@ -1,0 +1,22 @@
+.thumbnail {
+	width: 2.5rem;
+	height: 2.5rem;
+	background-color: var(--dark-blue);
+	border: 2px solid black;
+	border-radius: 100%;
+	padding: 5px;
+}
+
+.deck-line {
+	background-color: var(--background-blue);
+	background-image: url(assets/img/horizontal-lined-bg.png);
+	padding: 1rem 2rem;
+	color: white;
+	text-decoration: none;
+	text-align: center;
+	border: 0.1rem solid var(--background-blue);
+	text-indent: 0;
+	margin: 5px 0;
+	font-size: 1.5em;
+	letter-spacing: 0.15em;
+}

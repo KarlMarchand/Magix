@@ -1,15 +1,18 @@
 import { createContext, useState, useEffect, useMemo, useContext } from "react";
-import RequestHandler from "@utils/RequestHandler";
-import Deck from "@customTypes/Deck/Deck";
-import Faction from "@customTypes/Faction";
-import Hero from "@customTypes/Hero";
-import Talent from "@customTypes/Talent";
-import Card from "@customTypes/Card";
-import AvailableDeckOptions from "@customTypes/AvailableDeckOptions";
-import { convertCardArrayToRecord } from "./CardListConversions";
-import DeckOperationResult from "@customTypes/Deck/DeckOperationResult";
+import { convertCardArrayToRecord } from "@context/DeckManagerContext/CardListConversions";
+import factionsImagery from "@context/DeckManagerContext/Imageries/factionsImagery";
+import talentsImagery from "@context/DeckManagerContext/Imageries/talentsImagery";
+import heroesImagery from "@context/DeckManagerContext/Imageries/heroesImagery";
 import DeckState, { DEFAULT_DECK_STATE } from "@customTypes/Deck/DeckState";
+import DeckOperationResult from "@customTypes/Deck/DeckOperationResult";
+import AvailableDeckOptions from "@customTypes/AvailableDeckOptions";
 import CreateDeck from "@customTypes/Deck/CreateDeck";
+import RequestHandler from "@utils/RequestHandler";
+import Faction from "@customTypes/Faction";
+import Deck from "@customTypes/Deck/Deck";
+import Talent from "@customTypes/Talent";
+import Hero from "@customTypes/Hero";
+import Card from "@customTypes/Card";
 
 interface DeckManagerContextInterface {
 	setCurrentDeck: (deck?: Deck) => void;
@@ -26,6 +29,14 @@ interface DeckManagerContextInterface {
 	canAddCard: (card: Card) => boolean;
 	addCard: (card: Card) => DeckOperationResult;
 	currentDeck: DeckState;
+	filterCardsByFaction: (factionFilter: Faction | null) => void;
+	filterCardsByCost: (costFilter?: number | null) => void;
+	filteredCardList: Card[];
+	factionsImages: Record<string, { symbol: string; image: string }>;
+	heroesImages: Record<string, string>;
+	talentsImages: Record<string, string>;
+	deleteDeck: (deck: Deck) => Promise<DeckOperationResult<Deck>>;
+	equipDeck: (deck: Deck) => Promise<DeckOperationResult<Deck>>;
 }
 
 const deckManagerContextDefault: DeckManagerContextInterface = {
@@ -58,6 +69,20 @@ const deckManagerContextDefault: DeckManagerContextInterface = {
 		error: "Not implemented",
 	}),
 	currentDeck: DEFAULT_DECK_STATE,
+	filterCardsByFaction: (factionFilter: Faction | null) => null,
+	filterCardsByCost: (costFilter?: number | null) => null,
+	filteredCardList: [],
+	factionsImages: {},
+	heroesImages: {},
+	talentsImages: {},
+	deleteDeck: async () => ({
+		isSuccessful: false,
+		error: "Not implemented",
+	}),
+	equipDeck: async () => ({
+		isSuccessful: false,
+		error: "Not implemented",
+	}),
 };
 
 // Create the context
@@ -71,6 +96,7 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 	const [availableFactionsList, setFactionList] = useState<Faction[]>([]);
 	const [playerDeckList, setPlayerDeckList] = useState<Deck[]>([]);
 	const [currentDeck, _setCurrentDeck] = useState<DeckState>(DEFAULT_DECK_STATE);
+	const [filteredCardList, setFilteredCardList] = useState<Card[]>([]);
 
 	useEffect(() => {
 		RequestHandler.get<Deck[]>("deck/all").then((response) => {
@@ -88,6 +114,28 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			}
 		});
 	}, []);
+
+	useEffect(() => {
+		setFilteredCardList(availableCardsList);
+	}, [availableCardsList]);
+
+	const filterCardsByFaction = (factionFilter: Faction | null): void => {
+		setFilteredCardList(
+			factionFilter
+				? availableCardsList.filter(
+						(card) => card.factionName === factionFilter?.name || card.factionName === null
+				  )
+				: [...availableCardsList]
+		);
+	};
+
+	const filterCardsByCost = (costFilter?: number | null): void => {
+		setFilteredCardList(
+			costFilter !== null
+				? availableCardsList.filter((card) => card.cost === costFilter)
+				: [...availableCardsList]
+		);
+	};
 
 	const canAddCard = (card: Card): boolean => {
 		return currentDeck.cardNumber !== 30 && currentDeck.cards[card.id] < 3;
@@ -132,6 +180,20 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			result.error = "This deck name is already in use.";
 		} else {
 			currentDeck.name = newName;
+			if (currentDeck.id) {
+				const deck = playerDeckList.find((deck) => deck.id === currentDeck.id);
+				if (deck?.name) {
+					deck.name = newName;
+					sendDeckToServer({
+						id: deck.id,
+						name: deck.name,
+						heroId: deck.hero.id,
+						talentId: deck.talent.id,
+						factionId: deck.faction.id,
+						cards: deck.cards.map((card) => card.id),
+					});
+				}
+			}
 		}
 
 		return result;
@@ -176,25 +238,37 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 
 	const saveDeck = async (): Promise<DeckOperationResult<Deck>> => {
 		const validation = validateDeck();
-		const result: DeckOperationResult<Deck> = { isSuccessful: validation.isSuccessful, error: validation.error };
-		if (result.isSuccessful) {
-			const body: CreateDeck = {
+		let result: DeckOperationResult<Deck> = { isSuccessful: validation.isSuccessful, error: validation.error };
+		if (validation.isSuccessful) {
+			const newDeck: CreateDeck = {
 				name: currentDeck.name!,
 				heroId: currentDeck.hero!.id,
 				talentId: currentDeck.talent!.id,
 				factionId: currentDeck.faction!.id,
 				cards: Object.entries(currentDeck.cards).flatMap(([id, quantity]) => Array(quantity).fill(Number(id))),
 			};
-			// const response = id
-			// 	? await RequestHandler.put<Deck>("deck", {
-			// 			id: id,
-			// 			...body,
-			// 	  })
-			// 	: await RequestHandler.post<Deck>("deck", body);
-			// result.isSuccessful = response.success;
-			// result.data = response.data;
-			// result.error = response.message;
+			result = await sendDeckToServer(newDeck);
 		}
+		return result;
+	};
+
+	const factionsImages = factionsImagery;
+	const heroesImages = heroesImagery;
+	const talentsImages = talentsImagery;
+
+	const sendDeckToServer = async (body: CreateDeck): Promise<DeckOperationResult<Deck>> => {
+		const result: DeckOperationResult<Deck> = {
+			isSuccessful: true,
+		};
+		// const response = id
+		// 	? await RequestHandler.put<Deck>("deck", {
+		// 			id: id,
+		// 			...body,
+		// 	  })
+		// 	: await RequestHandler.post<Deck>("deck", body);
+		// result.isSuccessful = response.success;
+		// result.data = response.data;
+		// result.error = response.message;
 		return Promise.resolve(result);
 	};
 
@@ -203,19 +277,51 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			...DEFAULT_DECK_STATE,
 			id: current.id,
 			name: current.name,
+			newDeck: current.newDeck,
 		}));
 	};
 
 	const setCurrentDeck = (deck?: Deck): void => {
 		if (!deck) {
-			_setCurrentDeck(DEFAULT_DECK_STATE);
+			_setCurrentDeck({
+				...DEFAULT_DECK_STATE,
+				name: "New Deck",
+				newDeck: true,
+			});
 		} else {
 			_setCurrentDeck({
 				...deck,
 				cardNumber: deck.cards.length,
 				cards: convertCardArrayToRecord(deck.cards),
+				newDeck: false,
 			});
 		}
+	};
+
+	const deleteDeck = async (deck: Deck): Promise<DeckOperationResult<Deck>> => {
+		const result: DeckOperationResult<Deck> = {
+			isSuccessful: true,
+		};
+		const response = await RequestHandler.delete<Deck>(`deck/${deck.id}`);
+		result.isSuccessful = response.success;
+		if (response.success && response.data) {
+			result.data = response.data;
+		}
+		result.error = response.message;
+		return result;
+	};
+
+	const equipDeck = async (deck: Deck): Promise<DeckOperationResult<Deck>> => {
+		const result: DeckOperationResult<Deck> = {
+			isSuccessful: true,
+		};
+		const response = await RequestHandler.post<Deck>(`deck/switch/${deck.id}`, {});
+		result.isSuccessful = response.success;
+		if (response.success && response.data) {
+			result.data = response.data;
+		}
+		result.error = response.message;
+		return result;
 	};
 
 	const value = useMemo(
@@ -226,6 +332,7 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			availableCardsList,
 			availableFactionsList,
 			currentDeck,
+			filteredCardList,
 			setCurrentDeck,
 			resetDeck,
 			saveDeck,
@@ -234,6 +341,13 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			removeCard,
 			canAddCard,
 			addCard,
+			filterCardsByFaction,
+			filterCardsByCost,
+			factionsImages,
+			heroesImages,
+			talentsImages,
+			deleteDeck,
+			equipDeck,
 		}),
 		[
 			playerDeckList,
@@ -242,6 +356,10 @@ export const DeckManagerProvider: React.FC<{ children: JSX.Element }> = ({ child
 			availableCardsList,
 			availableFactionsList,
 			currentDeck,
+			filteredCardList,
+			factionsImages,
+			heroesImages,
+			talentsImages,
 		]
 	);
 

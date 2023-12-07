@@ -1,0 +1,9 @@
+.submit-btn {
+	&.success {
+		background-color: rgb(107, 189, 107);
+	}
+
+	&.failed {
+		background-color: rgb(190, 89, 89);
+	}
+}
