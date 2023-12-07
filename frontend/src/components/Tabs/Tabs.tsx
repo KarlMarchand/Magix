@@ -34,7 +34,7 @@ const Tabs: React.FC<TabsProps> = ({ children }) => {
 					</button>
 				))}
 			</div>
-			<div className="tab-content p-3 flex-fill overflow-hidden d-flex flex-column justify-centent-center">
+			<div className="tab-content px-3 pt-3 flex-fill overflow-hidden d-flex flex-column justify-centent-center">
 				{tabs[activeTab]}
 			</div>
 		</div>

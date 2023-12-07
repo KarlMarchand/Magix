@@ -103,7 +103,7 @@ body {
 		filter: drop-shadow(0px 0px 15px var(--light-blue));
 	}
 
-	&:active {
+	&:active:not(.always-active) {
 		fill: var(--light-blue);
 	}
 }

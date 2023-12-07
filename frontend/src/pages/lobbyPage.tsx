@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@context/AuthProvider";
 import RequestHandler from "@utils/RequestHandler";
 import useSessionStorage from "@hooks/UseSessionStorage";
-import GameStateContainer from "@customTypes/Game/GameStateContainer";
+import GameStateContainer from "@customTypes/game/GameStateContainer";
 import Chat from "@components/Chat";
-import RotatingSymbol from "@components/RotatingSymbol/RotatingSymbol";
+import RotatingSymbol from "@components/rotating_symbol/RotatingSymbol";
 import StartGameForm from "@components/StartGameForm";
-import { GameType, GameMode } from "@customTypes/Game/GameTypeOptions";
-import ErrorMessage from "@components/MessageBox/ErrorMessage";
+import { GameType, GameMode } from "@customTypes/game/GameTypeOptions";
+import ErrorMessage from "@components/message_box/ErrorMessage";
 import ServerResponse from "@customTypes/ServerResponse";
-import News from "@components/News/News";
+import News from "@components/news/News";
 
 const LobbyPage: React.FC = () => {
 	const { logout, user } = useAuth();

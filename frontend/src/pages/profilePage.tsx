@@ -5,13 +5,16 @@ import ServerResponse from "@customTypes/ServerResponse";
 import { useAuth } from "@context/AuthProvider";
 import "../sass/profileStyle.scss";
 import GameHistoryTable from "@components/GameHistoryTable";
-import BackButton from "@components/BackButton/BackButton";
+import BackButton from "@components/back_button/BackButton";
+import GameCard from "@components/game/game_card/GameCard";
+import { useGameOptions } from "@context/GameOptionsProvider";
 
 const ProfilePage: React.FC = () => {
 	const { user } = useAuth();
 	const [playerStats, setPlayerStats] = useState<PlayerStats>();
 	const [resultWins, setResultWins] = useState<string>("0 (0%)");
 	const [resultLoses, setResultLoses] = useState<string>("0 (0%)");
+	const { availableFactionsList } = useGameOptions();
 
 	useEffect(() => {
 		RequestHandler.get<PlayerStats>("player").then((response: ServerResponse<PlayerStats>) => {
@@ -85,11 +88,14 @@ const ProfilePage: React.FC = () => {
 				</div>
 				<div id="top-cards" className="card-container">
 					{playerStats &&
-						playerStats.topCards.map((card, i) => {
+						playerStats.topCards.map((card) => {
 							return (
-								<span className="flip" key={card.id}>
-									{card.cardName}
-								</span>
+								<GameCard
+									card={card}
+									key={card.id}
+									className="flip"
+									playerFaction={availableFactionsList[0].name}
+								/>
 							);
 						})}
 				</div>

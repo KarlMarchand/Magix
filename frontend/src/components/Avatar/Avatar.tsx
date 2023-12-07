@@ -1,6 +1,6 @@
 import React from "react";
 import "./avatar.scss";
-import heroesImagery from "@context/DeckManagerContext/Imageries/heroesImagery";
+import heroesImagery from "@context/deck_manager_context/imageries/heroesImagery";
 
 interface AvatarProps extends React.HTMLProps<HTMLDivElement> {
 	playerClassName?: string;
@@ -9,7 +9,7 @@ interface AvatarProps extends React.HTMLProps<HTMLDivElement> {
 const Avatar: React.FC<AvatarProps> = ({ playerClassName, className, ...htmlProps }) => {
 	const getAvatarImageUrl = () => {
 		const className = playerClassName || "AcePilot";
-		return heroesImagery[className];
+		return heroesImagery[className.replace(/\s+/g, "")];
 	};
 
 	const avatarImageUrl = getAvatarImageUrl();

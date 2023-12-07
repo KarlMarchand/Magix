@@ -10,7 +10,6 @@ interface DeckState {
 	faction?: Faction;
 	cards: Record<number, number>;
 	cardNumber: number;
-	newDeck?: boolean;
 }
 export default DeckState;
 
@@ -22,5 +21,4 @@ export const DEFAULT_DECK_STATE: DeckState = {
 	faction: undefined,
 	cards: {},
 	cardNumber: 0,
-	newDeck: undefined,
 };

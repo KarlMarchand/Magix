@@ -1,0 +1,15 @@
+#card-selector-tab {
+	--card-width: min(250px, 40vw);
+	--card-height: min(375px, 60vw);
+	--card-text-size: calc(var(--card-width) * 0.03);
+}
+
+.refresh-btn {
+	cursor: pointer;
+	transition: transform 2s;
+
+	&:hover {
+		filter: drop-shadow(0px 0px 15px var(--light-blue));
+		animation: rotate90 1s forwards;
+	}
+}

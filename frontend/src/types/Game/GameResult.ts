@@ -1,4 +1,4 @@
-import Deck from "@customTypes/Deck/Deck";
+import Deck from "@customTypes/deck/Deck";
 
 type GameResult = {
 	id: string;

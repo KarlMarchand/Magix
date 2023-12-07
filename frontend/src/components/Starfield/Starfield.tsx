@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import ISprite from "@customTypes/Interfaces/Isprite";
+import ISprite from "@customTypes/interfaces/Isprite";
 import Ship from "@customTypes/Ship";
 import Star from "@customTypes/Star";
 import "./starfield.scss";

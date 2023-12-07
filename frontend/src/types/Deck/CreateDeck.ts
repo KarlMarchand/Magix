@@ -4,7 +4,7 @@ type CreateDeck = {
 	heroId: number;
 	talentId: number;
 	factionId: number;
-	cards: number[];
+	cards: { id: number }[];
 };
 
 export default CreateDeck;

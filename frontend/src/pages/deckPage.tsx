@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
-import { useDeckManager } from "@context/DeckManagerContext/DeckManagerContext";
-import { Tabs, Tab } from "@components/Tabs/Tabs";
-import DeckSubmissionButton from "@components/DeckBuilding/DeckSubmissionButton/DeckSubmissionButton";
-import DeckCompositionList from "@components/DeckBuilding/DeckCompositionList/DeckCompositionList";
-import DeckSelectionModal from "@components/DeckBuilding/DeckSelectionModal/DeckSelectionModal";
-import DeckNameModal from "@components/DeckBuilding/DeckNameModal/DeckNameModal";
-import CardCostBarChart from "@components/DeckBuilding/CardCostBarChart/CardCostBarChart";
-import ErrorMessage from "@components/MessageBox/ErrorMessage";
-import FactionsTab from "@components/DeckBuilding/FactionsTab";
-import TalentsTab from "@components/DeckBuilding/TalentsTab";
-import HeroesTab from "@components/DeckBuilding/HeroesTab";
-import CardsTab from "@components/DeckBuilding/CardsTabs/CardsTab";
-import BackButton from "@components/BackButton/BackButton";
-import Avatar from "@components/Avatar/Avatar";
-import ConfirmationModal from "@components/ConfirmationModal/ConfirmationModal";
+import { useDeckManager } from "@context/deck_manager_context/DeckManagerContext";
+import { Tabs, Tab } from "@components/tabs/Tabs";
+import DeckSubmissionButton from "@components/deck_building/deck_submission_button/DeckSubmissionButton";
+import DeckCompositionList from "@components/deck_building/deck_composition_list/DeckCompositionList";
+import DeckSelectionModal from "@components/deck_building/deck_selection_modal/DeckSelectionModal";
+import DeckNameModal from "@components/deck_building/deck_name_modal/DeckNameModal";
+import CardCostBarChart from "@components/deck_building/card_cost_bar_chart/CardCostBarChart";
+import ErrorMessage from "@components/message_box/ErrorMessage";
+import FactionsTab from "@components/deck_building/FactionsTab";
+import TalentsTab from "@components/deck_building/TalentsTab";
+import HeroesTab from "@components/deck_building/HeroesTab";
+import CardsTab from "@components/deck_building/cards_tabs/CardsTab";
+import BackButton from "@components/back_button/BackButton";
+import Avatar from "@components/avatar/Avatar";
+import ConfirmationModal from "@components/ConfirmationModal";
 
 const DeckPage: React.FC = () => {
 	const { currentDeck, resetDeck } = useDeckManager();
@@ -31,7 +31,7 @@ const DeckPage: React.FC = () => {
 			style={{ minWidth: "1050px" }}
 		>
 			<BackButton />
-			{currentDeck.newDeck !== undefined && (
+			{!showDeckSelectionModal && (
 				<div className="blue-container m-4 fade-in p-5 flex-fill d-flex flex-column">
 					<Row className="h-100">
 						<Col xs={10}>
@@ -102,8 +102,8 @@ const DeckPage: React.FC = () => {
 						</Col>
 						<Col xs={2} className="d-flex flex-column justify-content-between">
 							<Avatar playerClassName={currentDeck.hero?.name} className="mb-3" />
+							<CardCostBarChart />
 							<DeckCompositionList className="flex-grow-1" />
-							<CardCostBarChart className="flex-grow-1" />
 							<button className="custom-btn" onClick={resetDeck}>
 								Reset Deck
 							</button>

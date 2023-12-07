@@ -1,0 +1,21 @@
+.arrow {
+	position: fixed;
+	top: 0.5vw;
+	left: 0.5vw;
+	width: 3.5rem;
+	height: 3.5rem;
+	margin: 0.5rem;
+	background-color: var(--dark-blue);
+	-webkit-mask-image: url("assets/img/arrow.png");
+	mask-image: url("assets/img/arrow.png");
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+
+	&:hover {
+		background-color: var(--light-blue);
+	}
+}
