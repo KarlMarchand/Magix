@@ -1,11 +1,10 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import useSessionStorage from "../hooks/UseSessionStorage";
-import RequestHandler from "../utils/RequestHandler";
-import UserLogin from "../types/UserLogin";
-import User from "../types/UserProfile";
-import ServerResponse from "../types/ServerResponse";
-import AuthHelper from "../utils/AuthHelper";
+import useSessionStorage from "@hooks/UseSessionStorage";
+import RequestHandler from "@utils/RequestHandler";
+import UserLogin from "@customTypes/UserLogin";
+import User from "@customTypes/UserProfile";
+import ServerResponse from "@customTypes/ServerResponse";
 
 interface AuthContextInterface {
 	user: User | null;
@@ -56,15 +55,12 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
 		}
 	}, [navigate, setUser]);
 
-	const forceLogout = AuthHelper.forceLogout;
-
 	const value = useMemo(
 		() => ({
 			user,
 			setUser,
 			login,
 			logout,
-			forceLogout,
 		}),
 		[user]
 	);

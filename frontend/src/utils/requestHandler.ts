@@ -1,5 +1,4 @@
-import ServerResponse from "../types/ServerResponse";
-import AuthHelper from "./AuthHelper";
+import ServerResponse from "@customTypes/ServerResponse";
 
 class RequestHandler {
 	private static BASE_API_URL: string = "https://localhost:7194/api/";
@@ -57,16 +56,32 @@ class RequestHandler {
 			"Content-Type": "application/json",
 		};
 
-		const response: Response = await fetch(RequestHandler.BASE_API_URL.concat(url), options);
+		let response: Response;
+		let result: ServerResponse<T> = { success: false, data: null, message: "" };
 
-		const result = await response.json();
+		try {
+			response = await fetch(RequestHandler.BASE_API_URL.concat(url), options);
 
-		if (typeof result === "string" && result === this.invalidTokenErrorString) {
-			this.accessToken = null;
-			AuthHelper.forceLogout();
+			if (response.ok) {
+				result = await response.json();
+
+				if (typeof result.data === "string" && result.data === this.invalidTokenErrorString) {
+					this.handleUnauthorized();
+				}
+			} else if (response.status === 403) {
+				this.handleUnauthorized();
+			}
+		} catch (error: any) {
+			result.message = "Error while processing the request";
+		} finally {
+			return result;
 		}
+	};
 
-		return result;
+	private static handleUnauthorized = () => {
+		this.accessToken = null;
+		window.sessionStorage.removeItem("user");
+		window.location.href = "/login";
 	};
 }
 
