@@ -1,32 +1,43 @@
 import Card from "@customTypes/Card";
 
 type GameState = {
-	Username?: string;
-	RemainingTurnTime?: number;
-	YourTurn?: boolean;
-	HeroPowerAlreadyUsed?: boolean;
-	Hp?: number;
-	Mp?: number;
-	MaxMp?: number;
-	Hand: Card[];
-	Board: Card[];
-	WelcomeText?: string;
-	HeroClass?: string;
-	RemainingCardsCount?: number;
-	Opponent?: GameState;
-	LatestActions: LatestAction[];
-	HandSize?: number;
+	username?: string;
+	remainingTurnTime?: number;
+	yourTurn?: boolean;
+	heroPowerAlreadyUsed?: boolean;
+	hp?: number;
+	mp?: number;
+	maxMp?: number;
+	hand: Card[];
+	board: Card[];
+	welcomeText?: string;
+	heroClass?: string;
+	remainingCardsCount?: number;
+	opponent?: OpponentState;
+	latestActions: LatestAction[];
+	handSize?: number;
 };
 export default GameState;
 
+export type OpponentState = {
+	username: string;
+	heroClass: string;
+	hp: number;
+	mp: number;
+	board: Card[];
+	welcomeText: string;
+	remainingCardsCount: number;
+	handSize: number;
+};
+
 export type LatestAction = {
-	Id?: number;
-	From?: string;
-	Action?: ActionDetails;
+	id?: number;
+	from?: string;
+	action?: ActionDetails;
 };
 
 export type ActionDetails = {
-	Type?: string;
-	Uid?: number;
-	Id?: number;
+	type?: string;
+	uid?: number;
+	id?: number;
 };

@@ -1,8 +1,8 @@
-import GameState from "@customTypes/Game/GameState";
+import GameState from "@customTypes/game/GameState";
 
 type GameStateContainer = {
-	GameState?: GameState;
-	Message?: string;
+	gameState?: GameState;
+	message?: string;
 };
 
 export default GameStateContainer;
