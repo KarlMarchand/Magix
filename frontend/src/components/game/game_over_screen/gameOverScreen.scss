@@ -1,0 +1,133 @@
+.gameOver {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 10;
+	opacity: 0;
+	animation: fade-in 1000ms forwards;
+
+	h1 {
+		color: black;
+		-webkit-text-stroke: 3px yellow;
+		text-transform: uppercase;
+	}
+
+	.img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-clip: border-box;
+		opacity: 0;
+		animation: fade-in 15000ms forwards;
+		animation-delay: 3s;
+
+		&.defeat {
+			background-size: 2048px 1030px;
+		}
+
+		&.victory {
+			background-size: 2048px 1030px;
+		}
+	}
+
+	.wrapper {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		animation: fade-in 3000ms forwards;
+		animation-delay: 5s;
+
+		h1 {
+			font-size: 10rem;
+
+			@media screen and (max-width: 650px) {
+				font-size: 7rem;
+			}
+		}
+
+		button {
+			transform: scale(2);
+			margin-top: 3em;
+			z-index: 1;
+		}
+	}
+}
+
+.plasma {
+	border-radius: 12px 12px 0 0;
+	position: relative;
+	width: 9px;
+	filter: blur(1px);
+	height: 0px;
+	animation-delay: 2s;
+	pointer-events: none;
+}
+
+.vader {
+	background: linear-gradient(
+		to right,
+		rgba(229, 17, 21, 1) 0%,
+		rgba(254, 254, 254, 1) 30%,
+		rgba(254, 254, 254, 1) 47%,
+		rgba(254, 254, 254, 1) 71%,
+		rgba(229, 17, 21, 1) 100%
+	);
+	transform: rotateZ(316deg);
+	animation: openSaberVader 3s forwards;
+
+	@keyframes openSaberVader {
+		0% {
+			left: -60px;
+			top: 70px;
+			height: 0px;
+		}
+
+		100% {
+			left: 0px;
+			top: 138px;
+			height: 195px;
+		}
+	}
+}
+
+.luke {
+	background: linear-gradient(
+		to right,
+		rgb(89, 255, 0) 0%,
+		rgb(254, 254, 254) 45%,
+		rgb(254, 254, 254) 50%,
+		rgb(254, 254, 254) 55%,
+		rgb(89, 255, 0) 100%
+	);
+	transform: rotateZ(214deg);
+	animation: openSaberLuke 3s forwards;
+
+	@keyframes openSaberLuke {
+		0% {
+			left: -40px;
+			top: 130px;
+			height: 0px;
+		}
+
+		100% {
+			left: -120px;
+			top: 260px;
+			height: 310px;
+		}
+	}
+}
