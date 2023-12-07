@@ -1,6 +1,6 @@
-import Faction from "../Faction";
-import Hero from "../Hero";
-import Talent from "../Talent";
+import Faction from "@customTypes/Faction";
+import Hero from "@customTypes/Hero";
+import Talent from "@customTypes/Talent";
 
 interface DeckState {
 	id?: string;
@@ -10,15 +10,17 @@ interface DeckState {
 	faction?: Faction;
 	cards: Record<number, number>;
 	cardNumber: number;
+	newDeck?: boolean;
 }
 export default DeckState;
 
 export const DEFAULT_DECK_STATE: DeckState = {
 	id: undefined,
-	name: "New Deck",
+	name: "",
 	hero: undefined,
 	talent: undefined,
 	faction: undefined,
 	cards: {},
 	cardNumber: 0,
+	newDeck: undefined,
 };

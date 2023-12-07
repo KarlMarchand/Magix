@@ -21,7 +21,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage, errorMessageH
 	return (
 		<>
 			{!shouldClose && (
-				<div {...htmlProps} className={`message-container ${className}`}>
+				<div {...htmlProps} className={`message-container ${className ? className : ""}`}>
 					<div className="alert-message alert-danger" onClick={handleClick}>
 						<span>Error</span>
 						{errorMessage}

@@ -18,7 +18,7 @@ const News: React.FC<React.HTMLProps<HTMLDivElement>> = ({ className, ...restPro
 	}, []);
 
 	return (
-		<div {...restProps} className={`news-container w-100 h-100 p-3 ${className}`}>
+		<div {...restProps} className={`news-container w-100 h-100 p-3 ${className ? className : ""}`}>
 			{news?.map((message: NewsEntry, index) => (
 				<div key={index} className="news-entry">
 					<h2>{message.title}</h2>
