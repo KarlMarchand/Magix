@@ -1,25 +1,23 @@
 import React from "react";
-import { useAuth } from "@context/AuthProvider";
 import "./avatar.scss";
+import heroesImagery from "@context/DeckManagerContext/Imageries/heroesImagery";
 
-interface AvatarProps {
+interface AvatarProps extends React.HTMLProps<HTMLDivElement> {
 	playerClassName?: string;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ playerClassName }) => {
-	const { user } = useAuth();
-
+const Avatar: React.FC<AvatarProps> = ({ playerClassName, className, ...htmlProps }) => {
 	const getAvatarImageUrl = () => {
-		const className = playerClassName || user?.className || "AcePilot";
-		return `url("assets/img/classe/${className.replace(/\s+/g, "")}.webp")`;
+		const className = playerClassName || "AcePilot";
+		return heroesImagery[className];
 	};
 
 	const avatarImageUrl = getAvatarImageUrl();
 	const avatarStyle = {
-		backgroundImage: `${avatarImageUrl}, linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue))`,
+		backgroundImage: `url(${avatarImageUrl}), linear-gradient(to bottom right, var(--light-blue), var(--purple), var(--light-blue))`,
 	};
 
-	return <div className="avatar" style={avatarStyle}></div>;
+	return <div {...htmlProps} className={`avatar ${className ? className : ""}`} style={avatarStyle}></div>;
 };
 
 export default Avatar;
