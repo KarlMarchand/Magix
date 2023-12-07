@@ -1,0 +1,7 @@
+.choice {
+	border: 2px solid var(--light-blue);
+
+	&.highlight {
+		background-color: var(--dark-blue-tp);
+	}
+}

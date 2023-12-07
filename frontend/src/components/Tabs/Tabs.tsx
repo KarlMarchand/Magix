@@ -34,7 +34,9 @@ const Tabs: React.FC<TabsProps> = ({ children }) => {
 					</button>
 				))}
 			</div>
-			<div className="tab-content p-3 flex-fill overflow-y-scroll">{tabs[activeTab]}</div>
+			<div className="tab-content p-3 flex-fill overflow-hidden d-flex flex-column justify-centent-center">
+				{tabs[activeTab]}
+			</div>
 		</div>
 	);
 };
