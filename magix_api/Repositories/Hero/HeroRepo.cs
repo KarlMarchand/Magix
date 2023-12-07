@@ -33,6 +33,7 @@ namespace magix_api.Repositories
                             if (dbHero is not null)
                             {
                                 dbHero.Power = hero.Power;
+                                hero.Id = dbHero.Id;
                             }
                             else
                             {

@@ -33,6 +33,7 @@ namespace magix_api.Repositories
                             if (dbTalent is not null)
                             {
                                 dbTalent.Description = talent.Description;
+                                talent.Id = dbTalent.Id;
                             }
                             else
                             {
