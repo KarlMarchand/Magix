@@ -1,4 +1,4 @@
-import GameState from "./GameState";
+import GameState from "@customTypes/Game/GameState";
 
 type GameStateContainer = {
 	GameState?: GameState;

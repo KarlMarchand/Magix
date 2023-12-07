@@ -1,4 +1,4 @@
-import ISprite from "./Interfaces/Isprite";
+import ISprite from "@customTypes/Interfaces/Isprite";
 
 class Star implements ISprite {
 	private color: string = "white";

@@ -1,5 +1,5 @@
 import React from "react";
-import Starfield from "../components/Starfield/Starfield";
+import Starfield from "@components/Starfield/Starfield";
 
 const GamePage: React.FC = () => {
 	return (

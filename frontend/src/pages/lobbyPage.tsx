@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import RequestHandler from "../utils/RequestHandler";
-import useSessionStorage from "../hooks/UseSessionStorage";
-import GameStateContainer from "../types/Game/GameStateContainer";
-import Chat from "../components/Chat";
-import RotatingSymbol from "../components/RotatingSymbol/RotatingSymbol";
-import StartGameForm from "../components/StartGameForm";
-import { GameType, GameMode } from "../types/Game/GameTypeOptions";
-import ErrorMessage from "../components/MessageBox/ErrorMessage";
-import ServerResponse from "../types/ServerResponse";
-import News from "../components/News/News";
+import { useAuth } from "@context/AuthProvider";
+import RequestHandler from "@utils/RequestHandler";
+import useSessionStorage from "@hooks/UseSessionStorage";
+import GameStateContainer from "@customTypes/Game/GameStateContainer";
+import Chat from "@components/Chat";
+import RotatingSymbol from "@components/RotatingSymbol/RotatingSymbol";
+import StartGameForm from "@components/StartGameForm";
+import { GameType, GameMode } from "@customTypes/Game/GameTypeOptions";
+import ErrorMessage from "@components/MessageBox/ErrorMessage";
+import ServerResponse from "@customTypes/ServerResponse";
+import News from "@components/News/News";
 
 const LobbyPage: React.FC = () => {
 	const { logout, user } = useAuth();

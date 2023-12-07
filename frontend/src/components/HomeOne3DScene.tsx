@@ -14,7 +14,7 @@ import {
 	InitModels,
 	InitRenderer,
 	CleanScene,
-} from "./ThreeJs/ThreeJsInit";
+} from "@components/ThreeJs/ThreeJsInit";
 import hologram from "@assets/hologram.png";
 
 interface ThreeSceneProps {

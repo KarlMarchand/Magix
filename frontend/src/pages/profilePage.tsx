@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import RequestHandler from "../utils/RequestHandler";
-import PlayerStats from "../types/PlayerStats";
-import ServerResponse from "../types/ServerResponse";
-import { useAuth } from "../context/AuthProvider";
+import RequestHandler from "@utils/RequestHandler";
+import PlayerStats from "@customTypes/PlayerStats";
+import ServerResponse from "@customTypes/ServerResponse";
+import { useAuth } from "@context/AuthProvider";
 import "../sass/profileStyle.scss";
-import GameHistoryTable from "../components/GameHistoryTable";
-import BackButton from "../components/BackButton/BackButton";
+import GameHistoryTable from "@components/GameHistoryTable";
+import BackButton from "@components/BackButton/BackButton";
 
 const ProfilePage: React.FC = () => {
 	const { user } = useAuth();

@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import { AuthProvider } from "./context/AuthProvider";
-import ProtectedRoute from "./components/ProtectedRoute";
-import LoginPage from "./pages/LoginPage";
-import LobbyPage from "./pages/LobbyPage";
-import GamePage from "./pages/GamePage";
-import DeckPage from "./pages/DeckPage";
-import ProfilePage from "./pages/ProfilePage";
-import { DeckManagerProvider } from "./context/DeckManagerContext/DeckManagerContext";
+import { AuthProvider } from "@context/AuthProvider";
+import ProtectedRoute from "@components/ProtectedRoute";
+import LoginPage from "@pages/LoginPage";
+import LobbyPage from "@pages/LobbyPage";
+import GamePage from "@pages/GamePage";
+import DeckPage from "@pages/DeckPage";
+import ProfilePage from "@pages/ProfilePage";
+import { DeckManagerProvider } from "@context/DeckManagerContext/DeckManagerContext";
 
 function App() {
 	return (

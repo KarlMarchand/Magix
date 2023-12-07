@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import User from "../types/UserProfile";
-import UserLogin from "../types/UserLogin";
-import ServerResponse from "../types/ServerResponse";
+import { useAuth } from "@context/AuthProvider";
+import User from "@customTypes/UserProfile";
+import UserLogin from "@customTypes/UserLogin";
+import ServerResponse from "@customTypes/ServerResponse";
 
 const LoginPage: React.FC = () => {
 	const navigate = useNavigate();

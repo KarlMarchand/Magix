@@ -1,5 +1,5 @@
-import ISprite from "./Interfaces/Isprite";
-import shipImg from "../assets/Ship.png";
+import ISprite from "@customTypes/Interfaces/Isprite";
+import shipImg from "@assets/Ship.png";
 
 class Ship implements ISprite {
 	private img: HTMLImageElement = new Image();

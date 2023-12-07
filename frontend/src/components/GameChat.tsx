@@ -1,4 +1,4 @@
-import Chat from "./Chat";
+import Chat from "@components/Chat";
 
 interface GameChatProp {
 	opened: boolean;

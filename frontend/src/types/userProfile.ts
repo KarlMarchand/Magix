@@ -1,6 +1,5 @@
 type User = {
 	username: string;
-	className: string;
 	winCount: number;
 	lossCount: number;
 	lastLogin: Date;

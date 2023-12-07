@@ -1,7 +1,7 @@
-import Card from "./Card";
-import Hero from "./Hero";
-import Talent from "./Talent";
-import Faction from "./Faction";
+import Card from "@customTypes/Card";
+import Hero from "@customTypes/Hero";
+import Talent from "@customTypes/Talent";
+import Faction from "@customTypes/Faction";
 
 type AvailableDeckOptions = {
 	cards: Card[];
