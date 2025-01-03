@@ -1,8 +1,8 @@
-import useGameManager from "@context/GameManagerContext";
 import React, { useEffect, useState } from "react";
-import Card from "@customTypes/Card";
-import "./cards.scss";
+import useGameState from "@context/GameStateProvider";
 import { useGameOptions } from "@context/GameOptionsProvider";
+import Card, { CardConditions, CardMechanics } from "@customTypes/Card";
+import "./cards.scss";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 	card: Card;
@@ -22,7 +22,7 @@ const GameCard: React.FC<CardProps> = ({
 	...htmlStandardProps
 }) => {
 	const { factionsImages } = useGameOptions();
-	const { creditCount, onCardDragFailed, onCardDragStart, playCard } = useGameManager();
+	const { canCardBePlayed, onCardDragEnd, onCardDragStart, playCard, selectedCard, setErrorMessage } = useGameState();
 	const [isSleeping, setIsSleeping] = useState<boolean>(false);
 	const [hasStealth, setHasStealth] = useState<boolean>(false);
 	const [hasTaunt, setHasTaunt] = useState<boolean>(false);
@@ -30,13 +30,17 @@ const GameCard: React.FC<CardProps> = ({
 	const [dragging, setDragging] = useState<boolean>(false);
 
 	const selection = async () => {
-		if (!isStatic) {
-			if (isSelfCard && !isHandCard) {
+		if (!isStatic && !isHandCard) {
+			if (!isSelfCard && selectedCard === null) {
+				setErrorMessage("You must select one of your card first!");
+				return;
+			}
+			if (isSelfCard && selectedCard === null) {
 				setIsSelected(!isSelected);
 			}
 			const moveIsValid = await playCard(card, !isSelfCard);
 			setIsSelected(false);
-			setIsSleeping(moveIsValid);
+			setIsSleeping(isSelfCard && moveIsValid);
 		}
 	};
 
@@ -47,11 +51,7 @@ const GameCard: React.FC<CardProps> = ({
 
 	const onDragEnd = (ev: React.DragEvent<HTMLDivElement>) => {
 		setDragging(false);
-		if (ev.dataTransfer.dropEffect === "none") {
-			onCardDragFailed();
-		} else {
-			playCard(card, !isSelfCard);
-		}
+		onCardDragEnd(ev);
 	};
 
 	useEffect(() => {
@@ -68,21 +68,21 @@ const GameCard: React.FC<CardProps> = ({
 	};
 
 	useEffect(() => {
-		setHasTaunt(card.mechanics?.includes("Taunt") ?? false);
-		setHasStealth(card.mechanics?.includes("Stealth") ?? false);
-		setIsSleeping(card.state === "SLEEP");
+		setHasTaunt(card.mechanics?.includes(CardMechanics.TAUNT) ?? false);
+		setHasStealth(card.mechanics?.includes(CardMechanics.STEALTH) ?? false);
+		setIsSleeping(card.state === CardConditions.SLEEPING);
 	}, [card]);
 
 	const factionName = card.factionName ? card.factionName.toLowerCase() : playerFaction.toLowerCase();
 
 	const classList = `game-card ${factionName}${className ? ` ${className}` : ""}${dragging ? " dragging" : ""}${
 		card.id === 1 ? " minion" : ""
-	}${isSelfCard ? " self" : " opponent"}`;
+	}${isSelfCard ? " self" : " opponent"}${isHandCard ? " handCard" : ""}`;
 
 	return (
 		<div
 			className={classList}
-			draggable={!isStatic && creditCount >= card.cost}
+			draggable={!isStatic && isHandCard && isSelfCard && canCardBePlayed(card.cost)}
 			onClick={selection}
 			onDragStart={onDragStart}
 			onDragEnd={(e) => onDragEnd(e)}

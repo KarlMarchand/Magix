@@ -4,13 +4,15 @@ import { useAuth } from "@context/AuthProvider";
 import User from "@customTypes/UserProfile";
 import UserLogin from "@customTypes/UserLogin";
 import ServerResponse from "@customTypes/ServerResponse";
+import UseLocalStorage from "@hooks/UseLocalStorage";
+import StorageKeys from "@customTypes/StorageKeys";
 
 const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { setUser, login } = useAuth();
 	const userRef = useRef<HTMLInputElement>(null);
 	const [credentialsAreValid, setCredentialsAreValid] = useState<boolean>(false);
-	const [username, setUsername] = useState<string>(localStorage.getItem("username") ?? "");
+	const [username, setUsername] = UseLocalStorage(StorageKeys.username, "");
 	const [pwd, setPwd] = useState<string>("");
 	const [errorMessage, setErrorMessage] = useState<string>("");
 

@@ -13,7 +13,7 @@ namespace magix_api.Repositories
             _context = context;
         }
 
-        public async Task<Game> CreateGame(Game game)
+        public async Task<Game> CreateGameAsync(Game game)
         {
             var entry = await _context.Games.AddAsync(game);
             await _context.SaveChangesAsync();
@@ -36,6 +36,40 @@ namespace magix_api.Repositories
                                       .ToListAsync();
 
             return new PaginatedResponse<Game>(games, totalItems, pageNumber, pageSize);
+        }
+
+        public async Task AddPlayedCardsAsync(int playerId, bool isVictory, List<int> playedCardsIds)
+        {
+            foreach (var cardId in playedCardsIds)
+            {
+                var playedCard = await _context.PlayedCards
+                    .FirstOrDefaultAsync(pc => pc.PlayerId == playerId && pc.CardId == cardId);
+
+                if (playedCard != null)
+                {
+                    // The combination of player and card exists, so update it
+                    playedCard.TimePlayed += 1;
+                    if (isVictory)
+                    {
+                        playedCard.Victory += 1;
+                    }
+                }
+                else
+                {
+                    // The combination does not exist, so create a new record
+                    playedCard = new PlayedCard
+                    {
+                        PlayerId = playerId,
+                        CardId = cardId,
+                        TimePlayed = 1,
+                        Victory = isVictory ? 1 : 0
+                    };
+                    _context.PlayedCards.Add(playedCard);
+                }
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
         }
     }
 }

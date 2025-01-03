@@ -9,7 +9,7 @@ namespace magix_api.Services.GameService
         Task<ServiceResponse<GameStateContainerDto>> ObserveGameAsync(string playerKey, string username);
         Task<ServiceResponse<GameStateContainerDto>> GameActionAsync(string playerKey, GameActionDto gameAction);
         Task<ServiceResponse<GameStateContainerDto>> GetGameStateAsync(string playerKey);
-        Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId);
+        Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId, List<int> playedCardsIds);
         Task<ServiceResponse<PaginatedResponse<GameResultDto>>> GetGamesHistoryAsync(int playerIdInt, int pageNumber, int pageSize);
     }
 }

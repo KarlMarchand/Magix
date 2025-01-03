@@ -7,16 +7,16 @@ import GameStateContainer from "@customTypes/game/GameStateContainer";
 import Chat from "@components/Chat";
 import RotatingSymbol from "@components/rotating_symbol/RotatingSymbol";
 import StartGameForm from "@components/StartGameForm";
-import { GameType, GameMode } from "@customTypes/game/GameTypeOptions";
+import { GameType, GameMode, GameInput } from "@customTypes/game/GameTypeOptions";
 import ErrorMessage from "@components/message_box/ErrorMessage";
 import ServerResponse from "@customTypes/ServerResponse";
 import News from "@components/news/News";
+import StorageKeys from "@customTypes/StorageKeys";
 
 const LobbyPage: React.FC = () => {
 	const { logout, user } = useAuth();
 	const navigate = useNavigate();
-	const [returningPlayer, setReturningPlayer] = useSessionStorage("returningPlayer", false);
-	const [_, setObservingKey] = useSessionStorage("observing", null);
+	const [returningPlayer, setReturningPlayer] = useSessionStorage(StorageKeys.returningPlayer, false);
 	const [isNavigating, setIsNavigating] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -37,28 +37,28 @@ const LobbyPage: React.FC = () => {
 				setErrorMessage("You need to provide a valid player name");
 				return;
 			}
-			setObservingKey(privateKey);
-			RequestHandler.get<GameStateContainer>(`observe/${privateKey}`).then((res) => startGame(res));
+			RequestHandler.get<GameStateContainer>(`observe/${privateKey}`).then((res) =>
+				startGame(res, { type, mode, privateKey })
+			);
 		} else {
-			setObservingKey(null);
 			const gameData: { type: GameType; mode: GameMode | null; privateKey?: string } = { type, mode };
 			if (privateKey) {
 				gameData.privateKey = privateKey;
 			}
-			RequestHandler.post<string>("game/join", gameData).then((res) => startGame(res));
+			RequestHandler.post<string>("game/join", gameData).then((res) => startGame(res, gameData));
 		}
 	};
 
-	const startGame = (res: ServerResponse<string> | ServerResponse<GameStateContainer>) => {
-		if (!res.success) {
-			const error: string = res.message.replaceAll("_", " ").toLowerCase();
+	const startGame = (response: ServerResponse<string> | ServerResponse<GameStateContainer>, gameData: GameInput) => {
+		if (!response.success) {
+			const error: string = response.message.replaceAll("_", " ").toLowerCase();
 			error.charAt(0).toUpperCase() + error.slice(1);
 			setErrorMessage(error);
 		} else {
 			setIsNavigating(true);
 			// !new Audio("./assets/sounds/lobby/lets_go_r2.mp3").play();
 			setTimeout(() => {
-				navigate("/game");
+				navigate("/game", { state: gameData });
 			}, 1500);
 		}
 	};

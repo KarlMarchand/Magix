@@ -1,0 +1,88 @@
+#chat-game {
+	position: absolute;
+	margin: 1vmin 0vmin;
+	z-index: 6;
+	top: 1vh;
+	left: 1vw;
+	grid-area: chat;
+
+	button {
+		display: none;
+	}
+
+	iframe {
+		display: None;
+		opacity: 0;
+		margin: 18px 0px 0px 18px;
+		width: 100%;
+		height: 90%;
+	}
+
+	.toggle-icon {
+		display: block;
+		position: relative;
+		width: fit-content;
+		cursor: pointer;
+	}
+
+	.toggle-icon .saber {
+		display: block;
+		width: 3em;
+		height: 0.2em;
+		margin: 0.8em;
+		border-right: 2em solid #fff;
+		border-left: 0.6em solid #888;
+	}
+
+	.toggle-icon,
+	.saber {
+		transition: all 0.4s ease-in-out;
+	}
+
+	&.pushed {
+		height: 98%;
+		width: unquote("min(650px, 100vw)");
+		margin: 0;
+
+		.toggle-icon {
+			transition-delay: 0.8s;
+			transform: rotate(-45deg);
+			top: -1%;
+			left: -2%;
+		}
+
+		.saber:nth-child(2) {
+			opacity: 0;
+		}
+
+		.saber:nth-of-type(1) {
+			transform: translateY(1em);
+			border-right-color: #e9b8b9;
+			box-shadow: 0.4em 0 0.6em 0.1em rgba(205, 40, 44, 1);
+		}
+
+		.saber:nth-of-type(3) {
+			transform: translateY(-1em) rotate(-90deg);
+			border-right-color: #b3d3f1;
+			box-shadow: 0.4em 0 0.6em 0.1em rgba(0, 119, 255, 1);
+		}
+
+		iframe {
+			display: block;
+			animation: fade-in 1s forwards;
+			margin: 0px;
+		}
+
+		&.blue-container {
+			animation: fade-in 1s forwards;
+		}
+
+		button {
+			display: block;
+			position: absolute;
+			top: 1em;
+			right: 2em;
+			font-size: 100%;
+		}
+	}
+}

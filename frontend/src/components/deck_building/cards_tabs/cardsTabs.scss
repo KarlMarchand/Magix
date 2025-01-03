@@ -1,6 +1,6 @@
 #card-selector-tab {
-	--card-width: min(250px, 40vw);
-	--card-height: min(375px, 60vw);
+	--card-width: 15em;
+	--card-height: 20em;
 	--card-text-size: calc(var(--card-width) * 0.03);
 }
 

@@ -1,11 +1,11 @@
 import React from "react";
+import { LuRefreshCw } from "react-icons/lu";
 import { Container, Row, Col } from "react-bootstrap";
 import { useDeckManager } from "@context/deck_manager_context/DeckManagerContext";
 import CardSelection from "@components/deck_building/CardSelection";
-import Card from "@customTypes/Card";
 import FiltersBar from "@components/deck_building/filters_bar/FiltersBar";
+import Card from "@customTypes/Card";
 import "./cardsTabs.scss";
-import { LuRefreshCw } from "react-icons/lu";
 
 const CardsTab: React.FC = () => {
 	const { currentDeck, filteredCardList, setFilter } = useDeckManager();

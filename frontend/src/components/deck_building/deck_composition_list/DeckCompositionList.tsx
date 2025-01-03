@@ -12,7 +12,7 @@ const DeckCompositionList: React.FC<StackProps> = ({ className, ...htmlStandardP
 		const node = document.getElementById("card-" + id);
 		if (!node) return;
 
-		node.scrollIntoView();
+		node.scrollIntoView({ behavior: "smooth" });
 
 		node.classList.add("selectedCard");
 		setTimeout(() => {

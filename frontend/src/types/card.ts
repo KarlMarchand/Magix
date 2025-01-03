@@ -14,3 +14,12 @@ type Card = {
 };
 
 export default Card;
+
+export const CardMechanics = {
+	TAUNT: "Taunt",
+	STEALTH: "Stealth",
+};
+
+export const CardConditions = {
+	SLEEPING: "SLEEP",
+};

@@ -1,5 +1,6 @@
 using AutoMapper;
 using magix_api.Dtos;
+using magix_api.Dtos.CardDto;
 using magix_api.Dtos.GameDto;
 using magix_api.Repositories;
 using magix_api.utils;
@@ -12,11 +13,13 @@ namespace magix_api.Services.GameService
         private readonly string _baseApiUrl = "games/";
         private readonly HashSet<string> _validAnswers = new() { "WAITING", "LAST_GAME_WON", "LAST_GAME_LOST", "NOT_IN_GAME" };
         private readonly IMapper _mapper;
+        private readonly IHeroRepo _heroRepo;
 
-        public GameService(IGameRepository gameRepo, IMapper mapper)
+        public GameService(IGameRepository gameRepo, IMapper mapper, IHeroRepo heroRepo)
         {
             _mapper = mapper;
             _gameRepo = gameRepo;
+            _heroRepo = heroRepo;
         }
 
         public async Task<ServiceResponse<GameStateContainerDto>> GameActionAsync(string playerKey, GameActionDto gameAction)
@@ -33,16 +36,85 @@ namespace magix_api.Services.GameService
                 data.Add("targetuid", gameAction.targetUid.GetValueOrDefault().ToString());
             }
 
-            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(this.GetUrl("action"), data));
+            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("action"), data));
         }
 
         public async Task<ServiceResponse<GameStateContainerDto>> GetGameStateAsync(string playerKey)
         {
-            ServiceResponse<GameStateContainerDto> response = new();
-
             Dictionary<string, string> data = new() { { "key", playerKey } };
 
-            return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("state"), data));
+            //var gameState= GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("state"), data);
+
+            var gameState = new ServerResponse<GameStateFromServerDto>(new GameStateFromServerDto
+            {
+                Username = "Karlipouette",
+                RemainingTurnTime = 24,
+                YourTurn = true,
+                HeroPowerAlreadyUsed = false,
+                Hp = 30,
+                Mp = 0,
+                MaxMp = 1,
+                Hand = new List<CardFromGameServerDto>{
+                    new CardFromGameServerDto{
+                        Id = 4,
+                        Cost = 2,
+                        Hp = 3,
+                        Atk = 2,
+                        Mechanics = new (),
+                        Uid = 3,
+                        BaseHP = 3
+                    },
+                    new CardFromGameServerDto{
+                        Id = 22,
+                        Cost = 7,
+                        Hp = 7,
+                        Atk = 7,
+                        Mechanics = new (),
+                        Uid = 5,
+                        BaseHP = 7
+                    },
+                    new CardFromGameServerDto{
+                        Id = 10,
+                        Cost = 3,
+                        Hp = 3,
+                        Atk = 3,
+                        Mechanics = new (){ "taunt", "charge" },
+                        Uid = 6,
+                        BaseHP = 3
+                    }
+                },
+                Board = new List<CardFromGameServerDto>{
+                    new CardFromGameServerDto{
+                        Id = 2,
+                        Cost = 1,
+                        Hp = 1,
+                        Atk = 2,
+                        Mechanics = new (),
+                        Uid = 7,
+                        BaseHP = 1,
+                        State = "SLEEP"
+                    }
+                },
+                WelcomeText = "My life for Aiur!",
+                HeroClass = "Warrior",
+                RemainingCardsCount = 24,
+                Opponent = new OpponentGameStateFromServerDto
+                {
+                    Username = "Dummy-AI",
+                    HeroClass = "Hunter",
+                    Hp = 30,
+                    Mp = 0,
+                    Board = new(),
+                    WelcomeText = "Die, maggot!",
+                    RemainingCardsCount = 24,
+                    HandSize = 3
+                },
+                LatestActions = new()
+            });
+
+            var fakeTask = Task.FromResult(gameState);
+
+            return await ProcessGameResponse(fakeTask);
         }
 
         public async Task<ServiceResponse<string>> JoinGameAsync(string playerKey, string type, string? mode, string? privateKey)
@@ -91,8 +163,6 @@ namespace magix_api.Services.GameService
 
         public async Task<ServiceResponse<GameStateContainerDto>> ObserveGameAsync(string playerKey, string username)
         {
-            ServiceResponse<GameStateContainerDto> response = new();
-
             Dictionary<string, string> data = new()
             {
                 {"key", playerKey},
@@ -102,7 +172,7 @@ namespace magix_api.Services.GameService
             return await ProcessGameResponse(GameServerAPI.CallApi<GameStateFromServerDto>(GetUrl("observe"), data));
         }
 
-        public async Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId)
+        public async Task<ServiceResponse<bool>> SaveGameResultAsync(int playerId, string opponent, bool victory, Guid deckId, List<int> playedCardsIds)
         {
             ServiceResponse<bool> response = new();
 
@@ -115,7 +185,9 @@ namespace magix_api.Services.GameService
                 Date = DateTime.Now
             };
 
-            var savedGame = await _gameRepo.CreateGame(game);
+            var savedGame = await _gameRepo.CreateGameAsync(game);
+
+            await _gameRepo.AddPlayedCardsAsync(playerId, victory, playedCardsIds);
 
             if (savedGame != null)
             {
@@ -166,18 +238,24 @@ namespace magix_api.Services.GameService
 
             var res = await gameResponseTask;
 
-            if (res.IsValid)
+            if (res.IsValid && res.Content != null)
             {
-                response.Data = new GameStateContainerDto() { GameState = res.Content };
+                var gameState = _mapper.Map<GameStateDto>(res.Content);
+                response.Data = new GameStateContainerDto() { GameState = gameState };
             }
-            else if (res.IsError && _validAnswers.Contains(res.Error!))
+            else if (res.IsError && res.Error != null)
             {
-                response.Data = new GameStateContainerDto() { Message = res.Error };
-            }
-            else if (res.IsError)
-            {
-                response.Success = false;
-                response.Message = res.Error!;
+                string errorWithoutQuotes = res.Error.Trim('\"');
+
+                if (_validAnswers.Contains(errorWithoutQuotes))
+                {
+                    response.Data = new GameStateContainerDto() { Message = res.Error };
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = res.Error;
+                }
             }
 
             return response;

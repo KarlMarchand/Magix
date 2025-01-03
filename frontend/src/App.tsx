@@ -10,6 +10,7 @@ import { DeckManagerProvider } from "@context/deck_manager_context/DeckManagerCo
 import GameOverScreen from "@components/game/game_over_screen/GameOverScreen";
 import LoadingScreen from "@components/loading_screen/LoadingScreen";
 import { GameOptionsProvider } from "@context/GameOptionsProvider";
+import { GameStateProvider } from "@context/GameStateProvider";
 
 function App() {
 	return (
@@ -27,7 +28,14 @@ function App() {
 							}
 						></Route>
 						<Route path="/profile" element={<ProfilePage />}></Route>
-						<Route path="/game" element={<GamePage />}></Route>
+						<Route
+							path="/game"
+							element={
+								<GameStateProvider>
+									<GamePage />
+								</GameStateProvider>
+							}
+						></Route>
 						<Route path="/gameover" element={<GameOverScreen isVictory={true} />}></Route>
 						<Route path="/loading" element={<LoadingScreen />}></Route>
 					</Route>

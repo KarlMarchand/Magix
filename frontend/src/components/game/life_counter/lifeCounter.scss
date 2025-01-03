@@ -1,0 +1,43 @@
+.life {
+	filter: drop-shadow(0 0 2rem var(--purple));
+	margin: auto auto;
+	position: relative;
+	left: 50%;
+	transform: translateX(-100%);
+
+	div {
+		background: var(--dark-blue);
+		background-image: url(assets/img/horizontal-lined-bg.png);
+		mask: url(assets/img/life.png) center/contain no-repeat;
+		font-size: 3em;
+		height: 2em;
+		width: 2em;
+		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		p {
+			position: relative;
+			top: -5%;
+		}
+
+		@media screen and (max-width: 650px) {
+			font-size: 2em;
+			height: 2em;
+			width: 2em;
+		}
+	}
+
+	&.opponent {
+		grid-area: lifeOpp;
+	}
+
+	&.self {
+		grid-area: lifeSelf;
+	}
+}
+
+.hurt div {
+	background-color: rgba(205, 40, 44, 0.5);
+}

@@ -54,7 +54,7 @@ namespace magix_api.Controllers
         [Authorize(Policy = "ValidateKey")]
         public async Task<ActionResult<ServiceResponse<bool>>> SaveGameResultAsync([FromBody] SaveGameDto gameToSave)
         {
-            var response = await _gameService.SaveGameResultAsync(User.GetPlayerId(), gameToSave.Opponent, gameToSave.Victory, gameToSave.DeckId);
+            var response = await _gameService.SaveGameResultAsync(User.GetPlayerId(), gameToSave.Opponent, gameToSave.Victory, gameToSave.DeckId, gameToSave.PlayedCardsIds);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 

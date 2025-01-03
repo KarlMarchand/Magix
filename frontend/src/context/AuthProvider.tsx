@@ -5,6 +5,8 @@ import RequestHandler from "@utils/RequestHandler";
 import UserLogin from "@customTypes/UserLogin";
 import User from "@customTypes/UserProfile";
 import ServerResponse from "@customTypes/ServerResponse";
+import UseLocalStorage from "@hooks/UseLocalStorage";
+import StorageKeys from "@customTypes/StorageKeys";
 
 interface AuthContextInterface {
 	user: User | null;
@@ -29,7 +31,8 @@ const authContextDefault: AuthContextInterface = {
 const AuthContext = createContext<AuthContextInterface>(authContextDefault);
 
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
-	const [user, setUser] = useSessionStorage("user", null);
+	const [user, setUser] = useSessionStorage(StorageKeys.user, null);
+	const [_, setUsername] = UseLocalStorage(StorageKeys.username, "");
 	const navigate = useNavigate();
 
 	const login = async (userData: UserLogin): Promise<ServerResponse<User>> => {
@@ -38,7 +41,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
 		if (response.success && response.data) {
 			setUser(response.data);
 			RequestHandler.setAccessToken(response.data.token);
-			localStorage.setItem("username", userData.username);
+			setUsername(userData.username);
 		}
 
 		return response;

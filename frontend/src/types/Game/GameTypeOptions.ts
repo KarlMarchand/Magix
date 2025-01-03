@@ -13,7 +13,7 @@ export enum GameMode {
 export type GameInput = {
 	type: GameType;
 	mode: GameMode | null;
-	privateKey: string;
+	privateKey?: string;
 };
 
 export type GameSettings = {

@@ -2,7 +2,7 @@ import React from "react";
 import GameCard, { CardProps } from "@components/game/game_card/GameCard";
 import Card from "@customTypes/Card";
 
-interface GameCardContainerInterface extends Omit<CardProps, "card"> {
+export interface GameCardContainerInterface extends Omit<CardProps, "card"> {
 	cards: Card[];
 }
 
